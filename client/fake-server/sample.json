@@ -1,0 +1,19 @@
+{
+    success:true,
+    content:
+    {
+	articles:
+	[
+	    {
+		author:"Florian",
+		title:"Youpi",
+		content:"balblabal llazllbal"
+	    },
+	    {
+		author:"Maurice",
+		title:"Tralala",
+		content:"linux, c'est bien!"
+	    },
+	]
+    }
+}
