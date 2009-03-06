@@ -8,9 +8,10 @@ Feedeo.ArticlePanel = Ext.extend(Ext.Panel, {
     var config = {
     tbar:
     [{
-        icon: Ext.APPLICATION_URL+'/img/icons/page_white.png', // icons can also be specified inline
-        cls: 'x-btn-icon',
-        tooltip: '<b>Quick Tips</b><br/>Icon only button with tooltip'
+        text:'Ouvrir dans un onglet',
+        tooltip: 'Ouvre l\'article dans un onglet',
+        handler: this.openInTab,
+        scope:this //comme ça, le "this" dans le handler sera "articlePanel" au lieu de "button"
     }],
     autoScroll:true,
     bodyStyle:'padding:15px',
@@ -23,8 +24,15 @@ Feedeo.ArticlePanel = Ext.extend(Ext.Panel, {
     
     // call parent
     Feedeo.ArticlePanel.superclass.initComponent.apply(this, arguments);
-    } // eo function initComponent
     
+    //define events
+    this.addEvents('openintab');
+    }, // eo function initComponent
+    openInTab : function()
+    {
+        console.log('openInTabClicked');
+        this.fireEvent('openintab'); //should pass the current record, but how ?
+    }
 });
  
 //register xtype

@@ -39,8 +39,16 @@ Feedeo.ArticlesGridPanel = Ext.extend(Ext.grid.GridPanel, {
         
         // call parent
         Feedeo.ArticlesGridPanel.superclass.initComponent.apply(this, arguments);
-    } // eo function initComponent
-    
+        
+        //register events & listeners
+        this.addEvents('articleselect');
+        this.addListener('rowselect',this.onRowSelect,this); //this = scope
+    }, // eo function initComponent
+    onRowSelect : function()
+    {
+        console.log('articleselect');
+        this.fireEvent('articleselect');
+    }
 });
  
 //register xtype
