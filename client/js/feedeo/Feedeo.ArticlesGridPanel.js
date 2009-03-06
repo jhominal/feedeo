@@ -42,12 +42,13 @@ Feedeo.ArticlesGridPanel = Ext.extend(Ext.grid.GridPanel, {
         
         //register events & listeners
         this.addEvents('articleselect');
-        this.addListener('rowselect',this.onRowSelect,this); //this = scope
+        var sm = this.getSelectionModel();
+        sm.addListener('rowselect',this.onRowSelect,this); //this = scope
     }, // eo function initComponent
-    onRowSelect : function()
+    onRowSelect : function(sm,rowindex,record)
     {
-        console.log('articleselect');
-        this.fireEvent('articleselect');
+        console.log('articleselect',record);
+        this.fireEvent('articleselect',record);
     }
 });
  

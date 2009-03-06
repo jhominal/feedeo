@@ -32,24 +32,17 @@ Feedeo.MainPanel = Ext.extend(Ext.Panel, {
         this.articlesGridPanel = this.items.itemAt(0);
         this.articlePanel = this.items.itemAt(1);
          
-        this.articlesGridPanel.on({ //au rendu du GridPanel, on ajoute l'evenement "click"
+        this.articlesGridPanel.on({
             scope:this,
-            render:function() { //on render
-                //set listener for rowclick
-                var sm = this.articlesGridPanel.getSelectionModel();
-                sm.on({ //add listener
-                    scope:this
-                    ,rowselect:this.onArticleClick //onrowclick
-                });
-            }
+            articleselect:this.onArticleSelect   
         });
 
     } // eo function initComponent
-    ,onArticleClick : function(sm,rowIndex,rec)
+    ,onArticleSelect : function(record)
     {
-       
+        console.log('article selected ! change record !');
         //give the record to the articlePanel !
-        this.articlePanel.body.dom.innerHTML = rec.data.content; //arf !
+        this.articlePanel.setArticle(record); //arf !
     }
 });
  

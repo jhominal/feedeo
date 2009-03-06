@@ -2,6 +2,7 @@ Ext.ns('Feedeo');
 
  
 Feedeo.ArticlePanel = Ext.extend(Ext.Panel, {
+    record : null,
     initComponent:function() {
     // hard coded - cannot be changed from outside
 
@@ -10,7 +11,7 @@ Feedeo.ArticlePanel = Ext.extend(Ext.Panel, {
     [{
         text:'Ouvrir dans un onglet',
         tooltip: 'Ouvre l\'article dans un onglet',
-        handler: this.openInTab,
+        handler: this.openInTabClick,
         scope:this //comme ça, le "this" dans le handler sera "articlePanel" au lieu de "button"
     }],
     autoScroll:true,
@@ -28,10 +29,19 @@ Feedeo.ArticlePanel = Ext.extend(Ext.Panel, {
     //define events
     this.addEvents('openintab');
     }, // eo function initComponent
-    openInTab : function()
+    openInTabClick : function()
     {
         console.log('openInTabClicked');
         this.fireEvent('openintab'); //should pass the current record, but how ?
+    },
+    setRecord : function(record)
+    {
+        this.record = record;
+        this.refresh();
+    },
+    refresh : function()
+    {
+        this.body.dom.innerHTML = this.record != null ? this.record.data.content : 'pas d\'article sélectionné.';
     }
 });
  
