@@ -7,6 +7,7 @@ Feedeo.MainView = Ext.extend(Ext.TabPanel, {
     
         var config = {
             activeTab: 0,
+            deferredRender:false,//permet de pre-loader les onglets
             defaults : {xtype:'articlefullpanel'},
             items:
             [
@@ -30,14 +31,19 @@ Feedeo.MainView = Ext.extend(Ext.TabPanel, {
 
         //handle openInTab event
         this.articlePanel.on({
-            openintab : this.onOpenInTab,
+            openintabclick : this.onOpenInTab,
             scope : this //comme ça, le "this" dans openInTab sera mainView
         });
     }, // eo function initComponent
-    onOpenInTab : function(){
-        console.log('event captured',this);
+    onOpenInTab : function(article){
+        console.debug('Event openintabclick captured, article:',article);
         //add a fake panel for debug purpose
-        this.add({xtype:'panel',title:'new tab',html:'<h2>Ttoo</h2><p>youpi</p>',closable:true});
+        if(article!=null)
+        {
+            this.add({xtype:'panel',title:'15 first cha...',article:article,html:'<object style="width:100%;height:100%;" data="'+article.data.url+'"></object>',closable:true});
+            this.doLayout(); //force le calcul du layout
+                             //et déclenche le préchargement de l'onglet grâce à deferredRender:false;
+        }
     }
 });
  

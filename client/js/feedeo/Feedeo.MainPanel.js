@@ -38,11 +38,11 @@ Feedeo.MainPanel = Ext.extend(Ext.Panel, {
         });
 
     } // eo function initComponent
-    ,onArticleSelect : function(record)
+    ,onArticleSelect : function(article)
     {
-        console.log('article selected ! change record !');
-        //give the record to the articlePanel !
-        this.articlePanel.setArticle(record); //arf !
+        console.debug('Event articleselect captured, article :',article);
+        //give the article to the articlePanel !
+        this.articlePanel.setArticle(article);
     }
 });
  

@@ -12,7 +12,8 @@ Feedeo.ArticlesGridPanel = Ext.extend(Ext.grid.GridPanel, {
             fields:[
             {name: 'author'},
             {name: 'title'},
-            {name: 'content'}
+            {name: 'content'},
+            {name: 'url'}
             ]
         });
 
@@ -47,7 +48,7 @@ Feedeo.ArticlesGridPanel = Ext.extend(Ext.grid.GridPanel, {
     }, // eo function initComponent
     onRowSelect : function(sm,rowindex,record)
     {
-        console.log('articleselect',record);
+        console.debug('Event rowselect captured, fire "articleselect" with :',record);
         this.fireEvent('articleselect',record);
     }
 });

@@ -27,14 +27,14 @@ Feedeo.ArticlePanel = Ext.extend(Ext.Panel, {
     Feedeo.ArticlePanel.superclass.initComponent.apply(this, arguments);
     
     //define events
-    this.addEvents('openintab');
+    this.addEvents('openintabclick');
     }, // eo function initComponent
     openInTabClick : function()
     {
-        console.log('openInTabClicked');
-        this.fireEvent('openintab'); //should pass the current record, but how ?
+        console.debug('Event buttonclick captured : fire openintabclick with :',this.record);
+        this.fireEvent('openintabclick',this.record);
     },
-    setRecord : function(record)
+    setArticle : function(record)
     {
         this.record = record;
         this.refresh();

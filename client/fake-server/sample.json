@@ -7,12 +7,14 @@
 	    {
 		author:"Florian",
 		title:"Youpi",
-		content:"balblabal llazllbal"
+		content:"balblabal llazllbal",
+		url:'http://fcargoet.evolix.net/2009/03/une-liste-alimentee-automatiquement-avec-jquery/'
 	    },
 	    {
 		author:"Maurice",
 		title:"Tralala",
-		content:"linux, c'est bien!"
+		content:"linux, c'est bien!",
+		url:'http://fcargoet.evolix.net/2009/03/wordpress-et-les-tirets/'
 	    },
 	]
     }
