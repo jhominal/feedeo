@@ -4,7 +4,8 @@
     <link rel="stylesheet" type="text/css" href="../js/ext-2.2/resources/css/ext-all.css">
     <script type="text/javascript" src="../js/ext-2.2/adapter/ext/ext-base.js"></script>
     <script type="text/javascript" src="../js/ext-2.2/ext-all-debug.js"></script>
-    <script type="text/javascript" src="../js/feedeo/Feedeo.ArticlesGridPanel.js"></script>
+
+    <script type="text/javascript" src="../js/feedeo/Feedeo.FeedsTreePanel.js"></script>
  
     <script type="text/javascript">
 Ext.BLANK_IMAGE_URL = '../js/ext-2.2/resources/images/default/s.gif';
@@ -14,22 +15,24 @@ Ext.onReady(function() {
 
 
     var win = new Ext.Window({
-        title:'Articles GridPanel Extension Class Example',
+        title:'Feeds Tree Panel Extension Class Example',
         width:600,
-        height:250,
+        height:500,
         layout:'fit',
         bodyStyle:'padding:10px',
         labelWidth:70,
         items:[{
-            xtype:'articlesgridpanel',
-            url:'json.php?page=sample' //url is given to JsonStore
+            xtype:'feedstreepanel'
         }]
     });
     win.show();
+
+
 });
     </script>
-    <title>Articles GridPanel Extension Class - Test</title>
+    <title>Feeds Tree Panel Extension Class - Test</title>
 </head>
 <body>
+
 </body>
 </html>
