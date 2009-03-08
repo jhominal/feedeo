@@ -30,20 +30,44 @@ Feedeo.MainView = Ext.extend(Ext.TabPanel, {
         
 
         //handle openInTab event
-        this.articlePanel.on({
-            openintabclick : this.onOpenInTab,
-            scope : this //comme ça, le "this" dans openInTab sera mainView
-        });
+        this.articlePanel.on(
+            {
+                openintabclick : this.onOpenInTab,
+                scope : this //comme ça, le "this" dans openInTab sera mainView
+            }
+        );
+        this.on(
+            {
+                remove:this.onTabRemove,
+                scope : this
+            },
+            {
+                add:this.onTabAdd,
+                scope : this
+            }
+        )
     }, // eo function initComponent
     onOpenInTab : function(article){
         console.debug('Event openintabclick captured, article:',article);
         //add a fake panel for debug purpose
         if(article!=null)
         {
-            this.add({xtype:'panel',title:'15 first cha...',article:article,html:'<object style="width:100%;height:100%;" data="'+article.data.url+'"></object>',closable:true});
+            var panel = this.add({xtype:'panel',title:'15 first cha...',article:article,html:'<object style="width:100%;height:100%;" data="'+article.data.url+'"></object>',closable:true});
+            //this.setActiveTab(panel);
+            console.log(panel,this);
             this.doLayout(); //force le calcul du layout
                              //et déclenche le préchargement de l'onglet grâce à deferredRender:false;
         }
+    },
+    onTabRemove : function ()
+    {
+        //vérifier le nombre d'onglets et masquer si un seul onglet
+        //this. hideTabStripItem(0);
+        
+    },
+    onTabAdd : function()
+    {
+        //Affiche la barre d'onglets si masquée
     }
 });
  

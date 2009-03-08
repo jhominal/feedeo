@@ -1,5 +1,5 @@
 [
-    {id:'1',text:'dossier1',children:[{id:2,text:'flux1',leaf:true},{id:3,text:'flux2',leaf:true}]},
-    {id:'4',text:'flux3',leaf:true},
-    {id:'5',text:'remote node'}
+    {text:'dossier1',children:[{text:'flux1',leaf:true},{text:'flux2',leaf:true}]},
+    {text:'flux3',leaf:true},
+    {text:'remote node'}
 ]

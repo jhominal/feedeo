@@ -4,7 +4,9 @@
     <link rel="stylesheet" type="text/css" href="../js/ext-2.2/resources/css/ext-all.css">
     <script type="text/javascript" src="../js/ext-2.2/adapter/ext/ext-base.js"></script>
     <script type="text/javascript" src="../js/ext-2.2/ext-all-debug.js"></script>
-    <script type="text/javascript" src="../js/feedeo/Feedeo.ArticlePanel.js"></script>
+    <script type="text/javascript" src="../js/feedeo/Feedeo.FeedsTreePanel.js"></script>
+    <script type="text/javascript" src="../js/feedeo/Feedeo.ArchivesTreePanel.js"></script>
+    <script type="text/javascript" src="../js/feedeo/Feedeo.FeedsAndArchivesPanel.js"></script>
  
     <script type="text/javascript">
 Ext.BLANK_IMAGE_URL = '../js/ext-2.2/resources/images/default/s.gif';
@@ -14,20 +16,20 @@ Ext.onReady(function() {
 Ext.QuickTips.init();
 
     var win = new Ext.Window({
-        title:'Article Panel Extension Class Example',
-        width:600,
-        height:250,
+        title:'Feeds And Archives Panel Extension Class Example',
+        width:400,
+        height:600,
         layout:'fit',
         bodyStyle:'padding:10px',
         labelWidth:70,
         items:[{
-            xtype:'articlepanel'
+            xtype:'feedsandarchivespanel'
         }]
     });
     win.show();
 });
     </script>
-    <title>Article Panel Extension Class - Test</title>
+    <title>Feeds And Archives Panel Extension Class - Test</title>
 </head>
 <body>
 </body>

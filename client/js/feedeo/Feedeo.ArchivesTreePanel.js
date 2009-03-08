@@ -11,7 +11,8 @@ Feedeo.ArchivesTreePanel = Ext.extend(Ext.tree.TreePanel, {
         })
         //noeud racine
         var rootNode = new Ext.tree.AsyncTreeNode({
-            text:'Dossier d\'archives'
+            text:'Dossier d\'archives',
+            expanded : true
         });
         var toolbar = [
             {

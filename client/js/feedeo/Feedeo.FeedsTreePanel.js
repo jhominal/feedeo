@@ -11,7 +11,8 @@ Feedeo.FeedsTreePanel = Ext.extend(Ext.tree.TreePanel, {
         })
         //noeud racine
         var rootNode = new Ext.tree.AsyncTreeNode({
-            text:'Flux RSS'
+            text:'Flux RSS',
+            expanded : true
         });
         var toolbar = [
             {
