@@ -5,7 +5,7 @@
     <script type="text/javascript" src="../js/ext-2.2/adapter/ext/ext-base.js"></script>
     <script type="text/javascript" src="../js/ext-2.2/ext-all-debug.js"></script>
 
-    <script type="text/javascript" src="../js/feedeo/Feedeo.FeedsTreePanel.js"></script>
+    <script type="text/javascript" src="../js/feedeo/Feedeo.ArchivesTreePanel.js"></script>
  
     <script type="text/javascript">
 Ext.BLANK_IMAGE_URL = '../js/ext-2.2/resources/images/default/s.gif';
@@ -15,14 +15,14 @@ Ext.onReady(function() {
     Ext.QuickTips.init();
 
     var win = new Ext.Window({
-        title:'Feeds Tree Panel Extension Class Example',
+        title:'Archives Tree Panel Extension Class Example',
         width:600,
         height:500,
         layout:'fit',
         bodyStyle:'padding:10px',
         labelWidth:70,
         items:[{
-            xtype:'feedstreepanel'
+            xtype:'archivestreepanel'
         }]
     });
     win.show();
@@ -30,7 +30,7 @@ Ext.onReady(function() {
 
 });
     </script>
-    <title>Feeds Tree Panel Extension Class - Test</title>
+    <title>Archives Tree Panel Extension Class - Test</title>
 </head>
 <body>
 

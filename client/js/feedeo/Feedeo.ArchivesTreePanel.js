@@ -2,7 +2,7 @@ Ext.ns('Feedeo');
 
 
  
-Feedeo.FeedsTreePanel = Ext.extend(Ext.tree.TreePanel, {
+Feedeo.ArchivesTreePanel = Ext.extend(Ext.tree.TreePanel, {
     initComponent:function() {
         // hard coded - cannot be changed from outside
         //treeLoader : charge les données depuis le serveur
@@ -11,13 +11,13 @@ Feedeo.FeedsTreePanel = Ext.extend(Ext.tree.TreePanel, {
         })
         //noeud racine
         var rootNode = new Ext.tree.AsyncTreeNode({
-            text:'Flux RSS'
+            text:'Dossier d\'archives'
         });
         var toolbar = [
             {
-                icon: Ext.APPLICATION_URL+'/img/icons/rss_add.png',
+                icon: Ext.APPLICATION_URL+'/img/icons/folder_add.png',
                 cls: 'x-btn-icon',
-                tooltip: '<b>Nouveau flux</b><br/>Cliquer pour ajouter un flux à votre arbre !'
+                tooltip: '<b>Nouveau dossier</b><br/>Cliquer pour créer un nouveau dossier d\'archive !'
             }
         ];
         var config = {
@@ -43,13 +43,13 @@ Feedeo.FeedsTreePanel = Ext.extend(Ext.tree.TreePanel, {
         Ext.apply(this, Ext.apply(this.initialConfig, config));
         
         // call parent
-       Feedeo.FeedsTreePanel.superclass.initComponent.apply(this, arguments);
+       Feedeo.ArchivesTreePanel.superclass.initComponent.apply(this, arguments);
 
     }, // eo function initComponent
 
 });
  
 //register xtype
-Ext.reg('feedstreepanel', Feedeo.FeedsTreePanel);
+Ext.reg('archivestreepanel', Feedeo.ArchivesTreePanel);
  
 // end of file
