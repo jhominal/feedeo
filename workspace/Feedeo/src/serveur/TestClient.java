@@ -1,4 +1,4 @@
-package feedeo;
+package serveur;
 
 import java.util.Iterator;
 import java.util.List;
@@ -38,53 +38,37 @@ public class TestClient {
 		Preference preference1= new Preference();
 		preference1.setName("Couleur");
 		
-		createPreference(preference1);
-		User user6= new User();
+				User user6= new User();
 		user6.setLogin("coucou");
 		HibernateObject.create(user6);
 		
-		createUser(user1); 
-		createUser(user2);
-		createUser(user3);
-		createUser(user4);
-		createUser(user5);
+		user1.createUser(); 
+		user2.createUser();
+		user3.createUser();
+		user4.createUser();
+		user5.createUser();
 
-		listUser();
+		listUser("select name from User as name");
 		System.out.print("_______________");
-		deleteUser(user2);
-		listUser();
+		user2.deleteUser();
+		listUser("select name from User as name");
 		user3.setName("amal");
 		System.out.print("_______________");
-		updateUser(user3);
-		listUser();
+		user3.updateUser();
+		listUser("select name from User as name");
 		
 	}
 	
-	public static void createUser(User u) {
-		HibernateObject.create(u);	
-	}
-	
-	public static void deleteUser(User u) {
-		HibernateObject.delete(u);	
-	}
-	
-	public static void updateUser(User u) {
-		HibernateObject.update(u);	
-	}
-
-	public static void createPreference(Preference preference) {
-		HibernateObject.create(preference);	
-	}
 	
 	
 	
 	
-	private static void listUser() {
+	private static void listUser(String requete) {
 		Transaction tx = null;
 		Session session = InitSessionFactory.getInstance().getCurrentSession();
 		try {
 			tx = session.beginTransaction();
-			List users = session.createQuery("select name from User as name")
+			List users = session.createQuery(requete)
 					.list();
 			for (Iterator iter = users.iterator(); iter.hasNext();) {
 				User element = (User) iter.next();

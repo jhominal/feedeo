@@ -1,4 +1,4 @@
-package feedeo;
+package serveur;
 
 import java.util.Collection;
 
@@ -60,6 +60,13 @@ public class User extends HibernateObject {
 			HibernateObject.create(this);	
 		}
 		
+		public void deleteUser() {
+			HibernateObject.delete(this);	
+		}
+		
+		public void updateUser() {
+			HibernateObject.update(this);	
+		}
 		
 		}
 

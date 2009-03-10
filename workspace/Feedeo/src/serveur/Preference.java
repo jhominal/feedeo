@@ -1,4 +1,4 @@
-package feedeo;
+package serveur;
 
 public class Preference extends HibernateObject {
 	
@@ -30,8 +30,17 @@ public class Preference extends HibernateObject {
 	 public String getValue(){
 		 return name;
 	 }
+	
+	 public void createPreference() {
+			HibernateObject.create(this);	
+		}
+	 public void deletePreference() {
+			HibernateObject.delete(this);	
+		}
 	 
-	 
+	 public void updatePreference() {
+			HibernateObject.update(this);	
+		}
 	
 
 }

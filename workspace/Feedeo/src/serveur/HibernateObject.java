@@ -1,4 +1,4 @@
-package feedeo;
+package serveur;
 
 import hibernate.InitSessionFactory;
 
