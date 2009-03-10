@@ -1,6 +1,6 @@
 
 Ext.ns('Feedeo');
-
+var icons = Ext.APPLICATION_URL+'/img/icons';
  
 Feedeo.MainToolbar = Ext.extend(Ext.Toolbar, {
     initComponent:function() {
@@ -17,9 +17,9 @@ Feedeo.MainToolbar = Ext.extend(Ext.Toolbar, {
                     menu: {
                         ignoreParentClicks : true,
                         items: [
-                            {text: 'Ajouter', handler: testHandler},
-                            {text: 'Importer', handler: testHandler},
-                            {text: 'Exporter', handler: testHandler}
+                            {text: 'Ajouter', handler: testHandler, icon: icons+'/feed_add.png'},
+                            {text: 'Importer', handler: testHandler, icon: icons+'/feed_go.png'},
+                            {text: 'Exporter', handler: testHandler, icon: icons+'/feed_go.png'}
                         ]
                     }
                 },
@@ -28,11 +28,12 @@ Feedeo.MainToolbar = Ext.extend(Ext.Toolbar, {
                     menu: {
                         ignoreParentClicks : true,
                         items: [
-                            {text: 'Créer', handler: testHandler,icon: Ext.APPLICATION_URL+'folder.png'},
-                            {text: 'Supprimer', handler: testHandler},
+                            {text: 'Créer', handler: testHandler, icon: icons+'/folder_add.png'},
+                            {text: 'Supprimer', handler: testHandler, icon: icons+'/folder_delete.png'},
+                            {text: 'Renommer', handler: testHandler, icon: icons+'/folder_edit.png'},
                             {text: 'Marquer tout comme lu', handler: testHandler},
                             '-',
-                            {text: 'Démarrer la visualisation plein écran', handler: testHandler}
+                            {text: 'Démarrer la visualisation plein écran', handler: testHandler, icon: icons+'/arrow_out.png'}
                         ]
                     }
                 },
@@ -41,28 +42,29 @@ Feedeo.MainToolbar = Ext.extend(Ext.Toolbar, {
                     menu: {
                         ignoreParentClicks : true,
                         items: [
-                            {text: 'Ouvrir dans un onglet', handler: testHandler},
-                            {text: 'Ouvrir la sélection dans des onglets', handler: testHandler},
-                            {text: 'Ouvrir dans le navigateur', handler: testHandler},
-                            {text: 'Ouvrir la sélection dans le navigateur', handler: testHandler},
+                            {text: 'Ouvrir l\'article dans un onglet', handler: testHandler, icon: icons+'/tab_go.png'},
+                            {text: 'Ouvrir la sélection dans des onglets', handler: testHandler, icon: icons+'/tab_go.png'},
+                            {text: 'Ouvrir l\'article dans le navigateur', handler: testHandler, icon: icons+'/world_go.png'},
+                            {text: 'Ouvrir la sélection dans le navigateur', handler: testHandler, icon: icons+'/world_go.png'},
                             
                             '-',
-                            {text: 'Marquer comme lu', handler: testHandler},
+                            {text: 'Marquer l\'article comme lu', handler: testHandler},
                             {text: 'Marquer la sélection comme lue', handler: testHandler},
                             '-',
-                            {text: 'Marquer comme important', handler: testHandler},
-                            {text: 'Marquer la sélection comme importante', handler: testHandler},
+                            {text: 'Marquer l\'article comme important', handler: testHandler, icon: icons+'/flag_red.png'},
+                            {text: 'Marquer la sélection comme importante', handler: testHandler, icon: icons+'/flag_red.png'},
                             '-',
-                            {text: 'Supprimer', handler: testHandler},
-                            {text: 'Supprimer la sélection', handler: testHandler},
+                            {text: 'Supprimer l\'article', handler: testHandler, icon: icons+'/page_white_delete.png'},
+                            {text: 'Supprimer la sélection', handler: testHandler, icon: icons+'/delete.png'},
                             '-',
                             {
-                                text: 'Exporter la sélection',
+                                text: 'Revue de presse',
+                                icon: icons+'/newspaper.png',
                                 menu : {
                                      ignoreParentClicks : true,
                                     items : [
-                                            {text: 'en HTML', handler: testHandler},
-                                            {text: 'en PDF', handler: testHandler},
+                                            {text: 'Exporter la sélection en HTML', handler: testHandler, icon: icons+'/html.png'},
+                                            {text: 'Exporter la sélection en PDF', handler: testHandler, icon: icons+'/page_white_acrobat.png'},
                                     ]
                                 }
                             
@@ -76,9 +78,9 @@ Feedeo.MainToolbar = Ext.extend(Ext.Toolbar, {
                     menu: {
                         ignoreParentClicks : true,
                         items: [
-                            {text: 'Configurer l\'apparence du lecteur', handler: testHandler},
+                            {text: 'Configurer l\'apparence du lecteur', handler: testHandler, icon: icons+'/layout_edit.png'},
                             {text: 'Configurer les raccourcis clavier', handler: testHandler},
-                            {text: 'Configurer les notifications', handler: testHandler}
+                            {text: 'Configurer les notifications', handler: testHandler, icon: icons+'/email_edit.png'}
                         ]
                     }
                 },
@@ -87,11 +89,11 @@ Feedeo.MainToolbar = Ext.extend(Ext.Toolbar, {
                     menu: {
                         ignoreParentClicks : true,
                         items: [
-                            {text: 'Aide', handler: testHandler},
+                            {text: 'Manuel', handler: testHandler, icon: icons+'/help.png'},
                             '-',
-                            {text: 'Rapporter un bug', handler: testHandler},
+                            {text: 'Rapporter un bug', handler: testHandler, icon: icons+'/bug.png'},
                             '-',
-                            {text: 'A propos de Feedeo', handler: testHandler}
+                            {text: 'A propos de Feedeo', handler: testHandler, icon: icons+'/vcard.png'}
                         ]
                     }
                 },
