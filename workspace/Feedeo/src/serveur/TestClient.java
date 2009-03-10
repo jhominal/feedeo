@@ -48,14 +48,14 @@ public class TestClient {
 		user4.createUser();
 		user5.createUser();
 
-		listUser("select name from User as name");
-		System.out.print("_______________");
+		HibernateObject.listUser("select name from User as name");
+		//System.out.print("_______________");
 		user2.deleteUser();
-		listUser("select name from User as name");
+		//listUser("select name from User as name");
 		user3.setName("amal");
 		System.out.print("_______________");
 		user3.updateUser();
-		listUser("select name from User as name");
+		//listUser("select name from User as name");
 		
 	}
 	
@@ -63,32 +63,5 @@ public class TestClient {
 	
 	
 	
-	private static void listUser(String requete) {
-		Transaction tx = null;
-		Session session = InitSessionFactory.getInstance().getCurrentSession();
-		try {
-			tx = session.beginTransaction();
-			List<User> users = session.createQuery(requete)
-					.list();
-			for (Iterator<User> iter = users.iterator(); iter.hasNext();) {
-				User element = iter.next();
-				System.out.print(element.getName() +"\n");
-				logger.debug("{}", element);
-			}
-			tx.commit();
-		} catch (RuntimeException e) {
-			if (tx != null && tx.isActive()) {
-				try {
-					// Second try catch as the rollback could fail as well
-					tx.rollback();
-				} catch (HibernateException e1) {
-					logger.debug("Error rolling back transaction");
-				}
-				// throw again the first exception
-				throw e;
-			}
-		}
-	}
-
-
+	
 }

@@ -1,5 +1,8 @@
 package serveur;
 
+import java.util.Iterator;
+import java.util.List;
+
 import hibernate.InitSessionFactory;
 
 import org.hibernate.HibernateException;
@@ -68,6 +71,32 @@ public abstract class HibernateObject {
 		try {
 			tx = session.beginTransaction();
 			session.save(object);
+			tx.commit();
+		} catch (RuntimeException e) {
+			if (tx != null && tx.isActive()) {
+				try {
+					// Second try catch as the rollback could fail as well
+					tx.rollback();
+				} catch (HibernateException e1) {
+					logger.debug("Error rolling back transaction");
+				}
+				// throw again the first exception
+				throw e;
+			}
+		}
+	}
+
+	static void listUser(String requete) {
+		Transaction tx = null;
+		Session session = InitSessionFactory.getInstance().getCurrentSession();
+		try {
+			tx = session.beginTransaction();
+			List<User> users = session.createQuery(requete).list();
+			for (Iterator<User> iter = users.iterator(); iter.hasNext();) {
+				User element = iter.next();
+				System.out.print(element.getName() +"\n");
+				logger.debug("{}", element);
+			}
 			tx.commit();
 		} catch (RuntimeException e) {
 			if (tx != null && tx.isActive()) {
