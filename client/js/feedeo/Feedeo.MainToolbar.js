@@ -107,8 +107,8 @@ Feedeo.MainToolbar = Ext.extend(Ext.Toolbar, {
         // call parent
         Feedeo.MainToolbar.superclass.initComponent.apply(this, arguments);
         
-    }// eo function initComponent
-
+    },// eo function initComponent
+    plugins : Feedeo.plugins.action('maintoolbar')
 });
  
 //register xtype
