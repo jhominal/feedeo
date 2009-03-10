@@ -31,9 +31,9 @@
         <!-- Drop and re-create the database schema on startup -->
         <property name="hbm2ddl.auto">create</property>
 
-        <mapping resource="feedeo/User.hbm.xml"/>
+        <mapping resource="serveur/User.hbm.xml"/>
         
-        <mapping resource="feedeo/Preference.hbm.xml"/> 
+        <mapping resource="serveur/Preference.hbm.xml"/> 
 
     </session-factory>
 

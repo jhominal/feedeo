@@ -68,10 +68,10 @@ public class TestClient {
 		Session session = InitSessionFactory.getInstance().getCurrentSession();
 		try {
 			tx = session.beginTransaction();
-			List users = session.createQuery(requete)
+			List<User> users = session.createQuery(requete)
 					.list();
-			for (Iterator iter = users.iterator(); iter.hasNext();) {
-				User element = (User) iter.next();
+			for (Iterator<User> iter = users.iterator(); iter.hasNext();) {
+				User element = iter.next();
 				System.out.print(element.getName() +"\n");
 				logger.debug("{}", element);
 			}
