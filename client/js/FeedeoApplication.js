@@ -2,11 +2,17 @@
 
 
 Ext.onReady(function() {
-Ext.QuickTips.init();
+    Ext.QuickTips.init();
+    
+
 
     var vp = new Ext.Viewport({
         layout:'border',
         items:[
+            {
+                region : 'north',
+                xtype : 'maintoolbar'
+            },
             {
                 region : 'west',
                 xtype:'feedsandarchivespanel',

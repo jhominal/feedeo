@@ -64,10 +64,9 @@ Feedeo.MainView = Ext.extend(Ext.TabPanel, {
         //vérifier le nombre d'onglets et masquer si un seul onglet
         //this. hideTabStripItem(0);
         //this.getCount(); retourne le nombre de tab
-        if(this.getCount()==1)
-        {
+       /* if(this.getCount()==1) {
             this.hideTabStripItem(0);
-        }
+        }*/
         
     },
     onTabAdd : function()

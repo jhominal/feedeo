@@ -11,7 +11,7 @@ Feedeo.FeedsAndTreePanel = Ext.extend(Ext.TabPanel, {
             [
                 {
                     xtype:'feedstreepanel',
-                    title:'Flux'
+                    title:'Réception'
                 },
                 {
                     xtype:'archivestreepanel',
