@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="feedeo.Article" table="Article">
+		<id name="idArticle" column="Id">
+			<generator class="increment"></generator>
+		</id>
+		<property name="title"/>
+		<property name="link" />
+		<property name="date"  type="timestamp" column="Article_date" />
+		<property name="summary"/>
+		<property name="read" />
+		<property name="author"/>
+		
+		
+				<!-- 
+	//Catégories de l'article /tags
+	private List<String> categories;
+	//Lien article au dossier PAS ICI DANS LA TABLE KI LIE ARTICLE ET DOSSIER
+	//private Directory directory;
+	//Lien vers le flux d'origine
+	private Feed feedOrig;
+		!-->
+		
+	</class>
+</hibernate-mapping>

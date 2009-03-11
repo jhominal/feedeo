@@ -31,6 +31,7 @@ public Date pubDate;
 /** Nvelle instance de flux
  * 
  */
+public Feed(){}
 public Feed (String url){
 	SyndFeed feed;
 	this.url=url;
@@ -85,11 +86,34 @@ public Feed (String url){
 }
 
 
-	
+// DEBUT SET GET
 public String getTitle(){
         return this.title;
 }
+public void setitle(String title){
+	this.title=title;
+}
+public String geturl(){
+	return this.url;
+}
+public void seturl(String url){
+	this.url=url;
+}
+;
+public String getlink(){
+	return link;
+}
+public void setlink(String link){
+	this.link=link;
+}
+public Date getpubDate(){
+	return pubDate;
+}
+public void getpubDate(Date pubDate){
+	this.pubDate=pubDate;
+}
 
+//FIN SET GET
 public void setArticles(SyndFeed feed){
     int nbarticles = feed.getEntries().size();
     Vector<Article> Larticles=new Vector<Article>(nbarticles);

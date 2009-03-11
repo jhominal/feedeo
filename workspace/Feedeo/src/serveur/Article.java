@@ -9,37 +9,36 @@ import com.sun.syndication.feed.synd.SyndContent;
 import com.sun.syndication.feed.synd.SyndEntry;
 
 public class Article{
+	//ID de l'article
+	private Long idArticle;
 	//Tittre de l'article
-	public String title;
+	private String title;
 	//Lien de l'article
-	public String link;
+	private String link;
 	//Date de l'article
-	public Date date;
+	private Date date;
 	//Catégories de l'article /tags
-	public List<String> categories;
+	private List<String> categories;
 	
 	//Résumé de l'article
-	public String summary;
+	private String summary;
 	
 	//booléen lu ou pas PAS ICI DANS LA TABLE KI LIE ARTICLE ET USER
-	public boolean read;
+	private boolean read;
 	
 	//Auteur de l'article
-	public String author;
-	//Lien article au flux d'origine
-	public Feed origFeed;
+	private String author;
 	//Lien article au dossier PAS ICI DANS LA TABLE KI LIE ARTICLE ET DOSSIER
-	public Directory directory;
+	//private Directory directory;
 	//proprio de l'article
-	public String owner;
+	private String owner;
 	
 	//Lien vers le flux d'origine
-	public Feed feedOrig;
+	private Feed feedOrig;
 	//RECUPERER UN ARTICLE AVEC UN SYNDENTRY
 	
-	//public Article(String tittle){
-		//super(tittle);
-	//}
+	public Article(){}
+	
 	public Article(String title,String url,Date date,String summary,String author,List<String> categories, boolean read,String owner){
 		this.title=title;
 		this.link=url;
@@ -94,7 +93,19 @@ public class Article{
         
     }
 	
-	
+// DEBUT SET GET
+	private void setId(Long i){
+		idArticle=i;
+	}
+	public Long getIdArticle(){
+		return idArticle;
+	}
+	public void setTitle(String title){
+		this.title=title;
+	}
+	public String getTitle(){
+		return title;
+	}
 	public void setURL(String link){
 		this.link= link;
 	}
@@ -128,10 +139,6 @@ public class Article{
 	public String getSummary(){
 		return summary;
 	}
-	
-	// GESTION DES PIECES JOINTES ENCLOSURES
-	
-	//FIN GESTION DES PIECES JOINTES ENCLOSURES
 public String getSummaryLight() {
 		
 		String summary=this.getSummary();
@@ -146,9 +153,6 @@ public boolean getread(){
 public void setread(boolean read){
 	this.read=read;
 }
-// GESTION DES FONCTION ISREAD
-
-// FIN GESTION DES FONCTION ISREAD ET SETREAD VIA L'APPLICATION EXTEND
 
 public String getOwner() {
 	return owner;
@@ -158,15 +162,22 @@ public void setOwner(String owner) {
 	this.owner = owner;
 }
 
-
-
+public void setAuthor(String author){
+	this.author=author;
+}
 	
-	public void setAuthor(String author){
-		this.author=author;
-	}
-	
-	public String getAuthor(){
-		return author;
-	}
+public String getAuthor(){
+	return author;
+}
+
+//FIN SET GET
+
+//GESTION DES PIECES JOINTES ENCLOSURES
+
+//FIN GESTION DES PIECES JOINTES ENCLOSURES
+
+//GESTION DES FONCTION ISREAD
+
+//FIN GESTION DES FONCTION ISREAD ET SETREAD VIA L'APPLICATION EXTEND
 
 }
