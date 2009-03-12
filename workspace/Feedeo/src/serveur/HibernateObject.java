@@ -113,6 +113,42 @@ public abstract class HibernateObject {
 	}
 
 
-
-
+/*
+	
+	public boolean assocUserPreferences(Integer _idUser, Long _idRole)
+	   throws HibernateException    {
+ 	boolean retour=true;
+ 	Role rol=new Role();
+ 	Utilisateur2 util=new Utilisateur2();
+ 	Session session = sessFactory.openSession();
+     Transaction tx = null;
+     try {
+	tx = session.beginTransaction();
+ 	Query q1=session.createQuery("from Utilisateur2 where idUser = :idUser");
+ 	Query q2 = session.createQuery("from Role where idRole = :idRole");
+ 	q1.setParameter("idUser", _idUser);
+ 	q2.setParameter("idRole", _idRole);
+	util=(Utilisateur2) q1.list().get(0);
+ 	System.out.println("Login = "+util.getLogin());
+	rol=(Role) q2.list().get(0);
+ 	System.out.println ("Nom du Role ="+rol.getNom());
+	((Set)util.getRoles()).add((Role) rol);
+	((Set)rol.getUtilisateur2s()).add((Utilisateur2) util);
+	session.save(rol);
+	session.save(util);
+         tx.commit();
+     }
+     catch (HibernateException he) {
+		retour=false;
+         if (tx!=null) tx.rollback();
+         throw he;
+	
+     }
+     finally {
+         session.close();
+     }
+     return retour;
+	}
+ }
+*/
 }

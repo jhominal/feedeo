@@ -1,13 +1,13 @@
 package serveur;
 
-import java.util.Iterator;
-import java.util.List;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+
+import java.util.HashSet;
+
+import java.util.Set;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import hibernate.InitSessionFactory;
+
 
 public class TestClient {
 	final static Logger logger = LoggerFactory.getLogger(TestClient.class);
@@ -38,15 +38,33 @@ public class TestClient {
 		Preference preference1= new Preference();
 		preference1.setName("Couleur");
 		
-				User user6= new User();
-		user6.setLogin("coucou");
-		HibernateObject.create(user6);
 		
-		user1.createUser(); 
-		user2.createUser();
+		
+		preference1.createPreference();
+		
+		//Preference preference2= new Preference();
+		//preference2.setName("mode");
+		
+		Set<Preference> preferences1= new HashSet<Preference>();
+		preferences1.add(preference1);
+		//preferences1.add(preference2);
+    	
+		
+		User user6= new User();
+		user6.setLogin("coucou");
+		user6.setName("salut");
+		
+		user6.setPreferences(preferences1);
+		
+		/*user2.createUser();
 		user3.createUser();
-		user4.createUser();
+		user4.createUser();	
 		user5.createUser();
+		*/
+		user6.createUser();
+		
+	HibernateObject.listUser("select name from User as name");
+		/*
 
 		HibernateObject.listUser("select name from User as name");
 		//System.out.print("_______________");
@@ -56,7 +74,7 @@ public class TestClient {
 		System.out.print("_______________");
 		user3.updateUser();
 		//listUser("select name from User as name");
-		
+		*/
 	}
 	
 	

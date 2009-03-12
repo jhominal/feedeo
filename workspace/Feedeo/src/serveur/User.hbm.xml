@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD
 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
-<hibernate-mapping>
-<class name="serveur.User" table="user">
-<id name="id" column="id" >
+ <hibernate-mapping>
+ 
+ <class name="serveur.User" table="user">
+<id name="idUser" column="idUser" >
 <generator class="increment"/>
 </id>
 <property name="name" column="name" />
 <property name="lastname" column="lastname" />
 <property name="login" column="login" />
 
-
+<set name="preferences" table="userPreferences" >
+		 <key column="idUser"/>
+           
+            <many-to-many  class="serveur.Preference" column="idPref" />
+            
+	   </set> 
+	   
+	   
+	   
 
 </class>
 </hibernate-mapping>

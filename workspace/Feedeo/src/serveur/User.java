@@ -1,27 +1,30 @@
 package serveur;
 
-import java.util.Collection;
+
+
+import java.util.Set;
+
 
 
 
 public class User extends HibernateObject {
 
-		private Integer id;
+		private long idUser;
 		private String name;
 		private String lastname;
 		
 		private String login;
 		//private String password;
 		
-		//private Collection<Preference> preferences;
+		private Set<Preference> preferences;
 		
 		public User(){
 		}
-		public Integer getId() {
-		return id;
+		public long getIdUser() {
+		return idUser;
 		}
-		public void setId(Integer id) {
-		this.id = id;
+		public void setIdUser(long idUser) {
+		this.idUser = idUser;
 		}
 		public String getName() {
 		return name;
@@ -45,15 +48,14 @@ public class User extends HibernateObject {
 			}
 		
 		
-		/*public Collection<Preference> getPreferences() {
+		public Set<Preference> getPreferences() {
 			return preferences;
 			}
 		
-		public void setPreferences(Collection<Preference> preferences) {
+		public void setPreferences(Set<Preference> preferences) {
 			this.preferences = preferences;
 			}
-		
-		*/
+
 		
 		
 		public void createUser() {
