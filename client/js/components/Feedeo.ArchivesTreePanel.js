@@ -1,18 +1,27 @@
+/**
+ * Feedeo.ArchivesTreepanel Class
+ *
+ * Events :
+ *  -folderselect(folder_id)
+ */
+
+// TODO: factoriser le code avec celui d'FeedsTreePanel
+
 Ext.ns('Feedeo');
-
-
  
 Feedeo.ArchivesTreePanel = Ext.extend(Ext.tree.TreePanel, {
     initComponent:function() {
         // hard coded - cannot be changed from outside
         //treeLoader : charge les données depuis le serveur
         var treeLoader = new Ext.tree.TreeLoader({
-            dataUrl:Ext.APPLICATION_URL+'/fake-server/json.php?page=tree'
+            dataUrl:Ext.APPLICATION_URL+'/fake-server/json.php',
+            baseParams : {page:'tree'}
         })
         //noeud racine
         var rootNode = new Ext.tree.AsyncTreeNode({
             text:'Dossier d\'archives',
-            expanded : true
+            expanded : true,
+            draggable: false
         });
         var toolbar = [
             {
@@ -24,7 +33,8 @@ Feedeo.ArchivesTreePanel = Ext.extend(Ext.tree.TreePanel, {
         var config = {
             loader:treeLoader,
             root:rootNode,
-            tbar:toolbar
+            tbar:toolbar,
+            enableDD : true
         }; /*
         var config = {
         tbar:
@@ -46,7 +56,28 @@ Feedeo.ArchivesTreePanel = Ext.extend(Ext.tree.TreePanel, {
         // call parent
        Feedeo.ArchivesTreePanel.superclass.initComponent.apply(this, arguments);
 
+       //listeners
+       this.on(
+            {
+                'click' : this.onFolderClick,
+                scope : this
+            }
+       );
+       //custom events
+       this.addEvents('folderselect');
+
     }, // eo function initComponent
+    onFolderClick : function(node,event)
+    {
+        //expand if possible
+        /*if(!node.leaf && !node.expanded)
+        {
+            console.debug('expand node');
+            node.expand();
+        }*/
+        console.debug('Node clicked',node,event);
+        this.fireEvent('folderselect',node.id);
+    }
 
 });
  

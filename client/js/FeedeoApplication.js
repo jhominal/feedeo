@@ -1,3 +1,29 @@
+Ext.ns('Feedeo');
+/* Feedeo functions */
+Feedeo.addFeed = function(o)
+{
+    //o.feedUrl
+    //o.folder_id
+};
+Feedeo.deleteFeed = function(o)
+{
+    //o.feed_id ?
+};
+Feedeo.addFolder = function(o)
+{
+    //o.name
+    //o.parent_id
+};
+Feedeo.removeFolder = function(o)
+{
+    //o.fodler_id
+};
+Feedeo.moveFolder = function(o)
+{
+    //o.folder_id
+    //o.new_parent_id
+};
+
 
 
 Ext.onReady(function() {
@@ -26,8 +52,7 @@ Ext.onReady(function() {
                 region : 'west',
                 xtype:'feedsandarchivespanel',
                 width: 200,
-                autoScroll:true
-
+                autoScroll:true //? comment ca marche ?
             },
             {
                 region : 'center',
@@ -35,4 +60,13 @@ Ext.onReady(function() {
             }
         ]
     });
+    vp.items.itemAt(1).on( //events on treepanels
+        {
+            'folderselect' : function(folder_id)
+            {
+                this.items.itemAt(2).mainPanel.setFolder(folder_id);
+            },
+            scope:vp
+        }
+    );
 });

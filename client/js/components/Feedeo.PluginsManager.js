@@ -12,6 +12,7 @@ Feedeo.plugins =
     {
         /* on ajoute le nouveau plugin à la liste */
         this.plugins.push(plugin);
+        console.debug('plugin registered :',plugin);
     },
     
     /* appelée par Ext
@@ -40,6 +41,7 @@ Feedeo.plugins =
             }
         }
         /* on retourne l'array de plugins répondant à l'action à ExtJS */
+        console.debug('plugins called for ',action,':',returnedPlugins);
         return returnedPlugins;
     }
 }
@@ -53,7 +55,7 @@ var mySamplePlugin =
     {
         maintoolbar : function(component)
         {
-            console.log(this.name,' : ',component);
+            console.log(this.name,' acts on : ',component);
         }
     }
 }

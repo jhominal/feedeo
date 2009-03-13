@@ -11,7 +11,7 @@ Feedeo.MainPanel = Ext.extend(Ext.Panel, {
                 {
                     xtype:'articlesgridpanel',
                     region : 'north',
-                    url: Ext.APPLICATION_URL+'/fake-server/json.php?page=sample',
+                    url: Ext.APPLICATION_URL+'/fake-server/json.php',
                     split:true,
                     height:200
                 },
@@ -43,6 +43,10 @@ Feedeo.MainPanel = Ext.extend(Ext.Panel, {
         console.debug('Event articleselect captured, article :',article);
         //give the article to the articlePanel !
         this.articlePanel.setArticle(article);
+    },
+    setFolder : function(folder_id)
+    {
+        this.articlesGridPanel.setFolder(folder_id);
     }
 });
  
