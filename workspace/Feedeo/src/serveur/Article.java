@@ -33,8 +33,8 @@ public class Article{
 	//proprio de l'article
 	private String owner;
 	
-	//Lien vers le flux d'origine
-	private Feed feedOrig;
+	//Lien vers le flux d'origine Voir dans le flux, lien unidirectionnel
+	//private Set Feed feedOrig;
 	//RECUPERER UN ARTICLE AVEC UN SYNDENTRY
 	
 	public Article(){}
@@ -89,7 +89,7 @@ public class Article{
         catch(Exception e){
     		e.printStackTrace();
     	}
-        this.feedOrig=feedOrig;
+        //this.feedOrig=feedOrig;
         
     }
 	

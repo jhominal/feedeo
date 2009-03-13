@@ -8,6 +8,8 @@ import java.net.URL;
 //import java.net.URL;
 //import java.util.Collection;
 //import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Vector;
 import com.sun.syndication.io.XmlReader;
 
@@ -25,6 +27,8 @@ public String title;
 public String url;
 public String link;
 public Date pubDate;
+//Lien Unidirectionnel vers la liste des articles de ce flux
+private Set<Article> articles=new HashSet<Article>();
 //public Vector<Article> articles;
 
 
@@ -116,13 +120,21 @@ public void getpubDate(Date pubDate){
 //FIN SET GET
 public void setArticles(SyndFeed feed){
     int nbarticles = feed.getEntries().size();
-    Vector<Article> Larticles=new Vector<Article>(nbarticles);
+    //Vector<Article> Larticles=new Vector<Article>(nbarticles);
     int i;
             for (i = 0; i <nbarticles ; i++) 
             {   Article article=new Article((SyndEntry)(feed.getEntries().get(i)),this);
-                Larticles.add(i,article);
+            	articles.add(article);
+                //Larticles.add(i,article);
             }
 	
+}
+
+public void setArticles(Set<Article> articles){
+	this.articles=articles;
+}
+public Set<Article> getArticles(){
+	return articles;
 }
 
 }
