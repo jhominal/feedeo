@@ -18,7 +18,7 @@ Feedeo.FeedsTreePanel = Ext.extend(Ext.tree.TreePanel, {
         var treeLoader = new Ext.tree.TreeLoader({
             dataUrl:Ext.APPLICATION_URL+'/fake-server/json.php',
             baseParams : {page:'tree'}
-        })
+        });
         //noeud racine
         var rootNode = new Ext.tree.AsyncTreeNode({
             text:'Flux RSS',
@@ -44,7 +44,7 @@ Feedeo.FeedsTreePanel = Ext.extend(Ext.tree.TreePanel, {
         Ext.apply(this, Ext.apply(this.initialConfig, config));
         
         // call parent
-       Feedeo.FeedsTreePanel.superclass.initComponent.apply(this, arguments);
+        Feedeo.FeedsTreePanel.superclass.initComponent.apply(this, arguments);
        
        //listeners
        this.on(

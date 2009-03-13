@@ -23,8 +23,52 @@ Feedeo.moveFolder = function(o)
     //o.folder_id
     //o.new_parent_id
 };
+Ext.ns('Feedeo.windows','Feedeo.windows.config','Feedeo.windows.help');
 
+Feedeo.windows.help.about =
+{
+    title : 'A propos de Feedeo',
+    width : 600,
+    height : 400,
+    modal : true,
+    html : '<h2>A propos de Feedeo</h2>'
+};
+Feedeo.windows.help.bugReport =
+{
+    title : 'Reporter un bug',
+    width : 600,
+    height : 400,
+    modal : true
+};
+Feedeo.windows.help.manual =
+{
+    title : 'Manuel d\'utilisation',
+    width : 600,
+    height : 400,
+    modal : true
+};
 
+Feedeo.windows.config.appearence =
+{
+    title : 'Apparence de Feedeo',
+    width : 600,
+    height : 400,
+    modal : true
+};
+Feedeo.windows.config.keyboard =
+{
+    title : 'Configurer les raccourcis clavier',
+    width : 600,
+    height : 400,
+    modal : true
+};
+Feedeo.windows.config.notifications =
+{
+    title : 'Configurer les notifications',
+    width : 600,
+    height : 400,
+    modal : true
+};
 
 Ext.onReady(function() {
     Ext.QuickTips.init();
@@ -38,7 +82,7 @@ Ext.onReady(function() {
     
         window.console = {};
         for (var i = 0; i < names.length; ++i)
-            window.console[names[i]] = function() {}
+            window.console[names[i]] = function() {};
     }
 
     var vp = new Ext.Viewport({
@@ -52,11 +96,16 @@ Ext.onReady(function() {
                 region : 'west',
                 xtype:'feedsandarchivespanel',
                 width: 200,
-                autoScroll:true //? comment ca marche ?
+                split :true,
+                collapsible : true,
+                collapseMode : 'mini',
+                autoScroll:true//? comment ca marche ?
+
             },
             {
                 region : 'center',
                 xtype : 'mainview'
+  
             }
         ]
     });

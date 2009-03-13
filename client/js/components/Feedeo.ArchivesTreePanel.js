@@ -16,7 +16,7 @@ Feedeo.ArchivesTreePanel = Ext.extend(Ext.tree.TreePanel, {
         var treeLoader = new Ext.tree.TreeLoader({
             dataUrl:Ext.APPLICATION_URL+'/fake-server/json.php',
             baseParams : {page:'tree'}
-        })
+        });
         //noeud racine
         var rootNode = new Ext.tree.AsyncTreeNode({
             text:'Dossier d\'archives',

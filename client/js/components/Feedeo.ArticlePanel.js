@@ -7,16 +7,16 @@ Feedeo.ArticlePanel = Ext.extend(Ext.Panel, {
     // hard coded - cannot be changed from outside
 
     var config = {
-    tbar:
-    [{
-        text:'Ouvrir dans un onglet',
-        tooltip: 'Ouvre l\'article dans un onglet',
-        handler: this.openInTabClick,
-        scope:this //comme ça, le "this" dans le handler sera "articlePanel" au lieu de "button"
-    }],
-    autoScroll:true,
-    bodyStyle:'padding:15px',
-    html:'Ce flux ne dispose pas d\'informations'
+        tbar:
+        [{
+            text:'Ouvrir dans un onglet',
+            tooltip: 'Ouvre l\'article dans un onglet',
+            handler: this.openInTabClick,
+            scope:this //comme ça, le "this" dans le handler sera "articlePanel" au lieu de "button"
+        }],
+        autoScroll:true,
+        bodyStyle:'padding:15px',
+        html:'Ce flux ne dispose pas d\'informations'
     }; // eo config object
     
 
@@ -41,7 +41,7 @@ Feedeo.ArticlePanel = Ext.extend(Ext.Panel, {
     },
     refresh : function()
     {
-        this.body.dom.innerHTML = this.record != null ? this.record.data.content : 'pas d\'article sélectionné.';
+        this.body.dom.innerHTML = this.record !== null ? this.record.data.content : 'pas d\'article sélectionné.';
     }
 });
  

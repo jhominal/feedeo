@@ -5,10 +5,11 @@ var icons = Ext.APPLICATION_URL+'/img/icons';
 Feedeo.MainToolbar = Ext.extend(Ext.Toolbar, {
     initComponent:function() {
 
-            var testHandler = function(target, event)
-            {
-                Ext.Msg.alert('Menu handler','Vous avez cliqué sur le bouton '+target.text);
-            };
+        var testHandler = function(target, event)
+        {
+            Ext.Msg.alert('Menu handler','Vous avez cliqué sur le bouton '+target.text);
+        };
+
         // hard coded - cannot be changed from outside
         var config = {
             items : [                
@@ -64,7 +65,7 @@ Feedeo.MainToolbar = Ext.extend(Ext.Toolbar, {
                                      ignoreParentClicks : true,
                                     items : [
                                             {text: 'Exporter la sélection en HTML', handler: testHandler, icon: icons+'/html.png'},
-                                            {text: 'Exporter la sélection en PDF', handler: testHandler, icon: icons+'/page_white_acrobat.png'},
+                                            {text: 'Exporter la sélection en PDF', handler: testHandler, icon: icons+'/page_white_acrobat.png'}
                                     ]
                                 }
                             
@@ -78,9 +79,29 @@ Feedeo.MainToolbar = Ext.extend(Ext.Toolbar, {
                     menu: {
                         ignoreParentClicks : true,
                         items: [
-                            {text: 'Configurer l\'apparence du lecteur', handler: testHandler, icon: icons+'/layout_edit.png'},
-                            {text: 'Configurer les raccourcis clavier', handler: testHandler},
-                            {text: 'Configurer les notifications', handler: testHandler, icon: icons+'/email_edit.png'}
+                            {
+                                text: 'Configurer l\'apparence du lecteur',
+                                handler: function()
+                                {
+                                    new Ext.Window(Feedeo.windows.config.appearence).show();
+                                },
+                                icon: icons+'/layout_edit.png'
+                            },
+                            {
+                                text: 'Configurer les raccourcis clavier',
+                                handler: function()
+                                {
+                                    new Ext.Window(Feedeo.windows.config.keyboard).show();
+                                }
+                            },
+                            {
+                                text: 'Configurer les notifications',
+                                handler: function()
+                                {
+                                    new Ext.Window(Feedeo.windows.config.notifications).show();
+                                },
+                                icon: icons+'/email_edit.png'
+                            }
                         ]
                     }
                 },
@@ -89,14 +110,42 @@ Feedeo.MainToolbar = Ext.extend(Ext.Toolbar, {
                     menu: {
                         ignoreParentClicks : true,
                         items: [
-                            {text: 'Manuel', handler: testHandler, icon: icons+'/help.png'},
+                            {
+                                text: 'Manuel',
+                                handler: function()
+                                {
+                                    new Ext.Window(Feedeo.windows.help.manual).show();
+                                },
+                                icon: icons+'/help.png'
+                            },
                             '-',
-                            {text: 'Rapporter un bug', handler: testHandler, icon: icons+'/bug.png'},
+                            {
+                                text: 'Rapporter un bug',
+                                handler: function()
+                                {
+                                    new Ext.Window(Feedeo.windows.help.bugReport).show();
+                                },
+                                icon: icons+'/bug.png'
+                            },
                             '-',
-                            {text: 'A propos de Feedeo', handler: testHandler, icon: icons+'/vcard.png'}
+                            {
+                                text: 'A propos de Feedeo',
+                                icon: icons+'/vcard.png',
+                                handler : function()
+                                {
+                                    new Ext.Window(Feedeo.windows.help.about).show();
+                                }
+                            }
                         ]
                     }
                 },
+                '->', //remplit l'espace restant
+                {
+                    text:'Se déconnecter',
+                    icon : icons+'/door_out.png',
+                    cls:"x-btn-text-icon", //pour ne pas repeter le background
+                    handler : testHandler
+                }
             ] //eo items
         }; // eo config object
     

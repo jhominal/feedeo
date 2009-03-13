@@ -1,25 +1,10 @@
-
 Ext.ns('Feedeo');
 
-Feedeo.myJsonStore = function(c){
-
-    Feedeo.myJsonStore.superclass.constructor.call(this, Ext.apply(c, {
-        proxy: c.proxy || (!c.data ? new Ext.data.HttpProxy({url: c.url}) : undefined),
-        reader: new Ext.data.JsonReader(c, c.fields)
-    }));
-};
-Ext.extend(Feedeo.myJsonStore, Ext.data.Store,{
-    load : function()
-    {
-        console.debug('myStoreLoadOptions',arguments);
-        Feedeo.myJsonStore.superclass.load.apply(this,arguments);
-    }
-});
  
 Feedeo.ArticlesGridPanel = Ext.extend(Ext.grid.GridPanel, {
     initComponent:function() {
         //create the store to load and store data
-        this.jsonStore = new Feedeo.myJsonStore({
+        this.jsonStore = new Feedeo.CachedMultiJsonStore({
             url:this.initialConfig.url, //load Json from url
             baseParams : {page:'sample'},
             root:'content.articles',
@@ -44,9 +29,9 @@ Feedeo.ArticlesGridPanel = Ext.extend(Ext.grid.GridPanel, {
             columns:[
                 {header: "Auteur", width: 20, sortable: true, dataIndex: 'author'},
                 {header: "Titre", width: 40, sortable: true, dataIndex:'title'}
-            ]
-            ,viewConfig:{forceFit:true}
-            ,loadMask:true //add a mask while loading the data
+            ],
+            viewConfig:{forceFit:true},
+            loadMask:true //add a mask while loading the data
         }; // eo config object
     
 
@@ -68,15 +53,19 @@ Feedeo.ArticlesGridPanel = Ext.extend(Ext.grid.GridPanel, {
     },
     setFolder : function(folder_id)
     {
-        //TODO : si on a déjà les données, on ne reload pas !
-        // un proxy, un store perso ??
-        console.log('store',this.jsonStore);
-        this.jsonStore.baseParams =
+        if(this.folder_id !== folder_id)
         {
-            page: 'sample',
-            folder_id:folder_id
-        };
-        this.jsonStore.load();
+            //TODO : si on a déjà les données, on ne reload pas !
+            // un proxy, un store perso ??
+            console.log('store',this.jsonStore);
+            this.folder_id = folder_id;
+            this.jsonStore.baseParams =
+            {
+                page: 'sample',
+                folder_id:this.folder_id
+            };
+            this.jsonStore.load();
+        }
     }
 });
  
