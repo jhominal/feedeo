@@ -1,20 +1,39 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    
+    <!-- ExtJS lib -->
     <link rel="stylesheet" type="text/css" href="../js/ext-2.2/resources/css/ext-all.css">
     <script type="text/javascript" src="../js/ext-2.2/adapter/ext/ext-base.js"></script>
     <script type="text/javascript" src="../js/ext-2.2/ext-all-debug.js"></script>
     
+    <!-- Ext, Feedeo & Firebug config -->
     <script type="text/javascript">
         //relative path to application files
         Ext.BLANK_IMAGE_URL = '../js/ext-2.2/resources/images/default/s.gif';
         Ext.APPLICATION_URL = '..';
+        
+        //si pas de firebug, faire pointer les console.* vers des fonctions vides
+        // pour ne pas faire d'erreurs...
+        if (!window.console || !console.firebug)
+        {
+            var names = ["log", "debug", "info", "warn", "error", "assert", "dir", "dirxml",
+            "group", "groupEnd", "time", "timeEnd", "count", "trace", "profile", "profileEnd"];
+        
+            window.console = {};
+            for (var i = 0; i < names.length; ++i)
+                window.console[names[i]] = function() {};
+        }
     </script>
-    <script type="text/javascript" src="../js/components/Feedeo.PluginsManager.js"></script>
     
+    <!-- Gestionnaire de plugins et plugins -->
+    <script type="text/javascript" src="../js/components/Feedeo.PluginsManager.js"></script>  
     <script type="text/javascript" src="../js/plugins/PressReview.js"></script>
     
+    <!-- Classes utilitaires -->
+    <script type="text/javascript" src="../js/utils/Feedeo.CachedMultiJsonStore.js"></script>
     
+    <!-- Composants graphiques -->
     <script type="text/javascript" src="../js/components/Feedeo.ArticlesGridPanel.js"></script>
     <script type="text/javascript" src="../js/components/Feedeo.ArticlePanel.js"></script>
     <script type="text/javascript" src="../js/components/Feedeo.MainPanel.js"></script>
@@ -24,11 +43,11 @@
     <script type="text/javascript" src="../js/components/Feedeo.FeedsAndArchivesPanel.js"></script>
     <script type="text/javascript" src="../js/components/Feedeo.MainToolbar.js"></script>
 
-
+    <!-- Feedeo -->
     <script type="text/javascript" src="../js/FeedeoApplication.js"></script>
  
 
-    <title>Application - Test</title>
+    <title>Feedeo</title>
 </head>
 <body>
 </body>

@@ -36,6 +36,7 @@ Feedeo.FeedsTreePanel = Ext.extend(Ext.tree.TreePanel, {
             loader:treeLoader,
             root:rootNode,
             tbar:toolbar,
+            autoScroll : true,
             enableDD : true           
             
         };         

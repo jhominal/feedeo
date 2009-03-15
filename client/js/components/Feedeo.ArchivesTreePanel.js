@@ -34,20 +34,9 @@ Feedeo.ArchivesTreePanel = Ext.extend(Ext.tree.TreePanel, {
             loader:treeLoader,
             root:rootNode,
             tbar:toolbar,
+            autoScroll : true,
             enableDD : true
-        }; /*
-        var config = {
-        tbar:
-        [{
-            text:'Ouvrir dans un onglet',
-            tooltip: 'Ouvre l\'article dans un onglet',
-            handler: this.openInTabClick,
-            scope:this //comme ça, le "this" dans le handler sera "articlePanel" au lieu de "button"
-        }],
-        autoScroll:true,
-        bodyStyle:'padding:15px',
-        html:'Ce flux ne dispose pas d\'informations'
-        }; // eo config object */
+        }; 
         
     
         // apply config
@@ -69,12 +58,6 @@ Feedeo.ArchivesTreePanel = Ext.extend(Ext.tree.TreePanel, {
     }, // eo function initComponent
     onFolderClick : function(node,event)
     {
-        //expand if possible
-        /*if(!node.leaf && !node.expanded)
-        {
-            console.debug('expand node');
-            node.expand();
-        }*/
         console.debug('Node clicked',node,event);
         this.fireEvent('folderselect',node.id);
     }

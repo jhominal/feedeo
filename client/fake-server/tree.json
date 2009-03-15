@@ -1,5 +1,5 @@
 [
-    {text:'dossier1',children:[{text:'flux1',leaf:true},{text:'flux2',leaf:true}]},
+    {text:'dossier1',children:[{text:'flux1',leaf:true},{text:'flux1',leaf:true},{text:'flux1',leaf:true},{text:'flux1',leaf:true},{text:'flux1',leaf:true},{text:'flux1',leaf:true},{text:'flux1',leaf:true},{text:'flux1',leaf:true},{text:'flux1',leaf:true},{text:'flux1',leaf:true},{text:'flux1',leaf:true},{text:'flux1',leaf:true},{text:'flux1',leaf:true},{text:'flux1',leaf:true},{text:'flux1',leaf:true},{text:'flux1',leaf:true},{text:'flux1',leaf:true},{text:'flux1',leaf:true},{text:'flux1',leaf:true},{text:'flux1',leaf:true},{text:'flux1',leaf:true},{text:'flux1',leaf:true},{text:'flux1',leaf:true},{text:'flux2',leaf:true}]},
     {text:'flux3',leaf:true},
     {text:'remote node'}
 ]
