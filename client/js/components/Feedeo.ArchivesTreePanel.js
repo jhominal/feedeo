@@ -36,6 +36,7 @@ Feedeo.ArchivesTreePanel = Ext.extend(Ext.tree.TreePanel, {
             tbar:toolbar,
             autoScroll : true,
             enableDD : true
+
         }; 
         
     
@@ -49,6 +50,7 @@ Feedeo.ArchivesTreePanel = Ext.extend(Ext.tree.TreePanel, {
        this.on(
             {
                 'click' : this.onFolderClick,
+                'contextmenu': this.onContextMenu,
                 scope : this
             }
        );
@@ -60,6 +62,38 @@ Feedeo.ArchivesTreePanel = Ext.extend(Ext.tree.TreePanel, {
     {
         console.debug('Node clicked',node,event);
         this.fireEvent('folderselect',node.id);
+    },
+    onContextMenu : function(node, event)
+    {
+        //create the menu on first right-click
+        if(!this.contextMenu)
+        {
+            this.contextMenu = new Ext.menu.Menu({
+                items: [{
+                    id: 'delete-node',
+                    text: 'Delete Node'
+                }],
+                listeners: {
+                    itemclick: function(item) {
+                        switch (item.id) {
+                            case 'delete-node':
+                                var n = item.parentMenu.contextNode;
+                                if (n.parentNode) {
+                                    n.remove();
+                                }
+                                break;
+                        }
+                    }
+                }
+            })
+        }
+        //node.select();
+        var c = node.getOwnerTree().contextMenu;
+        //attach the node to the menu
+        c.contextNode = node;
+        //display the menu
+        c.showAt(event.getXY());
+        console.debug('context node : ',node);
     }
 
 });
