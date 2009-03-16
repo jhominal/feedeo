@@ -45,6 +45,11 @@ Feedeo.ArticlesGridPanel = Ext.extend(Ext.grid.GridPanel, {
         this.addEvents('articleselect');
         var sm = this.getSelectionModel();
         sm.addListener('rowselect',this.onRowSelect,this); //this = scope
+        
+        this.on({
+           'rowcontextmenu' : this.onRowContextMenu,
+           scope : this
+        });
     }, // eo function initComponent
     onRowSelect : function(sm,rowindex,record)
     {
@@ -66,6 +71,42 @@ Feedeo.ArticlesGridPanel = Ext.extend(Ext.grid.GridPanel, {
             };
             this.jsonStore.load();
         }
+    },
+    onRowContextMenu : function(grid, rowIndex, event)
+    {
+        //create the menu on first right-click
+        if(!this.contextMenu)
+        {
+            this.contextMenu = new Ext.menu.Menu({
+                items: [{
+                    id: 'delete-article',
+                    text: 'Supprimer'
+                }],
+                listeners: {
+                    itemclick: function(item) {
+                        switch (item.id) {
+                            case 'delete-article':
+                                var article = item.parentMenu.contextArticle;
+                                var store = item.parentMenu.contextGrid.store;
+                                store.remove(article);
+                                break;
+                        }
+                    }
+                }
+            })
+        }
+        //on empeche la propagation de l'event
+        event.stopEvent();
+        //node.select();
+        var article = grid.store.getAt(rowIndex);//find the record
+        //attach the article and the grid to the menu
+        var ctxMenu = grid.contextMenu;
+        ctxMenu.contextArticle = article;
+        ctxMenu.contextGrid = grid;
+        
+        //display the menu
+        ctxMenu.showAt(event.getXY());
+        console.debug('context article : ',article);
     }
 });
  
