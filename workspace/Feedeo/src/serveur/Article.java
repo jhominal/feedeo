@@ -94,7 +94,7 @@ public class Article{
     }
 	
 // DEBUT SET GET
-	private void setId(Long i){
+	public void setId(Long i){
 		idArticle=i;
 	}
 	public Long getIdArticle(){

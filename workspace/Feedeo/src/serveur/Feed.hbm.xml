@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="feedeo.Feed" table="Feed">
+		<id name="idFeed" column="IdFeed">
+			<generator class="increment"></generator>
+		</id>
+		<property name="title"/>
+		<property name="url" />
+		<property name="pudate"  type="timestamp" column="Article_date" />
+		<property name="link"/>
+		<set name="articles" inverse="true" cascade="all-delete-orphan">
+		<key column="IdFeed"></key>
+		<one-to-many class="feedeo.Article" />
+		</set>
+		
+	</class>
+</hibernate-mapping>

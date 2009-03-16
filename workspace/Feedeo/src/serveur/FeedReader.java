@@ -7,7 +7,11 @@ import com.sun.syndication.io.SyndFeedInput;
 import com.sun.syndication.io.XmlReader;
 
 public class FeedReader {
-
+	//CREATION D'UN FICHIER OPML
+	//FIN CREATION D'UN FICHIER OPML
+	//LECTURE D'UN FICHIER OPML
+	//FIN LECTURE D'UN FICHIER OPML
+	
     public static void main(String[] args) {
         boolean ok = false;
         if (args.length==1) {

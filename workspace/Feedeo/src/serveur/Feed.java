@@ -10,7 +10,7 @@ import java.net.URL;
 //import java.util.List;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.Vector;
+//import java.util.Vector;
 import com.sun.syndication.io.XmlReader;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -23,10 +23,11 @@ import com.sun.syndication.io.SyndFeedInput;
 import java.util.Date;
 public class Feed {
 /*Feed's title*/
-public String title;
-public String url;
-public String link;
-public Date pubDate;
+private Long idFeed;
+private String title;
+private String url;
+private String link;
+private Date pubDate;
 //Lien Unidirectionnel vers la liste des articles de ce flux
 private Set<Article> articles=new HashSet<Article>();
 //public Vector<Article> articles;
@@ -91,6 +92,12 @@ public Feed (String url){
 
 
 // DEBUT SET GET
+public Long getId(){
+	return this.idFeed;
+}
+public void setId(Long id){
+	this.idFeed=id;
+}
 public String getTitle(){
         return this.title;
 }
@@ -124,8 +131,12 @@ public void setArticles(SyndFeed feed){
     int i;
             for (i = 0; i <nbarticles ; i++) 
             {   Article article=new Article((SyndEntry)(feed.getEntries().get(i)),this);
+            //verifier que c'est un article déjà dans la base
+            //faire un select sur les articles de ce flux pour rajouter les nouveaux articles et les lier à un dossier
+            //updater les anciens articles 
+            //si lu REMETTRE à NON LU si la date de mise à jour est récente
+            //s'il n'est pas encore dans la liste d'article de l'utilisateur alors on l'insère et on l'ajoute au dossier par défaut
             	articles.add(article);
-                //Larticles.add(i,article);
             }
 	
 }

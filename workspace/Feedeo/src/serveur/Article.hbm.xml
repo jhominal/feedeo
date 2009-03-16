@@ -5,7 +5,7 @@
 
 <hibernate-mapping>
 	<class name="feedeo.Article" table="Article">
-		<id name="idArticle" column="Id">
+		<id name="idArticle" column="IdArticle">
 			<generator class="increment"></generator>
 		</id>
 		<property name="title"/>
@@ -14,15 +14,17 @@
 		<property name="summary"/>
 		<property name="read" />
 		<property name="author"/>
-		
+		<set name="categories" table="Categories">
+			<key column="IdArticle"/>
+			<element type="string" column="Category"/>
+		</set>
+		<!-- Lien avec le flux d'origine
+		!-->
+		<many-to-one name="IdFeed" class="feedeo.Feed" not-null="true" />		
 		
 				<!-- 
-	//Catégories de l'article /tags
-	private List<String> categories;
 	//Lien article au dossier PAS ICI DANS LA TABLE KI LIE ARTICLE ET DOSSIER
 	//private Directory directory;
-	//Lien vers le flux d'origine
-	private Feed feedOrig;
 		!-->
 		
 	</class>

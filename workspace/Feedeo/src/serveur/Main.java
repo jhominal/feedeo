@@ -31,7 +31,8 @@ public class Main {
 
 		  JSONWriter writer = new JSONWriter();
 		  System.out.println("JSONWriter result is " + writer.write(feed));
+		  System.exit(0);
 
-		}
+}
 	
 }
