@@ -40,6 +40,7 @@ Feedeo.MainToolbar = Ext.extend(Ext.Toolbar, {
                 },
                 {
                     text: 'Article',
+                    id:'article',
                     menu: {
                         ignoreParentClicks : true,
                         items: [
@@ -56,20 +57,8 @@ Feedeo.MainToolbar = Ext.extend(Ext.Toolbar, {
                             {text: 'Marquer la sélection comme importante', handler: testHandler, icon: icons+'/flag_red.png'},
                             '-',
                             {text: 'Supprimer l\'article', handler: testHandler, icon: icons+'/page_white_delete.png'},
-                            {text: 'Supprimer la sélection', handler: testHandler, icon: icons+'/delete.png'},
-                            '-',
-                            {
-                                text: 'Revue de presse',
-                                icon: icons+'/newspaper.png',
-                                menu : {
-                                     ignoreParentClicks : true,
-                                    items : [
-                                            {text: 'Exporter la sélection en HTML', handler: testHandler, icon: icons+'/html.png'},
-                                            {text: 'Exporter la sélection en PDF', handler: testHandler, icon: icons+'/page_white_acrobat.png'}
-                                    ]
-                                }
+                            {text: 'Supprimer la sélection', handler: testHandler, icon: icons+'/delete.png'}
                             
-                            }
                             
                         ]
                     }
