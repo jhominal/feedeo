@@ -41,7 +41,11 @@ Feedeo.ArticlePanel = Ext.extend(Ext.Panel, {
     },
     refresh : function()
     {
-        this.body.dom.innerHTML = this.record !== null ? this.record.data.content : 'pas d\'article sélectionné.';
+        Feedeo.plugins.actions('beforeArticleRefresh',this);
+        var articleContent = this.record !== null ? this.record.data.content : 'Pas d\'article sélectionné.';
+        articleContent = Feedeo.plugins.filters('articleContent',articleContent);
+        this.body.dom.innerHTML = articleContent;
+        Feedeo.plugins.actions('afterArticleRefresh',this);
     }
 });
  

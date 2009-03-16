@@ -2,7 +2,7 @@
 var pressReview =
 {
     name : 'Revue de Presse',
-    actions :
+    onInit :
     {
         maintoolbar : function(component)
         {
