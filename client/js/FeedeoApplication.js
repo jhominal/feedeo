@@ -31,7 +31,9 @@ Feedeo.windows.help.about =
     width : 600,
     height : 400,
     modal : true,
-    html : '<h2>A propos de Feedeo</h2>'
+    bodyStyle : 'padding:10px',
+    autoLoad : Ext.APPLICATION_URL+'/html/about.html',
+    autoScroll : true
 };
 Feedeo.windows.help.bugReport =
 {
