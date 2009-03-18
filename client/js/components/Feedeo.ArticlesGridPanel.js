@@ -6,16 +6,40 @@ Feedeo.ArticlesGridPanel = Ext.extend(Ext.grid.GridPanel, {
         //create the store to load and store data
         this.jsonStore = new Feedeo.CachedMultiJsonStore({
             url:this.initialConfig.url, //load Json from url
-            baseParams : {page:'sample'},
+            baseParams : {page:'sample2'},
             root:'content.articles',
             autoLoad:true, // auto call the .load() method
             fields:[
                 {name: 'author'},
                 {name: 'title'},
                 {name: 'content'},
-                {name: 'url'}
+                {name: 'url'},
+                {name : 'date', type :'date', dateFormat:'Y-m-d'},
+                {name : 'categories'}, //Array ? does it work ?
+                {name :'summary'},
+                {name : 'state'} //array, or object (read, important..)
             ]
         });
+        
+        var stateRenderer = function(val)
+        {
+            return (val.read?"Lu":"Non Lu")
+                +(val.important?'<img src="'+Ext.APPLICATION_URL+'/img/icons/flag_red.png"/>':'');
+        };
+        var titleSummaryRenderer = function(val,metadata,record /*,...*/ )
+        {
+            console.debug('renderer',arguments);
+            return '<b>'+val+'</b><br/>'+record.data.summary;
+        }
+        var tagsRenderer = function(tagsArray)
+        {
+            var tagsString='';
+            for(var i = 0;i!= tagsArray.length;i++)
+            {
+                tagsString+=tagsArray[i]+' ';
+            }
+            return tagsString;
+        }
 
         // hard coded - cannot be changed from outside
         var config = {
@@ -27,8 +51,12 @@ Feedeo.ArticlesGridPanel = Ext.extend(Ext.grid.GridPanel, {
             }],
             store: this.jsonStore,
             columns:[
+                {header: "Etat", width : 10,sortable:true,dataIndex:'state',renderer:stateRenderer},
                 {header: "Auteur", width: 20, sortable: true, dataIndex: 'author'},
-                {header: "Titre", width: 40, sortable: true, dataIndex:'title'}
+                {header: "Titre", width: 40, sortable: true, dataIndex:'title',renderer:titleSummaryRenderer},
+                {header: "Publié le", width : 20,sortable:true,dataIndex :'date',renderer:Ext.util.Format.dateRenderer('d/m/Y')},
+                {header: "Tags", width:30,sortable:false,dataIndex:'categories',renderer:tagsRenderer}
+                
             ],
             viewConfig:{forceFit:true},
             loadMask:true //add a mask while loading the data
@@ -66,7 +94,7 @@ Feedeo.ArticlesGridPanel = Ext.extend(Ext.grid.GridPanel, {
             this.folder_id = folder_id;
             this.jsonStore.baseParams =
             {
-                page: 'sample',
+                page: 'sample2',
                 folder_id:this.folder_id
             };
             this.jsonStore.load();
