@@ -2,6 +2,7 @@ package serveur;
 
 
 
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -17,6 +18,12 @@ public class User extends HibernateObject {
 		private String password;
 		
 		private Set<Preference> preferences;
+		
+		//LIEN MANY TO MANY AVEC ARTICLE
+		private Set<Article> user_articles=new HashSet<Article>();
+		//LIEN ONE TO MANY AVEC DIRECTORY
+		private Set<Directory> user_directories=new HashSet<Directory>();
+
 		
 		public User(){
 		}
@@ -72,7 +79,21 @@ public class User extends HibernateObject {
 			this.preferences = preferences;
 			}
 
+		public Set<Article> getUser_articles(){
+			return this.user_articles;
+		}
+
+		public void setlistDir(Set<Article> listArticle){
+			this.user_articles=listArticle;
+		}
 		
+		public Set<Directory> getUser_directories(){
+			return this.user_directories;
+		}
+
+		public void setUser_directories(Set<Directory> directories){
+			this.user_directories=directories;
+		}
 		
 		public void createUser() {
 			HibernateObject.create(this);	

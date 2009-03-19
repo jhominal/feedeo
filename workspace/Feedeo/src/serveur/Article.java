@@ -3,6 +3,7 @@ package serveur;
 
 import java.util.Date;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -22,10 +23,13 @@ public class Article{
 	//Catégories de l'article /tags
 	private List<String> categories;
 	
-	//Résumé de l'article
+	//Résumé de l'article()
 	private String summary;
 	//LIEN AVEC LES PROPRIETES D'UN ARTICLES lien one to many avec la classe Articl_Properties
-	private Set<Articles_Properties> articles_properties;
+	private Set<Articles_Properties> articles_properties=new HashSet<Articles_Properties>();
+	//LIEN MANY TO MANY AVEC USER
+	private Set<User> article_user=new HashSet<User>();
+	
 	
 	
 	//PROPRIETE DE L'ARTICLE 
@@ -191,6 +195,13 @@ public void setlistDir(Set<Directory> listDir){
 	this.listDir=listDir;
 }
 
+public Set<User> getArticle_user(){
+	return this.article_user;
+}
+
+public void setArticle_user(Set<User> article_user){
+	this.article_user=article_user;
+}
 //FIN SET GET
 
 //GESTION DES PIECES JOINTES ENCLOSURES

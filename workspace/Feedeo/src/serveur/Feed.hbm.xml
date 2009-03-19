@@ -12,6 +12,8 @@
 		<property name="url" />
 		<property name="pudate"  type="timestamp" column="Article_date" />
 		<property name="link"/>
+		
+		<!--- LIEN ONE TO MANY AVEC ARTICLE !--->
 		<set name="articles" inverse="true" cascade="all-delete-orphan">
 		<key column="IdFeed"></key>
 		<one-to-many class="feedeo.Article" />

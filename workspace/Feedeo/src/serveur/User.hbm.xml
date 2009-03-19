@@ -18,9 +18,18 @@
             <many-to-many  class="serveur.Preference" column="idPref" />
             
 	   </set> 
-	   
-	   
-	   
+<!-- LIEN MANY TO MANY AVEC ARTICLE !-->
+	
+	<set  name="user_articles" table="User_Article" inverse="true" >
+			<key column="idUser" />
+			<many-to-many  class="feedeo.Article" column="idArticle" >
+		</set>	
+<!--- LIEN ONE TO MANY AVEC DOSSIER !--->
+		<set name="user_directories" inverse="true" cascade="all-delete-orphan">
+		<key column="IdUser"></key>
+		<one-to-many class="feedeo.Article" />
+		</set>
 
 </class>
+
 </hibernate-mapping>

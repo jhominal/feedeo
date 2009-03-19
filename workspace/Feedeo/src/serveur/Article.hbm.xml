@@ -18,14 +18,8 @@
 			<key column="IdArticle"/>
 			<element type="string" column="Category"/>
 		</set>
-		<!-- Lien avec le flux d'origine
-		!-->
+		<!-- LIEN MANY TO ONE AVEC FLUX !-->
 		<many-to-one name="IdFeed" class="feedeo.Feed" not-null="true" />		
-		
-				<!-- 
-	//Lien article au dossier PAS ICI DANS LA TABLE KI LIE ARTICLE ET DOSSIER
-	//private Directory directory;
-		!-->
 		
 	</class>
 	<!-- LIEN MANY TO MANY AVEC DIRECTORY!-->
@@ -41,7 +35,13 @@
 		<key column="IdArticle"></key>
 		<one-to-many class="feedeo.Articles_Properties" />
 		</set>
-	
 	</class>
+	
+	<!-- LIEN MANY TO MANY AVEC USER!-->
+	<class name="feedeo.Article" table="Article">
+	<set  name="article_user" table="User_Article" inverse="true" >
+			<key column="idArticle" />
+			<many-to-many  class="feedeo.User" column="idUser" >
+		</set>		
 
 </hibernate-mapping>
