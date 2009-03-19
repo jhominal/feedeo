@@ -30,7 +30,7 @@
 		</set>		
 	</class>
 	<!-- LIEN ONE TO MANY AVEC ARTICLES PROPERTIES!-->
-	</class name="feedeo.Article" table="Article">
+	<class name="feedeo.Article" table="Article">
 		<set name="articles_properties" inverse="true" cascade="all-delete-orphan">
 		<key column="IdArticle"></key>
 		<one-to-many class="feedeo.Articles_Properties" />
