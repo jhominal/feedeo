@@ -2,7 +2,9 @@ package serveur;
 
 
 import java.util.Date;
+
 import java.util.List;
+import java.util.Set;
 
 
 import com.sun.syndication.feed.synd.SyndContent;
@@ -22,20 +24,20 @@ public class Article{
 	
 	//Résumé de l'article
 	private String summary;
+	//LIEN AVEC LES PROPRIETES D'UN ARTICLES lien one to many avec la classe Articl_Properties
+	private Set<Articles_Properties> articles_properties;
 	
-	//booléen lu ou pas PAS ICI DANS LA TABLE KI LIE ARTICLE ET USER
-	private boolean read;
+	
+	//PROPRIETE DE L'ARTICLE 
+	//private Set<Articles_User>
+	
 	
 	//Auteur de l'article
 	private String author;
-	//Lien article au dossier PAS ICI DANS LA TABLE KI LIE ARTICLE ET DOSSIER
-	//private Directory directory;
+	//Lien article au dossier many to many
+	private Set<Directory> listDir;
 	//proprio de l'article
 	private String owner;
-	
-	//Lien vers le flux d'origine Voir dans le flux, lien unidirectionnel
-	//private Set Feed feedOrig;
-	//RECUPERER UN ARTICLE AVEC UN SYNDENTRY
 	
 	public Article(){}
 	
@@ -46,7 +48,7 @@ public class Article{
 		this.summary=summary;
 		this.author=author;
 		this.owner=owner;
-		this.read=read;
+		//this.read=read;
 		this.categories=categories;
 	}
 	
@@ -82,7 +84,7 @@ public class Article{
         	}
         	
         }
-        this.read=(boolean)false;
+       // this.read=(boolean)false;
         try{
         	this.author=se.getAuthor();
     	}
@@ -147,12 +149,14 @@ public String getSummaryLight() {
 		return summary;
 }
 
-public boolean getread(){
+/*
+ * public boolean getread(){
 	return read;
 }
 public void setread(boolean read){
 	this.read=read;
 }
+*/
 
 public String getOwner() {
 	return owner;
@@ -168,6 +172,23 @@ public void setAuthor(String author){
 	
 public String getAuthor(){
 	return author;
+}
+
+public void setArticlesProperties(Set<Articles_Properties> articles_properties){
+	this.articles_properties=articles_properties;
+}
+public Set<Articles_Properties> getUserArticles(){
+	return articles_properties;
+
+}
+
+
+public Set<Directory> getlistDir(){
+	return this.listDir;
+}
+
+public void setlistDir(Set<Directory> listDir){
+	this.listDir=listDir;
 }
 
 //FIN SET GET

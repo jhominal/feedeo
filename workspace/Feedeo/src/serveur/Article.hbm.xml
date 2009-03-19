@@ -28,4 +28,20 @@
 		!-->
 		
 	</class>
+	<!-- LIEN MANY TO MANY AVEC DIRECTORY!-->
+	<class name="feedeo.Article" table="Article">
+	<set  name="listDir" table="Dir_Article" inverse="true" >
+			<key column="idArticle" />
+			<many-to-many  class="feedeo.Directory" column="idDirectory" >
+		</set>		
+	</class>
+	<!-- LIEN ONE TO MANY AVEC ARTICLES PROPERTIES!-->
+	</class name="feedeo.Article" table="Article">
+		<set name="articles_properties" inverse="true" cascade="all-delete-orphan">
+		<key column="IdArticle"></key>
+		<one-to-many class="feedeo.Articles_Properties" />
+		</set>
+	
+	</class>
+
 </hibernate-mapping>

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<class name="feedeo.Articles_Proterties" table="Articles_Proterties">
+		<id name="idProperties" column="idProperties">
+			<generator class="increment"></generator>
+		</id>
+		<property name="read"/>
+		<property name="important" />
+		<property name="idUser" />
+		
+	<!-- LIEN MANY TO ONE AVEC ARTICLE !-->
+		<many-to-one name="IdArticle" class="feedeo.Article" not-null="true" />		
+	</class>
+</hibernate-mapping>

@@ -1,22 +1,34 @@
 
 package serveur;
 
+import java.util.Set;
+
 public class Directory {
 	public String title;
 	//ID DU DOSSIER PARENT on ne sait pas encore comment ça va fonctionner avec HIBERNATE
-	public Directory dirParent;
-	//ID DU DOSSIER
-	public Integer id;
-	//LIEN AVEC L'UTILISATEUR
-	//public String idUser;
+	public Long idParent;
+	//Lien dossier aux articles many to many
+	private Set<Article> listArticle;
+	
+	
+	
 	public Directory(String title){
 		this.title=title;
-		dirParent=null;
+		this.idParent=null;
 	}
-	public Directory(String title,Directory dirParent){
+	public Directory(String title,Long dirParent){
 		this.title=title;
-		this.dirParent=dirParent;
+		this.idParent=dirParent;
 	}
+	
+	public Set<Article> getlistArticle(){
+		return this.listArticle;
+	}
+	
+	public void setlistArticle(Set<Article> articles){
+		this.listArticle=articles;
+	}
+	
 	public boolean isEmpty()
 	{
 		//REQUETE HIBERNATE
