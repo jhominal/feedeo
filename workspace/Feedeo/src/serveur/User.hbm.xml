@@ -1,35 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD
 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
- <hibernate-mapping>
- 
- <class name="serveur.User" table="user">
-<id name="idUser" column="idUser" >
-<generator class="increment"/>
-</id>
-<property name="name" column="name" />
-<property name="lastname" column="lastname" />
-<property name="login" column="login" />
-<property name="password" column="password" />
+<hibernate-mapping>
 
-<set name="preferences" table="userPreferences" >
-		 <key column="idUser"/>
-           
-            <many-to-many  class="serveur.Preference" column="idPref" />
-            
-	   </set> 
-<!-- LIEN MANY TO MANY AVEC ARTICLE !-->
-	
-	<set  name="user_articles" table="User_Article" inverse="true" >
+	<class name="serveur.User" table="user">
+
+		<id name="idUser" column="idUser">
+			<generator class="increment" />
+		</id>
+		<property name="name" column="name" />
+		<property name="lastname" column="lastname" />
+		<property name="login" column="login" />
+		<property name="password" column="password" />
+
+
+
+
+		<!-- LIEN MANY TO MANY AVEC PREFERENCE !-->
+		<set name="userPreferences" cascade="all" inverse="false">
 			<key column="idUser" />
-			<many-to-many  class="feedeo.Article" column="idArticle" >
-		</set>	
-<!--- LIEN ONE TO MANY AVEC DOSSIER !--->
-		<set name="user_directories" inverse="true" cascade="all-delete-orphan">
-		<key column="IdUser"></key>
-		<one-to-many class="feedeo.Article" />
+			<one-to-many class="serveur.UserPreference" />
 		</set>
 
-</class>
+		<!-- LIEN MANY TO MANY AVEC ARTICLE !-->
+		<!--
+			<set name="user_articles" table="User_Article" inverse="true"> <key
+			column="idUser" /> <many-to-many class="feedeo.Article"
+			column="idArticle" /> </set>
+		-->
+		<!-- LIEN ONE TO MANY AVEC DOSSIER !-->
+		<!--
+			<set name="user_directories" inverse="true"
+			cascade="all-delete-orphan"> <key column="IdUser"></key> <one-to-many
+			class="feedeo.Article" /> </set>
+		-->
+	</class>
 
 </hibernate-mapping>
