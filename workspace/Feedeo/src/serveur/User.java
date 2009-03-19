@@ -1,11 +1,7 @@
 package serveur;
 
-
-
 import java.util.HashSet;
 import java.util.Set;
-
-
 
 
 public class User extends HibernateObject {
@@ -17,7 +13,7 @@ public class User extends HibernateObject {
 		private String login;
 		private String password;
 		
-		private Set<Preference> preferences;
+		Set<UserPreference> userPreferences=new HashSet<UserPreference>();
 		
 		//LIEN MANY TO MANY AVEC ARTICLE
 		private Set<Article> user_articles=new HashSet<Article>();
@@ -35,9 +31,11 @@ public class User extends HibernateObject {
 			this.setPassword(password);
 			
 		}
+		
 		public long getIdUser() {
 		return idUser;
 		}
+		
 		public void setIdUser(long idUser) {
 		this.idUser = idUser;
 		}
@@ -71,12 +69,12 @@ public class User extends HibernateObject {
 			}
 		
 		
-		public Set<Preference> getPreferences() {
-			return preferences;
+		public Set<UserPreference> getUserPreferences() {
+			return userPreferences;
 			}
 		
-		public void setPreferences(Set<Preference> preferences) {
-			this.preferences = preferences;
+		public void setUserPreferences(Set<UserPreference> userPreferences) {
+			this.userPreferences = userPreferences;
 			}
 
 		public Set<Article> getUser_articles(){
@@ -107,6 +105,9 @@ public class User extends HibernateObject {
 			HibernateObject.update(this);	
 		}
 		
-		}
+    
+}
+
+
 
 
