@@ -12,7 +12,8 @@
 			"date":"2009-03-12",
 			"categories" : ["info","jquery"],
 			"summary" : "balblabal llazllbal",
-			"state" : {"read":false, "important":false}
+			"read" : false,
+			"important":false
 			},
 			{
 			"author":"Maurice",
@@ -22,7 +23,8 @@
 			"date":"2008-11-12",
 			"categories" : ["info","wordpress"],
 			"summary" : "wordpress, c'est bien",
-			"state" : {"read":true, "important":true}
+			"read":true,
+			"important":true
 			}
 		]
     }

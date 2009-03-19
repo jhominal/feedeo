@@ -15,21 +15,21 @@ Feedeo.ArticlesGridPanel = Ext.extend(Ext.grid.GridPanel, {
                 {name: 'content'},
                 {name: 'url'},
                 {name : 'date', type :'date', dateFormat:'Y-m-d'},
-                {name : 'categories'}, //Array ? does it work ?
+                {name : 'categories'}, //Array
                 {name :'summary'},
-                {name : 'state'} //array, or object (read, important..)
+                {name : 'read'},
+                {name : 'important'}
             ]
         });
         
-        var stateRenderer = function(val)
+
+        var titleStateSummaryRenderer = function(val,metadata,record /*,...*/ )
         {
-            return (val.read?"Lu":"Non Lu")
-                +(val.important?'<img src="'+Ext.APPLICATION_URL+'/img/icons/flag_red.png"/>':'');
-        };
-        var titleSummaryRenderer = function(val,metadata,record /*,...*/ )
-        {
-            console.debug('renderer',arguments);
-            return '<b>'+val+'</b><br/>'+record.data.summary;
+            var html='';
+            //html+=(record.get('important')?'<img src="'+Ext.APPLICATION_URL+'/img/icons/flag_red.png"/>':'');
+            html+='<b>'+val+'</b>';
+            html+='<br/>'+record.get('summary');
+            return html;
         }
         var tagsRenderer = function(tagsArray)
         {
@@ -47,13 +47,15 @@ Feedeo.ArticlesGridPanel = Ext.extend(Ext.grid.GridPanel, {
             [{
                 icon: Ext.APPLICATION_URL+'/img/icons/page_white.png', // icons can also be specified inline
                 cls: 'x-btn-icon',
-                tooltip: '<b>Quick Tips</b><br/>Icon only button with tooltip'
+                tooltip: '<b>Quick Tips</b><br/>Icon only button with tooltip',
+                handler : function(){console.log(this.jsonStore.commitChanges());},
+                scope:this
             }],
             store: this.jsonStore,
             columns:[
-                {header: "Etat", width : 10,sortable:true,dataIndex:'state',renderer:stateRenderer},
+                {header: "Titre", width: 40, sortable: true, dataIndex:'title',renderer:titleStateSummaryRenderer},
                 {header: "Auteur", width: 20, sortable: true, dataIndex: 'author'},
-                {header: "Titre", width: 40, sortable: true, dataIndex:'title',renderer:titleSummaryRenderer},
+
                 {header: "Publié le", width : 20,sortable:true,dataIndex :'date',renderer:Ext.util.Format.dateRenderer('d/m/Y')},
                 {header: "Tags", width:30,sortable:false,dataIndex:'categories',renderer:tagsRenderer}
                 
@@ -69,6 +71,18 @@ Feedeo.ArticlesGridPanel = Ext.extend(Ext.grid.GridPanel, {
         // call parent
         Feedeo.ArticlesGridPanel.superclass.initComponent.apply(this, arguments);
         
+        //set the row class function (bold if unread)
+        this.getView().getRowClass = function(article, index)
+        {
+            //css class read & unread... are defined in feedeo.css
+            var rowClass='';
+            rowClass+=(article.data.read ? '' : 'unread');
+            rowClass+=' '+(article.data.important ? 'important':'');
+            return rowClass;
+            
+        }; 
+        
+        
         //register events & listeners
         this.addEvents('articleselect');
         var sm = this.getSelectionModel();
@@ -81,6 +95,9 @@ Feedeo.ArticlesGridPanel = Ext.extend(Ext.grid.GridPanel, {
     }, // eo function initComponent
     onRowSelect : function(sm,rowindex,record)
     {
+        //set article as read
+        record.set('read',true);
+        
         console.debug('Event rowselect captured, fire "articleselect" with :',record);
         this.fireEvent('articleselect',record);
     },
