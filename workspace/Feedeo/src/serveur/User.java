@@ -14,11 +14,19 @@ public class User extends HibernateObject {
 		private String lastname;
 		
 		private String login;
-		//private String password;
+		private String password;
 		
 		private Set<Preference> preferences;
 		
 		public User(){
+		}
+		
+		public User(String name, String lastname, String login, String password){
+			this.setName(name);
+			this.setLastname(lastname);
+			this.setLogin(login);
+			this.setPassword(password);
+			
 		}
 		public long getIdUser() {
 		return idUser;
@@ -45,6 +53,14 @@ public class User extends HibernateObject {
 		
 		public void setLogin(String login) {
 			this.login = login;
+			}
+		
+		public String getPassword() {
+			return password;
+			}
+		
+		public void setPassword(String password) {
+			this.password = password;
 			}
 		
 		

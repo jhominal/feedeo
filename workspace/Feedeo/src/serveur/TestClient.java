@@ -16,24 +16,9 @@ public class TestClient {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		User user1 = new User();
-		user1.setName("meriam");
-		user1.setLastname("sekkat");
-		user1.setLogin("mimi");
-		User user2 = new User();
-		user2.setName("zak");
-		user2.setLastname("salim");
-		User user3 = new User();
-		user3.setName("abla");
-		user3.setLastname("ben");
-		User user4 = new User();
-		user4.setName("salwa");
-		user4.setLastname("bousfiha");
-		user4.setLogin("sliwa");
-		User user5 = new User();
-		user5.setName("florian");
-		user5.setLastname("cargoet");
-		user5.setLogin("flori");
+		User user1 = new User("meriam","sekkat","mimi","tintin20");
+		User user2 = new User("ghita","sekkat","tita","tite200");
+		
 		
 		Preference preference1= new Preference();
 		preference1.setName("Couleur");
@@ -42,31 +27,28 @@ public class TestClient {
 		
 		preference1.createPreference();
 		
-		//Preference preference2= new Preference();
-		//preference2.setName("mode");
+		Preference preference2= new Preference();
+		preference2.setName("Police");
+		preference2.createPreference();
 		
 		Set<Preference> preferences1= new HashSet<Preference>();
 		preferences1.add(preference1);
 		//preferences1.add(preference2);
     	
 		
-		User user6= new User();
-		user6.setLogin("coucou");
-		user6.setName("salut");
+		user1.setPreferences(preferences1);
 		
-		user6.setPreferences(preferences1);
-		
-		/*user2.createUser();
-		user3.createUser();
+	   user2.createUser();
+		/*user3.createUser();
 		user4.createUser();	
 		user5.createUser();
 		*/
-		user6.createUser();
+		user1.createUser();
 		
 	HibernateObject.listUser("select name from User as name");
-		/*
+		
 
-		HibernateObject.listUser("select name from User as name");
+/*		HibernateObject.listUser("select name from User as name");
 		//System.out.print("_______________");
 		user2.deleteUser();
 		//listUser("select name from User as name");

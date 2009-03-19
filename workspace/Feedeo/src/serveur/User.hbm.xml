@@ -10,6 +10,7 @@
 <property name="name" column="name" />
 <property name="lastname" column="lastname" />
 <property name="login" column="login" />
+<property name="password" column="password" />
 
 <set name="preferences" table="userPreferences" >
 		 <key column="idUser"/>
