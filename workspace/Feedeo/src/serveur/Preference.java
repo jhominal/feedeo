@@ -1,23 +1,34 @@
 package serveur;
 
+import java.util.HashSet;
 import java.util.Set;
+
+//import java.util.Set;
 
 public class Preference extends HibernateObject {
 	
-	 private long idPref;
+	 private long idPreference;
 	 private String name;
-	 private String value;
-	 private Set<User> users;
+	// private Set<User> users;
+	 
+	 Set<UserPreference> userPreferences=new HashSet<UserPreference>();
 
 	 
 	 public Preference(){}
 	 
-	 public void setIdPref(long idPref){
-		 this.idPref=idPref;
+	 public Preference(String name){
+			
+		 this.name=name;
+		 
 	 }
 	 
-	 public long getIdPref(){
-		 return idPref;
+	 
+	 public void setIdPreference(long idPreference){
+		 this.idPreference=idPreference;
+	 }
+	 
+	 public long getIdPreference(){
+		 return idPreference;
 	 }
 	 public void setName(String name){
 		 this.name=name;
@@ -27,13 +38,7 @@ public class Preference extends HibernateObject {
 		 return name;
 	 }
 	 
-	 public void setValue(String value){
-		 this.value=value;
-	 }
-	 
-	 public String getValue(){
-		 return value;
-	 }
+/*
 	 
 	 public void setUsers(Set<User> users){
 		 this.users=users;
@@ -42,6 +47,16 @@ public class Preference extends HibernateObject {
 	 public Set<User> getUsers(){
 		 return users;
 	 }
+	 */
+	 
+
+		public Set<UserPreference> getUserPreferences() {
+			return userPreferences;
+			}
+		
+		public void setUserPreferences(Set<UserPreference> userPreferences) {
+			this.userPreferences = userPreferences;
+			}
 	 
 	
 	 public void createPreference() {

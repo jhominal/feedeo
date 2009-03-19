@@ -15,11 +15,9 @@ public abstract class HibernateObject {
   
 	final static Logger logger = LoggerFactory.getLogger(TestClient.class);
 	
-	Integer id;
 	
 	public HibernateObject(){}
-	
-	
+
 	
 	static void delete(HibernateObject object) {
 		Transaction tx = null;

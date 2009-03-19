@@ -1,10 +1,6 @@
 package serveur;
 
 
-import java.util.HashSet;
-
-import java.util.Set;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,31 +15,27 @@ public class TestClient {
 		User user1 = new User("meriam","sekkat","mimi","tintin20");
 		User user2 = new User("ghita","sekkat","tita","tite200");
 		
+		/** In a first time, two preferences: color and police size*/
+
+		 Preference color= new Preference("color");
+	 	 Preference police=new Preference ("police");
+	 	 
+	 	 UserPreferencePK pk=new UserPreferencePK(user1, color);
+	 	 UserPreference up= new UserPreference(pk,"vert");
+	 	 
+	 	 
+	 	 color.createPreference();
+	 	 police.createPreference();
+		 user1.createUser();
+		 user2.createUser();
+		 up.createUserPreference();
+		 
+         
+		 
+       	
+	     
 		
-		Preference preference1= new Preference();
-		preference1.setName("Couleur");
 		
-		
-		
-		preference1.createPreference();
-		
-		Preference preference2= new Preference();
-		preference2.setName("Police");
-		preference2.createPreference();
-		
-		Set<Preference> preferences1= new HashSet<Preference>();
-		preferences1.add(preference1);
-		//preferences1.add(preference2);
-    	
-		
-		user1.setPreferences(preferences1);
-		
-	   user2.createUser();
-		/*user3.createUser();
-		user4.createUser();	
-		user5.createUser();
-		*/
-		user1.createUser();
 		
 	HibernateObject.listUser("select name from User as name");
 		
