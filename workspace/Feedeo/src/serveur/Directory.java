@@ -8,7 +8,7 @@ public class Directory {
 	//ID DU DOSSIER
 	public Integer id;
 	//LIEN AVEC L'UTILISATEUR
-	public String idUser;
+	//public String idUser;
 	public Directory(String title){
 		this.title=title;
 		dirParent=null;
@@ -24,15 +24,21 @@ public class Directory {
 	}
 	public boolean deleteDir()
 	{
-		return false;
+		if (isEmpty())
+			//REQUETE HIBERNATE ET UPDATE
+			return true;
+		else
+			return false;
 	}
-	public boolean mooveDir()
+	public boolean mooveDir(Long IdDest, Long IdOrig)
 	{
+		//REQUETE HIBERNATE ET UPDATE
 		return false;
 	}
 	
-	public boolean createDir()
+	public boolean createDir(Long IdParent)
 	{
+		//CREATE 
 		return false;
 	}
 	
