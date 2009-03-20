@@ -17,10 +17,10 @@
 		<key column="idDirectory" />
 		<many-to-many class="feedeo.Article" column="idArticle" />
 	  </set>
+	<!-- LIEN MANY TO ONE AVEC USER !-->
+	
+	<many-to-one name="IdUser" class="serveur.User" not-null="true" />	
 	</class>
 	
-	<!-- LIEN MANY TO ONE AVEC USER !-->
-	<class name="feedeo.Directory" table="Directory">
-		<many-to-one name="IdUser" class="feedeo.User" not-null="true" />	
-	</class>
+	
 </hibernate-mapping>
