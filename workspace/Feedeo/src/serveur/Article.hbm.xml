@@ -2,9 +2,8 @@
 <!DOCTYPE hibernate-mapping PUBLIC
         "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
-
 <hibernate-mapping>
-	<class name="feedeo.Article" table="Article">
+	<class name="serveur.Article" table="Article">
 		<id name="idArticle" column="IdArticle">
 			<generator class="increment"></generator>
 		</id>
@@ -19,29 +18,20 @@
 			<element type="string" column="Category"/>
 		</set>
 		<!-- LIEN MANY TO ONE AVEC FLUX !-->
-		<many-to-one name="IdFeed" class="feedeo.Feed" not-null="true" />		
+		<many-to-one name="IdFeed" class="serveur.Feed" not-null="true" />		
 		
 	</class>
 	<!-- LIEN MANY TO MANY AVEC DIRECTORY!-->
-	<class name="feedeo.Article" table="Article">
+	
 	<set  name="listDir" table="Dir_Article" inverse="true" >
 			<key column="idArticle" />
-			<many-to-many  class="feedeo.Directory" column="idDirectory" >
+			<many-to-many  class="serveur.Directory" column="idDirectory" >
 		</set>		
-	</class>
-	<!-- LIEN ONE TO MANY AVEC ARTICLES PROPERTIES!-->
-	<class name="feedeo.Article" table="Article">
-		<set name="articles_properties" inverse="true" cascade="all-delete-orphan">
-		<key column="IdArticle"></key>
-		<one-to-many class="feedeo.Articles_Properties" />
-		</set>
-	</class>
-	
+		
 	<!-- LIEN MANY TO MANY AVEC USER!-->
-	<class name="feedeo.Article" table="Article">
-	<set  name="article_user" table="User_Article" inverse="true" >
-			<key column="idArticle" />
-			<many-to-many  class="feedeo.User" column="idUser" >
-		</set>		
+	<set name="article_properties" table="User_Article" inverse="true"> 
+				<key column="idArticle" /> 
+				<one-to-many class="serveur.Articles_Properties" /> 
+	</set>		
 
 </hibernate-mapping>

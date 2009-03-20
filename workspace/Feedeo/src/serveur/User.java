@@ -15,8 +15,8 @@ public class User extends HibernateObject {
 		
 		Set<UserPreference> userPreferences=new HashSet<UserPreference>();
 		
-		//LIEN MANY TO MANY AVEC ARTICLE
-		private Set<Article> user_articles=new HashSet<Article>();
+		//LIEN MANY TO MANY AVEC ARTICLE SET DE PROPRIETES
+		private Set<Articles_Properties> article_properties=new HashSet<Articles_Properties>();
 		//LIEN ONE TO MANY AVEC DIRECTORY
 		private Set<Directory> user_directories=new HashSet<Directory>();
 
@@ -77,12 +77,13 @@ public class User extends HibernateObject {
 			this.userPreferences = userPreferences;
 			}
 
-		public Set<Article> getUser_articles(){
-			return this.user_articles;
+		public Set<Articles_Properties> getArticles_Properties(){
+			return this.article_properties;
 		}
 
-		public void setlistDir(Set<Article> listArticle){
-			this.user_articles=listArticle;
+		public void setArticles_Properties(Set<Articles_Properties> articles_Properties){
+			this.article_properties=articles_Properties;
+			
 		}
 		
 		public Set<Directory> getUser_directories(){

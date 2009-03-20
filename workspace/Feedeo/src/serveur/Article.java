@@ -27,8 +27,8 @@ public class Article{
 	private String summary;
 	//LIEN AVEC LES PROPRIETES D'UN ARTICLES lien one to many avec la classe Articl_Properties
 	private Set<Articles_Properties> articles_properties=new HashSet<Articles_Properties>();
-	//LIEN MANY TO MANY AVEC USER
-	private Set<User> article_user=new HashSet<User>();
+	//LIEN MANY TO MANY AVEC USER SET DE PROPRIETES
+	private Set<Articles_Properties> article_properties=new HashSet<Articles_Properties>();
 	
 	
 	
@@ -195,12 +195,12 @@ public void setlistDir(Set<Directory> listDir){
 	this.listDir=listDir;
 }
 
-public Set<User> getArticle_user(){
-	return this.article_user;
+public Set<Articles_Properties> getArticle_user(){
+	return this.article_properties;
 }
 
-public void setArticle_user(Set<User> article_user){
-	this.article_user=article_user;
+public void setArticle_user(Set<Articles_Properties> article_properties){
+	this.article_properties=article_properties;
 }
 //FIN SET GET
 
