@@ -37,7 +37,7 @@ public class UserPreferencePK implements Serializable{
 			this.idPreference = idPreference;
 			}
 			
-       
+ 
        public boolean equals(Object other) {
            if ( !(other instanceof UserPreferencePK) ) return false;
            UserPreferencePK castOther = (UserPreferencePK) other;
@@ -53,5 +53,5 @@ public class UserPreferencePK implements Serializable{
                .append(getIdPreference())
                .toHashCode();
        }
-
+       
 }

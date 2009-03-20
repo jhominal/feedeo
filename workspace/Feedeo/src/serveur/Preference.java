@@ -3,13 +3,13 @@ package serveur;
 import java.util.HashSet;
 import java.util.Set;
 
-//import java.util.Set;
+
 
 public class Preference extends HibernateObject {
 	
 	 private long idPreference;
 	 private String name;
-	// private Set<User> users;
+	
 	 
 	 Set<UserPreference> userPreferences=new HashSet<UserPreference>();
 
