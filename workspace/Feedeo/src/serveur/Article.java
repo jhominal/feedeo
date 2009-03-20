@@ -22,14 +22,12 @@ public class Article extends HibernateObject{
 	private Date date;
 	//Catégories de l'article /tags
 	private List<String> categories;
+	private Feed feed;
 	
 	//Résumé de l'article()
 	private String summary;
 	//LIEN AVEC LES PROPRIETES D'UN ARTICLES lien one to many avec la classe Articl_Properties
-	private Set<Articles_Properties> articles_properties=new HashSet<Articles_Properties>();
-	//LIEN MANY TO MANY AVEC USER SET DE PROPRIETES
 	private Set<Articles_Properties> article_properties=new HashSet<Articles_Properties>();
-	
 	
 	
 	//PROPRIETE DE L'ARTICLE 
@@ -100,8 +98,8 @@ public class Article extends HibernateObject{
     }
 	
 // DEBUT SET GET
-	public void setId(Long i){
-		idArticle=i;
+	public void setIdArticle(Long id){
+		idArticle=id;
 	}
 	public Long getIdArticle(){
 		return idArticle;
@@ -112,11 +110,11 @@ public class Article extends HibernateObject{
 	public String getTitle(){
 		return title;
 	}
-	public void setURL(String link){
+	public void setLink(String link){
 		this.link= link;
 	}
 	
-	public String getURL(){
+	public String getLink(){
 		return link;
 	}
 	
@@ -153,6 +151,13 @@ public String getSummaryLight() {
 		return summary;
 }
 
+public void setFeed(Feed feed){
+	this.feed=feed;
+}
+
+public Feed getFeed(){
+	return this.feed;
+}
 /*
  * public boolean getread(){
 	return read;
@@ -178,11 +183,11 @@ public String getAuthor(){
 	return author;
 }
 
-public void setArticlesProperties(Set<Articles_Properties> articles_properties){
-	this.articles_properties=articles_properties;
+public void setArticle_properties(Set<Articles_Properties> articles_properties){
+	this.article_properties=articles_properties;
 }
-public Set<Articles_Properties> getUserArticles(){
-	return articles_properties;
+public Set<Articles_Properties> getArticle_properties(){
+	return article_properties;
 
 }
 
@@ -211,5 +216,20 @@ public void setArticle_user(Set<Articles_Properties> article_properties){
 //GESTION DES FONCTION ISREAD
 
 //FIN GESTION DES FONCTION ISREAD ET SETREAD VIA L'APPLICATION EXTEND
+
+
+// METHODES PR LA PERSISTANCE DES DONNEES DANS HIBERNATE
+public void createArticle() {
+	HibernateObject.create(this);	
+}
+
+public void deleteArticle() {
+	HibernateObject.delete(this);	
+}
+
+public void updateArticle() {
+	HibernateObject.update(this);	
+}
+//FIN METHODES PR LA PERSISTANCE DES DONNEES DANS HIBERNATE
 
 }

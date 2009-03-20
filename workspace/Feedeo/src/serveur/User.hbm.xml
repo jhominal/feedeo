@@ -22,16 +22,23 @@
 			<one-to-many class="serveur.UserPreference" />
 		</set>
 		
-		<!-- LIEN MANY TO MANY AVEC ARTICLE !-->
+		<!-- LIEN MANY TO MANY AVEC ARTICLE -->
 			<set name="article_properties" table="User_Article" inverse="true"> 
 				<key column="idUser" /> 
 				<one-to-many class="serveur.Articles_Properties" /> 
 			</set>
-		<!-- LIEN ONE TO MANY AVEC DOSSIER !-->
+		
+		<!-- LIEN ONE TO MANY AVEC FLUX -->
+		
+		<set name="user_feeds" inverse="true" cascade="all-delete-orphan"> 
+			<key column="idUser"></key> 
+			<one-to-many class="serveur.Feed" /> 
+		</set>
+		
 		
 		<set name="user_directories" inverse="true" cascade="all-delete-orphan"> 
-			<key column="IdUser"></key> 
-			<one-to-many class="serveur.Article" /> 
+			<key column="idUser"></key> 
+			<one-to-many class="serveur.Directory" /> 
 		</set>
 	</class>
 

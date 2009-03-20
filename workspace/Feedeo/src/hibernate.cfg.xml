@@ -36,7 +36,10 @@
         <mapping resource="serveur/Preference.hbm.xml"/> 
         
          <mapping resource="serveur/UserPreference.hbm.xml"/> 
-		<!--<mapping resource="serveur/Article.hbm.xml" /> -->
+		<mapping resource="serveur/Article.hbm.xml" /> 
+		<mapping resource ="serveur/Articles_Properties.hbm.xml"/>
+		<mapping resource="serveur/Feed.hbm.xml" /> 
+		<mapping resource="serveur/Directory.hbm.xml" /> 
 
     </session-factory>
 

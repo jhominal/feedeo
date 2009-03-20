@@ -10,14 +10,18 @@
 		</id>
 		<property name="title"/>
 		<property name="url" />
-		<property name="pudate"  type="timestamp" column="Article_date" />
+		<property name="pubDate"  type="timestamp" column="Article_date" />
 		<property name="link"/>
 		
-		<!--- LIEN ONE TO MANY AVEC ARTICLE !--->
+		<!-- LIEN ONE TO MANY AVEC ARTICLE -->
 		<set name="articles" inverse="true" cascade="all-delete-orphan">
-		<key column="IdFeed"></key>
-		<one-to-many class="feedeo.Article" />
+		<key column="idFeed"></key>
+		<one-to-many class="serveur.Article" />
 		</set>
+		
+		<!-- LIEN MANY ONE AVEC USER -->
+		<many-to-one name="user" class="serveur.User"  column= "idUser" not-null="true" />
+		 
 		
 	</class>
 </hibernate-mapping>

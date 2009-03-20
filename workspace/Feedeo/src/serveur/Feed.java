@@ -30,6 +30,9 @@ private String link;
 private Date pubDate;
 //Lien Unidirectionnel vers la liste des articles de ce flux
 private Set<Article> articles=new HashSet<Article>();
+
+//LIEN MANY TO ONE AVEC USER
+private User user;
 //public Vector<Article> articles;
 
 
@@ -47,6 +50,7 @@ public Feed (String url){
 			this.title=feed.getTitle();
 			this.link=feed.getLink();
 			this.pubDate=feed.getPublishedDate();
+			this.createFeed();
 			//CREER ICI LES ARTICLES
 			this.setArticles(feed);
 		}
@@ -92,16 +96,16 @@ public Feed (String url){
 
 
 // DEBUT SET GET
-public Long getId(){
+public Long getIdFeed(){
 	return this.idFeed;
 }
-public void setId(Long id){
+public void setIdFeed(Long id){
 	this.idFeed=id;
 }
 public String getTitle(){
         return this.title;
 }
-public void setitle(String title){
+public void setTitle(String title){
 	this.title=title;
 }
 public String geturl(){
@@ -117,13 +121,18 @@ public String getlink(){
 public void setlink(String link){
 	this.link=link;
 }
-public Date getpubDate(){
+public Date getPubDate(){
 	return pubDate;
 }
-public void getpubDate(Date pubDate){
+public void setpubDate(Date pubDate){
 	this.pubDate=pubDate;
 }
-
+public User getUser(){
+	return user;
+}
+public void setUser(User user){
+	this.user=user;
+}
 //FIN SET GET
 public void setArticles(SyndFeed feed){
     int nbarticles = feed.getEntries().size();
@@ -131,6 +140,7 @@ public void setArticles(SyndFeed feed){
     int i;
             for (i = 0; i <nbarticles ; i++) 
             {   Article article=new Article((SyndEntry)(feed.getEntries().get(i)),this);
+           // article.createArticle();
             //verifier que c'est un article déjà dans la base
             //faire un select sur les articles de ce flux pour rajouter les nouveaux articles et les lier à un dossier
             //updater les anciens articles 
@@ -147,5 +157,19 @@ public void setArticles(Set<Article> articles){
 public Set<Article> getArticles(){
 	return articles;
 }
+
+//METHODES PR LA PERSISTANCE DES DONNEES DANS HIBERNATE
+public void createFeed() {
+	HibernateObject.create(this);	
+}
+
+public void deleteFeed() {
+	HibernateObject.delete(this);	
+}
+
+public void updateFeed() {
+	HibernateObject.update(this);	
+}
+//FIN METHODES PR LA PERSISTANCE DES DONNEES DANS HIBERNATE
 
 }

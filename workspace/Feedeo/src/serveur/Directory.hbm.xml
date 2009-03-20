@@ -4,7 +4,7 @@
         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-	<class name="feedeo.Directory" table="Directory">
+	<class name="serveur.Directory" table="Directory">
 		<id name="idDirectory" column="idDirectory">
 			<generator class="increment"></generator>
 		</id>
@@ -15,11 +15,12 @@
 	
 	<set name="listArticle" table="Dir_Article">
 		<key column="idDirectory" />
-		<many-to-many class="feedeo.Article" column="idArticle" />
+		<many-to-many class="serveur.Article" column="idArticle" />
 	  </set>
-	<!-- LIEN MANY TO ONE AVEC USER !-->
+	<!-- LIEN MANY TO ONE AVEC USER 
 	
-	<many-to-one name="IdUser" class="serveur.User" not-null="true" />	
+	<many-to-one name="idUser" class="serveur.User" not-null="true" />
+	-->	
 	</class>
 	
 	

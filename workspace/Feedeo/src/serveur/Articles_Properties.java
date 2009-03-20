@@ -24,7 +24,7 @@ public class Articles_Properties extends HibernateObject{
 		return this.important;
 	}
 	
-	public void setmportant(boolean important){
+	public void setImportant(boolean important){
 		this.important=important;
 	}
 	public Article_PropertiesPK getIdUserArticle(){

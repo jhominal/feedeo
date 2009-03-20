@@ -6,8 +6,8 @@
 
  <class name="serveur.UserPreference" table="userpreference">
   <composite-id name="idUserPreference" class="serveur.UserPreferencePK" >
-              <key-many-to-one name="IdUser" class="serveur.User" column="IdUser" />
-              <key-many-to-one name="IdPreference" class="serveur.Preference" column="IdPreference" />
+              <key-many-to-one name="idUser" class="serveur.User" column="idUser" />
+              <key-many-to-one name="idPreference" class="serveur.Preference" column="idPreference" />
   </composite-id>
   
   <property name="value" column="value"/>
