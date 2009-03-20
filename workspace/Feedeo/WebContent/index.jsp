@@ -1,77 +1,61 @@
-<%@ page import="java.util.*" %>
-<%@ page import="org.stringtree.json.JSONWriter" %>
+<%@page import="org.stringtree.json.JSONReader"%>
+<%@page import="org.stringtree.json.JSONWriter"%>
+<%@page import="java.util.*"%>
+<%@page import="serveur.*" %>
 <%
-/*
-Enumeration pNameList; // contient une liste des params transmises
-String pName;          // contient un de ces noms
-String pVals [];       // contient l'array des valeurs pour chaque param
-String val;            // 1 valeur
+HashMap jsonResponse = new HashMap();
 
-out.println("<p>Method used was: " + request.getMethod());
+JSONReader jsonReader = new JSONReader();
+JSONWriter jsonWriter = new JSONWriter();
 
-out.println("<p>Liste de parametres et valeurs (pas forcement dans l'ordre): <ol>");
+String jsonRequest = request.getParameter("request");
+String requestType = request.getParameter("type");
 
-for (pNameList = request.getParameterNames();pNameList.hasMoreElements();){
-        pName = (String) pNameList.nextElement();
-    out.println("<li>name=" + pName + ": ");
-    pVals = request.getParameterValues(pName);
-
-    if (pVals != null) {
-                for (int i=0; i<pVals.length; i++)
-                        out.print ("val=" + pVals[i] + " ");
-    }
-}
-
-out.println("</ol>");
-*/
-/*
-String jsonResponse = "";
-
-String userName = (String)session.getAttribute("userName");
-String object = request.getParameter("object");
-String action = request.getParameter("action");
-out.print(request.getQueryString());
-// handle login and register request
-if(userName == null)
+if(requestType != null && requestType.equals("multiple"))
 {
-        //must be a login request or a register request
-        if( action!=null && action.equals("login" ))
-        {
-                //log user
-                String login = request.getParameter("login");
-                String password = request.getParameter("password");
-                if(login != null && password !=null)
-                {
-                        //check user
-
-                        //save in session
-                        session.setAttribute("userName",userName);
-                }
-                else
-                {
-                        jsonResponse = "{ success : false, error : 'You must give login and password.' }";
-                }
-        }
-        else if(action!=null && action.equals("register"))
-        {
-                //create account
-        }
-        else
-        {
-                //illegal request
-                jsonResponse = "{ success : false, error : 'You are not logged.' }";
-        }
+	try
+	{
+	        ArrayList<HashMap> requests = (ArrayList)jsonReader.read(jsonRequest);
+	        //handle each request
+	        for(HashMap r:requests)
+	        {
+	                //out.println("Req : "+r);
+	                FeedeoHandler.handle(r,jsonResponse);
+	        }
+	
+	
+	//debug
+	//jsonResponse = jsonWriter.write(requests);
+	
+	
+	}
+	catch(Exception e)
+	{
+	        jsonResponse.put("success",false);
+	        jsonResponse.put("error", "bad multiple request");
+	}
 }
-// handle other requests
-else
+else if(requestType != null && requestType.equals("simple"))
 {
+	try
+	{
+	        HashMap simpleRequest = (HashMap)jsonReader.read(jsonRequest);
+			FeedeoHandler.handle(simpleRequest, jsonResponse);
+
+	}
+	catch(Exception e)
+	{
+	        jsonResponse.put("success",false);
+	        jsonResponse.put("error", "bad simple request");
+	}
+}
+else 
+{
+	jsonResponse.put("success",false);
+    jsonResponse.put("error", "bad request type [multiple, simple]");
 
 }
 
+out.println(jsonWriter.write(jsonResponse));
 
-out.print(jsonResponse);
-*/
-
-String jsonRequest = request.getParameter("json");
-out.println(jsonRequest);
 %>
