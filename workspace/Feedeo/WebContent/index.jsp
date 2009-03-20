@@ -8,10 +8,62 @@ HashMap jsonResponse = new HashMap();
 JSONReader jsonReader = new JSONReader();
 JSONWriter jsonWriter = new JSONWriter();
 
+String userName = (String) session.getAttribute("userName");
+
+FeedeoHandler handler = new FeedeoHandler(userName);
+
 String jsonRequest = request.getParameter("request");
 String requestType = request.getParameter("type");
 
-if(requestType != null && requestType.equals("multiple"))
+if(userName == null)
+{
+	//pas loggé
+	//traite une requete de login ou de creation
+	try
+	{
+	        HashMap loginOrCreateRequest = (HashMap)jsonReader.read(jsonRequest);
+	        String action = (String) loginOrCreateRequest.get("action");
+	        if(action !=null && action.equals("login"))
+	        {
+				userName = handler.login(loginOrCreateRequest);
+				if(userName != null)
+				{
+					session.setAttribute("userName",userName);
+			        jsonResponse.put("success",true);
+			        jsonResponse.put("msg", "login successful");
+			        //ajouter qq données sur l'user
+				}
+				else
+				{
+			        jsonResponse.put("success",false);
+			        jsonResponse.put("error", "login failed");
+				}
+	        }
+	        else if(action !=null && action.equals("create"))
+	        {
+	        	userName = handler.createAccount(loginOrCreateRequest);
+	        	if(userName != null)
+	        	{
+	        		//log him
+	        		session.setAttribute("userName",userName);
+			        jsonResponse.put("success",true);
+			        jsonResponse.put("msg", "Account creation successful");
+			        //ajouter qq données sur l'user
+	        	}
+	        	else
+	        	{
+	        		jsonResponse.put("success",false);
+			        jsonResponse.put("error", "Account creation failed");
+	        	}
+	        }
+	}
+	catch(Exception e)
+	{
+	        jsonResponse.put("success",false);
+	        jsonResponse.put("error", "Request failed. You must login.");
+	}	
+}
+else if(requestType != null && requestType.equals("multiple"))
 {
 	try
 	{
@@ -20,7 +72,7 @@ if(requestType != null && requestType.equals("multiple"))
 	        for(HashMap r:requests)
 	        {
 	                //out.println("Req : "+r);
-	                FeedeoHandler.handle(r,jsonResponse);
+	                handler.handle(r,jsonResponse);
 	        }
 	
 	
@@ -40,7 +92,7 @@ else if(requestType != null && requestType.equals("simple"))
 	try
 	{
 	        HashMap simpleRequest = (HashMap)jsonReader.read(jsonRequest);
-			FeedeoHandler.handle(simpleRequest, jsonResponse);
+			handler.handle(simpleRequest, jsonResponse);
 
 	}
 	catch(Exception e)
