@@ -3,7 +3,7 @@ package serveur;
 
 import java.util.Set;
 
-public class Directory {
+public class Directory extends HibernateObject{
 	public String title;
 	//ID DU DOSSIER PARENT on ne sait pas encore comment ça va fonctionner avec HIBERNATE
 	public Long idParent;

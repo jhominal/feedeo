@@ -21,7 +21,7 @@ import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.SyndFeedInput;
 import java.util.Date;
-public class Feed {
+public class Feed extends HibernateObject {
 /*Feed's title*/
 private Long idFeed;
 private String title;

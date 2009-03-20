@@ -3,6 +3,7 @@
 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
  <hibernate-mapping>
  <class name="serveur.Articles_Properties" table="Articles_Properties">
+ 
   <composite-id name="idUserArticle" class="serveur.Article_PropertiesPK" >
               <key-many-to-one name="IdUser" class="serveur.User" column="IdUser" />
               <key-many-to-one name="IdArticle" class="serveur.Article" column="IdArticle" />

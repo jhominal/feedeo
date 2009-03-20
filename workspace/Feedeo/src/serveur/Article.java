@@ -11,7 +11,7 @@ import java.util.Set;
 import com.sun.syndication.feed.synd.SyndContent;
 import com.sun.syndication.feed.synd.SyndEntry;
 
-public class Article{
+public class Article extends HibernateObject{
 	//ID de l'article
 	private Long idArticle;
 	//Tittre de l'article

@@ -1,6 +1,6 @@
 package serveur;
 
-public class Articles_Properties {
+public class Articles_Properties extends HibernateObject{
 	
 	//TOUTES LES PROPRIETES D'UN ARTICLE
 	private boolean read;

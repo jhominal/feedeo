@@ -4,7 +4,7 @@
         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 
 <hibernate-mapping>
-	<class name="feedeo.Feed" table="Feed">
+	<class name="serveur.Feed" table="Feed">
 		<id name="idFeed" column="IdFeed">
 			<generator class="increment"></generator>
 		</id>
