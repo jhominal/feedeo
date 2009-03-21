@@ -11,7 +11,7 @@ Feedeo.MainPanel = Ext.extend(Ext.Panel, {
                 {
                     xtype:'articlesgridpanel',
                     region : 'north',
-                    url: Ext.APPLICATION_URL+'/fake-server/json.php',
+                    url: Feedeo.SERVER_URL,
                     split:true,
                     height:200
                 },

@@ -16,7 +16,7 @@ Feedeo.FeedsTreePanel = Ext.extend(Ext.tree.TreePanel, {
         // hard coded - cannot be changed from outside
         //treeLoader : charge les données depuis le serveur
         var treeLoader = new Ext.tree.TreeLoader({
-            dataUrl:Ext.APPLICATION_URL+'/fake-server/json.php',
+            dataUrl:Feedeo.SERVER_URL,
             baseParams : {page:'tree'}
         });
         //noeud racine

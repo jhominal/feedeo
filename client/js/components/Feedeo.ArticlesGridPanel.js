@@ -6,7 +6,15 @@ Feedeo.ArticlesGridPanel = Ext.extend(Ext.grid.GridPanel, {
         //create the store to load and store data
         this.jsonStore = new Feedeo.CachedMultiJsonStore({
             url:this.initialConfig.url, //load Json from url
-            baseParams : {page:'sample2'},
+            baseParams :
+            {
+                type:'simple',
+                request : {
+                    action : 'getArticles',
+                    object : 'folder',
+                    id : this.folder_id
+                }
+            },
             root:'content.articles',
             autoLoad:true, // auto call the .load() method
             fields:[
@@ -21,7 +29,7 @@ Feedeo.ArticlesGridPanel = Ext.extend(Ext.grid.GridPanel, {
                 {name : 'important'}
             ]
         });
-        
+
 
         var titleStateSummaryRenderer = function(val,metadata,record /*,...*/ )
         {
@@ -109,11 +117,7 @@ Feedeo.ArticlesGridPanel = Ext.extend(Ext.grid.GridPanel, {
             // un proxy, un store perso ??
             console.log('store',this.jsonStore);
             this.folder_id = folder_id;
-            this.jsonStore.baseParams =
-            {
-                page: 'sample2',
-                folder_id:this.folder_id
-            };
+            this.jsonStore.baseParams.request.id = this.folder_id;
             this.jsonStore.load();
         }
     },

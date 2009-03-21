@@ -10,7 +10,16 @@ Feedeo.CachedMultiJsonStore = function(c){
 Ext.extend(Feedeo.CachedMultiJsonStore, Ext.data.Store,{
     load : function()
     {
-        console.debug('myStoreLoadOptions',arguments);
+        console.debug('checking/formating baseParams',this.baseParams);
+        if(this.baseParams && this.baseParams.request)
+        {
+            if(typeof(this.baseParams.request) == "object")
+            {
+                this.baseParams.request = Ext.util.JSON.encode(this.baseParams.request);
+            }
+        }
+        console.debug('formated baseParams',this.baseParams);
+        
         Feedeo.CachedMultiJsonStore.superclass.load.apply(this,arguments);
     }
 });
