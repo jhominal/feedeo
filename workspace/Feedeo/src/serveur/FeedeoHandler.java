@@ -24,15 +24,38 @@ public class FeedeoHandler {
 		{			
 			if(object.equals("folder"))
 			{
-				
+				if(action.equals("get"))
+				{
+
+				}
+				else if(action.equals("..."))
+				{
+					
+				}
 			
 			}
 			else if (object.equals("article"))
 			{
-				
+				if(action.equals("get"))
+				{
+
+				}
+				else if(action.equals("..."))
+				{
+					
+				}
 			}
 			else if(object.equals("preferences"))
 			{
+				if(action.equals("get"))
+				{
+					response.put("success",true);
+					response.put("preferences", null);
+				}
+				else if(action.equals("..."))
+				{
+					
+				}
 				
 			}else if(object.equals("..."))
 			{
