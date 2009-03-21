@@ -14,13 +14,13 @@
 		<property name="link"/>
 		
 		<!-- LIEN ONE TO MANY AVEC ARTICLE -->
-		<set name="articles" inverse="true" cascade="all-delete-orphan">
+		<set name="articles" inverse="true" > <!-- cascade="all-delete-orphan" -->
 		<key column="idFeed"></key>
 		<one-to-many class="serveur.Article" />
 		</set>
 		
 		<!-- LIEN MANY ONE AVEC USER -->
-		<many-to-one name="user" class="serveur.User"  column= "idUser" not-null="true" />
+		<many-to-one name="user" class="serveur.User"  column= "idUser" />
 		 
 		
 	</class>

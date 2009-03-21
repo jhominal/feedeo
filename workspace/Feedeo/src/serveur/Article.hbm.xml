@@ -10,15 +10,15 @@
 		<property name="title"/>
 		<property name="link" />
 		<property name="date"  type="timestamp" column="Article_date" />
-		<property name="summary"/>
+		<property name="summary" type= "text" length="2147483647"/>
 		<property name="author"/>
-		<set name="categories" table="Categories">
+		<!--set name="categories" table="Categories">
 			<key column="IdArticle"/>
 			<element type="string" column="Category"/>
-		</set>
+		</set-->
 		
 		<!-- LIEN MANY TO ONE AVEC FLUX -->
-		<many-to-one name="feed" class="serveur.Feed"  column= "idFeed" not-null="true" />		
+		<many-to-one name="feed" class="serveur.Feed"  column= "idFeed" />		
 	
 	<!-- LIEN MANY TO MANY AVEC DIRECTORY!-->
 	

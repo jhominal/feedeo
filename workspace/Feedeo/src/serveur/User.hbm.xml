@@ -34,7 +34,7 @@
 			<key column="idUser"></key> 
 			<one-to-many class="serveur.Feed" /> 
 		</set>
-		
+		<!-- LIEN ONE TO MANY AVEC DIRECTORY -->
 		
 		<set name="user_directories" inverse="true" cascade="all-delete-orphan"> 
 			<key column="idUser"></key> 

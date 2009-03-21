@@ -10,6 +10,7 @@
 		</id>
 		<property name="title"/>
 		<property name="idParent" />
+		<property name="leaf" />
 		
 	<!-- LIEN MANY TO MANY AVEC L'UTILISATEUR !-->
 	
@@ -17,10 +18,10 @@
 		<key column="idDirectory" />
 		<many-to-many class="serveur.Article" column="idArticle" />
 	  </set>
-	<!-- LIEN MANY TO ONE AVEC USER 
+	<!-- LIEN MANY TO ONE AVEC USER -->	
 	
-	<many-to-one name="idUser" class="serveur.User" not-null="true" />
-	-->	
+	<many-to-one name="user" class="serveur.User" column= "idUser" /> <!-- not-null="true" -->
+	
 	</class>
 	
 	

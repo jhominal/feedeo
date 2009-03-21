@@ -94,13 +94,19 @@ public class User extends HibernateObject {
 		public void setUser_directories(Set<Directory> directories){
 			this.user_directories=directories;
 		}
-		
+		public void addDierctory(Directory dir){
+			this.user_directories.add(dir);
+		}
 		public Set<Feed> getUser_feeds(){
 			return this.user_feeds;
 		}
 
 		public void setUser_feeds(Set<Feed> feeds){
 			this.user_feeds=feeds;
+		}
+		
+		public void addFeed(Feed feed){
+			this.user_feeds.add(feed);
 		}
 		
 		

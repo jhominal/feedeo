@@ -4,7 +4,7 @@ package serveur;
 import java.util.Date;
 
 import java.util.HashSet;
-import java.util.List;
+//import java.util.List;
 import java.util.Set;
 
 
@@ -21,7 +21,7 @@ public class Article extends HibernateObject{
 	//Date de l'article
 	private Date date;
 	//Catégories de l'article /tags
-	private List<String> categories;
+	//private Set<String> categories;
 	private Feed feed;
 	
 	//Résumé de l'article()
@@ -37,13 +37,13 @@ public class Article extends HibernateObject{
 	//Auteur de l'article
 	private String author;
 	//Lien article au dossier many to many
-	private Set<Directory> listDir;
+	private Set<Directory> listDir=new HashSet<Directory>();;
 	//proprio de l'article
 	private String owner;
 	
 	public Article(){}
 	
-	public Article(String title,String url,Date date,String summary,String author,List<String> categories, boolean read,String owner){
+	public Article(String title,String url,Date date,String summary,String author,Set<String> categories, boolean read,String owner){
 		this.title=title;
 		this.link=url;
 		this.date=date;
@@ -51,11 +51,11 @@ public class Article extends HibernateObject{
 		this.author=author;
 		this.owner=owner;
 		//this.read=read;
-		this.categories=categories;
+		//this.categories=categories;
 	}
 	
-	@SuppressWarnings("unchecked")
-	public Article(SyndEntry se,Feed feedOrig) {
+	
+	public Article(SyndEntry se,Feed feed,Directory dir) {
 		this.title=se.getTitle();
         this.link=se.getLink();
         try{
@@ -69,7 +69,7 @@ public class Article extends HibernateObject{
     		e.printStackTrace();
     	}
         try{
-        	this.categories=se.getCategories();
+        //	this.categories=(Set<String>) se.getCategories();
     	}
         catch(Exception e){
     		e.printStackTrace();
@@ -93,8 +93,9 @@ public class Article extends HibernateObject{
         catch(Exception e){
     		e.printStackTrace();
     	}
-        //this.feedOrig=feedOrig;
-        
+       //VERIFIER QUE L'ARTICLE N'EST PASDEJA DANS LE DOSSIER
+       this.addDir(dir);
+       this.feed= feed;
     }
 	
 // DEBUT SET GET
@@ -126,17 +127,19 @@ public class Article extends HibernateObject{
 		return date;
 	}
 	
-	public void setCategories(List<String> cat){
+	/*public void setCategories(Set<String> cat){
 		categories=cat;
 	}
-	public List<String> getCategories(){
+	public Set<String> getCategories(){
 		return categories;
 		
 		
 	}
+	
 	public void addCategory(String newCat){
 		categories.add(newCat);	
 	}
+	*/
 	public void setSummary(String sum){
 		summary=sum;
 	}
@@ -198,6 +201,9 @@ public Set<Directory> getlistDir(){
 
 public void setlistDir(Set<Directory> listDir){
 	this.listDir=listDir;
+}
+public void addDir(Directory dir){
+	this.listDir.add(dir);
 }
 
 public Set<Articles_Properties> getArticle_user(){

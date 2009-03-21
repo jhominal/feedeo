@@ -1,10 +1,4 @@
 package serveur;
-//import java.util.Iterator;
-//import java.util.Vector;
-import org.stringtree.json.JSONWriter;
-/*import java.util.Iterator;
-import java.util.Vector;
-*/
 
 public class Main {
 
@@ -14,6 +8,7 @@ public class Main {
 		
 	}
 	
+
 	public static void main(String[] arg){
 		//String[] url=new String[1];
 		//url[0]="http://fcargoet.evolix.net/feed/";
@@ -35,19 +30,21 @@ public class Main {
 		 user1.createUser();
 		 user2.createUser();
 		 up.createUserPreference();
-		String url="http://fcargoet.evolix.net/feed/";
-		Feed feed=new Feed(url);
-		//Iterator<Article> itr = v.iterator();
-		//while (itr.hasNext())
-		//{
-		//	System.out.println(itr.next().getTittle());
-		//}
 		
-		//TEST 2 REUSSI
-
-		  JSONWriter writer = new JSONWriter();
+		 
+		// LECTURE D'UN FLUX CREATION D'ARTICLE DANS UN DOSSIER
+		 Directory dir1_user1=new Directory("racine",user1);
+		String url="http://fcargoet.evolix.net/feed/";
+		Feed feed=new Feed(url,dir1_user1,user1);
+		
+		dir1_user1.createDirectory();
+		feed.createFeed();
+		feed.setArticles(feed.getFeedOrigine(),dir1_user1);
+		//FIN LECTURE D'UN FLUX
+		
+		 /* JSONWriter writer = new JSONWriter();
 		  System.out.println("JSONWriter result is " + writer.write(feed));
-		  System.exit(0);
+		  System.exit(0);*/
 
 }
 	

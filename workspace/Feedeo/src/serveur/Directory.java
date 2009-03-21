@@ -1,6 +1,7 @@
 
 package serveur;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class Directory extends HibernateObject{
@@ -8,18 +9,24 @@ public class Directory extends HibernateObject{
 	private String title;
 	//ID DU DOSSIER PARENT on ne sait pas encore comment ça va fonctionner avec HIBERNATE
 	private Long idParent;
+	private boolean leaf;
 	//Lien dossier aux articles many to many
-	private Set<Article> listArticle;
+	private Set<Article> listArticle=new HashSet<Article>();
+	private User user;
 	
 	
 	
-	public Directory(String title){
+	public Directory(String title,User user){
 		this.title=title;
 		this.idParent=null;
+		this.user=user;
+		this.leaf=false;
 	}
-	public Directory(String title,Long dirParent){
+	public Directory(String title,Long dirParent,User user){
 		this.title=title;
 		this.idParent=dirParent;
+		this.user=user;
+		this.leaf=false;
 	}
 	
 	
@@ -52,6 +59,20 @@ public class Directory extends HibernateObject{
 	public void setIdParent(Long id){
 		this.idParent=id;
 	}
+	public boolean getLeaf(){
+		return this.leaf;
+	}
+	
+	public void setILeaf(boolean leaf){
+		this.leaf=leaf;
+	}
+	public User getUser(){
+		return this.user;
+	}
+	
+	public void setUser(User user){
+		this.user=user;
+	}
 	public Set<Article> getlistArticle(){
 		return this.listArticle;
 	}
@@ -59,7 +80,9 @@ public class Directory extends HibernateObject{
 	public void setlistArticle(Set<Article> articles){
 		this.listArticle=articles;
 	}
-	
+	/*public void addArticle(Article a){
+		this.listArticle.add(a);
+	}*/
 	public boolean isEmpty()
 	{
 		//REQUETE HIBERNATE
@@ -79,12 +102,19 @@ public class Directory extends HibernateObject{
 		return false;
 	}
 	
-	public boolean createDir(Long IdParent)
-	{
-		//CREATE 
-		return false;
+	//METHODES PR LA PERSISTANCE DES DONNEES DANS HIBERNATE
+	public void createDirectory() {
+		HibernateObject.create(this);	
 	}
-	
+
+	public void deleteDirectory() {
+		HibernateObject.delete(this);	
+	}
+
+	public void updateDirectory() {
+		HibernateObject.update(this);	
+	}
+	//FIN METHODES PR LA PERSISTANCE DES DONNEES DANS HIBERNATE	
 
 }
 

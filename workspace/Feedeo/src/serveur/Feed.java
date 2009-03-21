@@ -28,6 +28,7 @@ private String title;
 private String url;
 private String link;
 private Date pubDate;
+public SyndFeed feedOrig;
 //Lien Unidirectionnel vers la liste des articles de ce flux
 private Set<Article> articles=new HashSet<Article>();
 
@@ -40,19 +41,18 @@ private User user;
  * 
  */
 public Feed(){}
-public Feed (String url){
+public Feed (String url,Directory dir,User user){
 	SyndFeed feed;
 	this.url=url;
 	try {
 			URL new_url=new URL(url);
 			SyndFeedInput input = new SyndFeedInput();
-			feed =  input.build(new XmlReader(new_url));
-			this.title=feed.getTitle();
-			this.link=feed.getLink();
-			this.pubDate=feed.getPublishedDate();
-			this.createFeed();
+			this.feedOrig=input.build(new XmlReader(new_url));
+			this.title=this.feedOrig.getTitle();
+			this.link=this.feedOrig.getLink();
+			this.pubDate=this.feedOrig.getPublishedDate();
+			this.user=user;
 			//CREER ICI LES ARTICLES
-			this.setArticles(feed);
 		}
 	catch (Exception e){ 
 		try {
@@ -82,8 +82,7 @@ public Feed (String url){
 				this.title=feed.getTitle();
 				this.link=feed.getLink();
 				this.pubDate=feed.getPublishedDate();
-				//CREER ICI LES ARTICLES
-				this.setArticles(feed);
+				this.user=user;
 		}
 		catch (Exception ex){
 	
@@ -92,6 +91,9 @@ public Feed (String url){
 		}
 	}
 	
+}
+public SyndFeed getFeedOrigine(){
+	return this.feedOrig;
 }
 
 
@@ -134,20 +136,26 @@ public void setUser(User user){
 	this.user=user;
 }
 //FIN SET GET
-public void setArticles(SyndFeed feed){
+public void setArticles(SyndFeed feed,Directory dir){
     int nbarticles = feed.getEntries().size();
-    //Vector<Article> Larticles=new Vector<Article>(nbarticles);
+    Set<Article>articles=new HashSet<Article>();
     int i;
             for (i = 0; i <nbarticles ; i++) 
-            {   Article article=new Article((SyndEntry)(feed.getEntries().get(i)),this);
-           // article.createArticle();
-            //verifier que c'est un article déjà dans la base
-            //faire un select sur les articles de ce flux pour rajouter les nouveaux articles et les lier à un dossier
+            {   
+            	//verifier que c'est un article déjà dans la base par l'url
+            	//si oui on verifie sa date de publication passe à un autre article
+            	//sinon on l'ajoute et on fait les lien avec le dossier et le flux
+            	Article article=new Article((SyndEntry)(feed.getEntries().get(i)),this,dir);
+            	articles.add(article);
+            	article.createArticle();
+       
             //updater les anciens articles 
             //si lu REMETTRE à NON LU si la date de mise à jour est récente
             //s'il n'est pas encore dans la liste d'article de l'utilisateur alors on l'insère et on l'ajoute au dossier par défaut
-            	articles.add(article);
+            	
             }
+            this.setArticles(articles);
+            dir.setlistArticle(articles);
 	
 }
 
