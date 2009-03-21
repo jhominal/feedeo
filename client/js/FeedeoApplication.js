@@ -74,40 +74,58 @@ Feedeo.windows.config.notifications =
 
 Ext.onReady(function() {
     Ext.QuickTips.init();
-    
 
-    var vp = new Ext.Viewport({
-        layout:'border',
-        items:[
-            {
-                region : 'north',
-                xtype : 'maintoolbar'
-            },
-            {
-                region : 'west',
-                title : 'Vos dossiers',
-                xtype:'feedsandarchivespanel',
-                width: 200,
-                split :true,
-                collapsible : true,
-                //collapseMode : 'mini',
-                autoScroll:true//? comment ca marche ?
-
-            },
-            {
-                region : 'center',
-                xtype : 'mainview'
-  
-            }
-        ]
-    });
-    vp.items.itemAt(1).on( //events on treepanels
+    var conn = new Ext.data.Connection();
+    conn.request({
+        url: Feedeo.SERVER_URL,
+        method: 'POST',
+        params:
         {
-            'folderselect' : function(folder_id)
-            {
-                this.items.itemAt(2).mainPanel.setFolder(folder_id);
-            },
-            scope:vp
-        }
-    );
+            type : 'simple',
+            request: '{"action":"get","object":"preferences"}'
+        },
+        success: function(responseObject) {
+            console.debug('getPrefs',arguments);
+            var vp = new Ext.Viewport({
+                layout:'border',
+                items:[
+                    {
+                        region : 'north',
+                        xtype : 'maintoolbar'
+                    },
+                    {
+                        region : 'west',
+                        title : 'Vos dossiers',
+                        xtype:'feedsandarchivespanel',
+                        width: 200,
+                        split :true,
+                        collapsible : true,
+                        //collapseMode : 'mini',
+                        autoScroll:true//? comment ca marche ?
+        
+                    },
+                    {
+                        region : 'center',
+                        xtype : 'mainview'
+          
+                    }
+                ]
+            });
+            vp.items.itemAt(1).on( //events on treepanels
+                {
+                    'folderselect' : function(folder_id)
+                    {
+                        this.items.itemAt(2).mainPanel.setFolder(folder_id);
+                    },
+                    scope:vp
+                }
+            );
+        },
+         failure: function(responseObject) {
+            
+             Ext.Msg.alert('Status', 'Unable to show history at this time. Please try again later.');
+         }
+    });
+
+
 });

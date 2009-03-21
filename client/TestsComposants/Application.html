@@ -62,8 +62,8 @@
         //relative path to application files
         Ext.BLANK_IMAGE_URL = '../js/ext-2.2/resources/images/default/s.gif';
         Ext.APPLICATION_URL = '..';
-        Feedeo.SERVER_URL = 'feedeo-test';
-
+        Ext.ns('Feedeo');
+	Feedeo.SERVER_URL = '/feedeo-test/';
         //si pas de firebug, faire pointer les console.* vers des fonctions vides
         // pour ne pas faire d'erreurs...
         if (!window.console || !console.firebug)
