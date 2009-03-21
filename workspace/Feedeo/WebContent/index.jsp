@@ -3,7 +3,10 @@
 <%@page import="java.util.*"%>
 <%@page import="serveur.*" %>
 <%
-HashMap jsonResponse = new HashMap();
+HashMap<String, Object> jsonResponse = new HashMap<String, Object>();
+//cas par défaut
+jsonResponse.put("success",false);
+jsonResponse.put("error","No handler for your request");
 
 JSONReader jsonReader = new JSONReader();
 JSONWriter jsonWriter = new JSONWriter();
@@ -56,6 +59,11 @@ if(userName == null)
 			        jsonResponse.put("error", "Account creation failed");
 	        	}
 	        }
+	        else
+	        {
+	        	jsonResponse.put("success",false);
+	        	jsonResponse.put("error", "Request failed. You must login.");
+	        }
 	}
 	catch(Exception e)
 	{
@@ -67,7 +75,7 @@ else if(requestType != null && requestType.equals("multiple"))
 {
 	try
 	{
-	        ArrayList<HashMap> requests = (ArrayList)jsonReader.read(jsonRequest);
+	        ArrayList<HashMap> requests = (ArrayList<HashMap>)jsonReader.read(jsonRequest);
 	        //handle each request
 	        for(HashMap r:requests)
 	        {
@@ -107,6 +115,9 @@ else
     jsonResponse.put("error", "bad request type [multiple, simple]");
 
 }
+//enlever le error par défaut si succès
+if((Boolean)jsonResponse.get("success"))
+	jsonResponse.remove("error");
 
 out.println(jsonWriter.write(jsonResponse));
 
