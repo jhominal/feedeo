@@ -71,12 +71,82 @@ Feedeo.windows.config.notifications =
     height : 400,
     modal : true
 };
+Feedeo.windows.loginForm =
+{
+    title : 'Connectez-vous',
+    width : 600,
+    height : 400,
+    modal : true,
+    items :
+    [
+        {
+            xtype : "form",
+            url : Feedeo.SERVER_URL,
+            listeners :
+            {
+                'beforeaction' : {fn:function(a,b){console.debug('bf action',a,b);}}   
+            },            
+            items :
+            [
+                {
+                    xtype : "textfield",
+                    name : "login",
+                    fieldLabel : "Identifiant"
+                },
+                {
+                    xtype : "textfield",
+                    fieldLabel : "Mot de passe",
+                    name : "password"
+                }
+            ]
+        }
+    ]
+}
+
+Feedeo.init = function(options)
+{
+    //use options to custom the display
+    //print hello login, use user prefs...
+    var vp = new Ext.Viewport({
+        layout:'border',
+        items:[
+            {
+                region : 'north',
+                xtype : 'maintoolbar'
+            },
+            {
+                region : 'west',
+                title : 'Vos dossiers',
+                xtype:'feedsandarchivespanel',
+                width: 200,
+                split :true,
+                collapsible : true,
+                //collapseMode : 'mini',
+                autoScroll:true//? comment ca marche ?
+    
+            },
+            {
+                region : 'center',
+                xtype : 'mainview'
+    
+            }
+        ]
+    });
+    vp.items.itemAt(1).on( //events on treepanels
+        {
+            'folderselect' : function(folder_id)
+            {
+                this.items.itemAt(2).mainPanel.setFolder(folder_id);
+            },
+            scope:vp
+        }
+    );
+}
 
 Ext.onReady(function() {
     Ext.QuickTips.init();
 
-    var conn = new Ext.data.Connection();
-    conn.request({
+    Feedeo.request({
         url: Feedeo.SERVER_URL,
         method: 'POST',
         params:
@@ -84,46 +154,14 @@ Ext.onReady(function() {
             type : 'simple',
             request: '{"action":"get","object":"preferences"}'
         },
-        success: function(responseObject) {
-            console.debug('getPrefs',arguments);
-            var vp = new Ext.Viewport({
-                layout:'border',
-                items:[
-                    {
-                        region : 'north',
-                        xtype : 'maintoolbar'
-                    },
-                    {
-                        region : 'west',
-                        title : 'Vos dossiers',
-                        xtype:'feedsandarchivespanel',
-                        width: 200,
-                        split :true,
-                        collapsible : true,
-                        //collapseMode : 'mini',
-                        autoScroll:true//? comment ca marche ?
-        
-                    },
-                    {
-                        region : 'center',
-                        xtype : 'mainview'
-          
-                    }
-                ]
-            });
-            vp.items.itemAt(1).on( //events on treepanels
-                {
-                    'folderselect' : function(folder_id)
-                    {
-                        this.items.itemAt(2).mainPanel.setFolder(folder_id);
-                    },
-                    scope:vp
-                }
-            );
+        success: function(data) {
+            console.debug('getPrefs',data);
+            Feedeo.init(data);
         },
-         failure: function(responseObject) {
-            
-             Ext.Msg.alert('Status', 'Unable to show history at this time. Please try again later.');
+         failure: function(data) {
+            console.debug('getPrefs failure',data)
+            //handle failure
+            new Ext.Window(Feedeo.windows.loginForm).show();
          }
     });
 
