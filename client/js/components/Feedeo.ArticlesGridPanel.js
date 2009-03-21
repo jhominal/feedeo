@@ -14,7 +14,7 @@ Feedeo.ArticlesGridPanel = Ext.extend(Ext.grid.GridPanel, {
                     object : 'folder'
                 }
             },
-            root:'content.articles',
+            root:'articles',
             //autoLoad:true, // auto call the .load() method
             fields:[
                 {name: 'author'},

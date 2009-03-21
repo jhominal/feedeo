@@ -71,6 +71,7 @@ Feedeo.windows.config.notifications =
     height : 400,
     modal : true
 };
+//TODO:reformater tout ça !
 Feedeo.windows.loginForm =
 {
     title : 'Connectez-vous',
@@ -80,60 +81,127 @@ Feedeo.windows.loginForm =
     items :
     [
         {
-            xtype : "form",
-            url : Feedeo.SERVER_URL,
-            listeners :
-            {
-                beforeaction : { fn :function(form,action)
-                {
-                    
-                    var params = {type : 'simple'};
-                    var values = form.getValues();
-                    values.action = 'login';
-                    //json encode the request
-                    params.request = Ext.util.JSON.encode(values);
-                    form.baseParams = params;
-                    //login & password are sent to the server... tant pis
-                
-                }}
-            },
-            defaults :
-            {
-                listeners :
-                    {
-                        specialkey : function(f,e)
-                        {
-                            console.log('toto');
-                            if(e.getKey()==e.ENTER)
-                            {
-                                console.log('enter');
-                                this.ownerCt.getForm().submit
-                                (
-                                    {
-                                        success:function(form,data)
-                                        {
-                                            console.log('login success:',data);
-                                            Feedeo.init(data.preferences||{});
-                                        }
-                                    }
-                                );
-                            }
-                        }
-                    }
-            },
+            xtype : "tabpanel",
             items :
             [
+                //Connexion tab
                 {
-                    xtype : "textfield",
-                    name : "login",
-                    fieldLabel : "Identifiant"
+                    xtype : "form",
+                    title : "Connexion",
+                    url : Feedeo.SERVER_URL,
+                    listeners : {
+                              beforeaction : { fn :function(form,action)
+                              {
+                                  
+                                  var params = {type : 'simple'};
+                                  var values = form.getValues();
+                                  values.action = 'login';
+                                  //json encode the request
+                                  params.request = Ext.util.JSON.encode(values);
+                                  form.baseParams = params;
+                                  //login & password are sent to the server... tant pis
+                              
+                              }}
+                          },
+                    defaults : {
+                              listeners :
+                                  {
+                                      specialkey : function(f,e)
+                                      {
+                                          if(e.getKey()==e.ENTER)
+                                          {
+                                              this.ownerCt.getForm().submit
+                                              (
+                                                  {
+                                                      success:function(form,data)
+                                                      {
+                                                          console.log('login success:',data);
+                                                          Feedeo.init(data.preferences||{});
+                                                      }
+                                                  }
+                                              );
+                                          }
+                                      }
+                                  }
+                          },
+                    items : [        {
+                        xtype : "textfield",
+                        name : "login",
+                        fieldLabel : "Identifiant"
+    
+                    },        {
+                        xtype : "textfield",
+                        fieldLabel : "Mot de passe",
+                        name : "password"
+                    }]
                 },
+                //tab enregistrement
                 {
-                    xtype : "textfield",
-                    fieldLabel : "Mot de passe",
-                    name : "password"
-                }
-            ]
+                  xtype : "panel",
+                  html : 'hello',
+                  title : "Enregistrement",
+                  url : Feedeo.SERVER_URL,
+                  listeners :
+                  {
+                      beforeaction :
+                      {
+                          fn :function(form,action)
+                          {
+                              
+                              var params = {type : 'simple'};
+                              var values = form.getValues();
+                              values.action = 'create';
+                              //json encode the request
+                              params.request = Ext.util.JSON.encode(values);
+                              form.baseParams = params;
+                              //login & password are sent to the server... tant pis
+                          
+                          }
+                      }
+                  },
+                  defaults :
+                  {
+                      listeners :
+                          {
+                              specialkey : function(f,e)
+                              {
+                                  if(e.getKey()==e.ENTER)
+                                  {
+                                      this.ownerCt.getForm().submit
+                                      (
+                                          {
+                                              success:function(form,data)
+                                              {
+                                                  console.log('create success:',data);
+                                                  Feedeo.init(data.preferences||{});
+                                              }
+                                          }
+                                      );
+                                  }
+                              }
+                          }
+                  },
+                  items :
+                  [
+                      {
+                          xtype : "textfield",
+                          fieldLabel : "Identifiant",
+                          name : "login"
+                      },
+                      {
+                          xtype : "textfield",
+                          fieldLabel : "Mot de passe",
+                          name : "password"
+                      },
+                      {
+                          xtype : "textfield",
+                          fieldLabel : "E-mail",
+                          name : "mail"
+                      }
+                  ]
+              }
+            ],
+            activeTab : 0
         }
     ]
 }
