@@ -8,7 +8,7 @@ HashMap<String, Object> jsonResponse = new HashMap<String, Object>();
 jsonResponse.put("success",false);
 jsonResponse.put("error","No handler for your request");
 
-jsonResponse.put("debug",request.getQueryString());
+//jsonResponse.put("debug",request.getQueryString());
 
 JSONReader jsonReader = new JSONReader();
 JSONWriter jsonWriter = new JSONWriter();
