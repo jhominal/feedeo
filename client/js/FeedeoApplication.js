@@ -110,7 +110,11 @@ Feedeo.windows.loginForm =
                                 this.ownerCt.getForm().submit
                                 (
                                     {
-                                        success:function(data){console.log('success:',data);}
+                                        success:function(form,data)
+                                        {
+                                            console.log('login success:',data);
+                                            Feedeo.init(data.preferences||{});
+                                        }
                                     }
                                 );
                             }

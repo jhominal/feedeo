@@ -11,12 +11,11 @@ Feedeo.ArticlesGridPanel = Ext.extend(Ext.grid.GridPanel, {
                 type:'simple',
                 request : {
                     action : 'getArticles',
-                    object : 'folder',
-                    id : this.folder_id
+                    object : 'folder'
                 }
             },
             root:'content.articles',
-            autoLoad:true, // auto call the .load() method
+            //autoLoad:true, // auto call the .load() method
             fields:[
                 {name: 'author'},
                 {name: 'title'},
@@ -109,15 +108,15 @@ Feedeo.ArticlesGridPanel = Ext.extend(Ext.grid.GridPanel, {
         console.debug('Event rowselect captured, fire "articleselect" with :',record);
         this.fireEvent('articleselect',record);
     },
-    setFolder : function(folder_id)
+    setFolder : function(folderId)
     {
-        if(this.folder_id !== folder_id)
+        if(this.folderId !== folderId)
         {
             //TODO : si on a déjà les données, on ne reload pas !
             // un proxy, un store perso ??
             console.log('store',this.jsonStore);
-            this.folder_id = folder_id;
-            this.jsonStore.baseParams.request.id = this.folder_id;
+            this.folderId = folderId;
+            this.jsonStore.baseParams.request.folderId = this.folderId;
             this.jsonStore.load();
         }
     },

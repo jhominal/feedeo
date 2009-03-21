@@ -15,24 +15,46 @@ Feedeo.FeedsTreePanel = Ext.extend(Ext.tree.TreePanel, {
     initComponent:function() {
         // hard coded - cannot be changed from outside
         //treeLoader : charge les données depuis le serveur
-        var treeLoader = new Ext.tree.TreeLoader({
-            dataUrl:Feedeo.SERVER_URL,
-            baseParams : {page:'tree'}
+        var treeLoader = new Feedeo.TreeLoader
+        ({
+            url:Feedeo.SERVER_URL,
+            baseParams :
+            {
+                type:'simple'
+            },
+            listeners:
+            {
+                beforeload : function(tl,node) //format the request
+                {
+                    console.debug('treeNode getChildren',node)
+                    request =
+                    {
+                        action:"getChildren",
+                        object:"folder",
+                        folderId:node.id
+                    }
+                    tl.baseParams.request = Ext.util.JSON.encode(request);
+                }
+            }
         });
         //noeud racine
-        var rootNode = new Ext.tree.AsyncTreeNode({
+        var rootNode = new Ext.tree.AsyncTreeNode
+        ({
             text:'Flux RSS',
+            id:'0',
             expanded : true,
             draggable:false
         });
-        var toolbar = [
+        var toolbar =
+        [
             {
                 icon: Ext.APPLICATION_URL+'/img/icons/rss_add.png',
                 cls: 'x-btn-icon',
                 tooltip: '<b>Nouveau flux</b><br/>Cliquer pour ajouter un flux à votre arbre !'
             }
         ];
-        var config = {
+        var config =
+        {
             loader:treeLoader,
             root:rootNode,
             tbar:toolbar,
@@ -48,7 +70,8 @@ Feedeo.FeedsTreePanel = Ext.extend(Ext.tree.TreePanel, {
         Feedeo.FeedsTreePanel.superclass.initComponent.apply(this, arguments);
        
        //listeners
-       this.on(
+       this.on
+       (
             {
                 'click' : this.onFolderClick,
                 'contextmenu' : this.onContextMenu,
