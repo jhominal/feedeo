@@ -84,8 +84,39 @@ Feedeo.windows.loginForm =
             url : Feedeo.SERVER_URL,
             listeners :
             {
-                'beforeaction' : {fn:function(a,b){console.debug('bf action',a,b);}}   
-            },            
+                beforeaction : { fn :function(form,action)
+                {
+                    
+                    var params = {type : 'simple'};
+                    var values = form.getValues();
+                    values.action = 'login';
+                    //json encode the request
+                    params.request = Ext.util.JSON.encode(values);
+                    form.baseParams = params;
+                    //login & password are sent to the server... tant pis
+                
+                }}
+            },
+            defaults :
+            {
+                listeners :
+                    {
+                        specialkey : function(f,e)
+                        {
+                            console.log('toto');
+                            if(e.getKey()==e.ENTER)
+                            {
+                                console.log('enter');
+                                this.ownerCt.getForm().submit
+                                (
+                                    {
+                                        success:function(data){console.log('success:',data);}
+                                    }
+                                );
+                            }
+                        }
+                    }
+            },
             items :
             [
                 {
@@ -152,7 +183,11 @@ Ext.onReady(function() {
         params:
         {
             type : 'simple',
-            request: '{"action":"get","object":"preferences"}'
+            request:
+            {
+                action:"get",
+                object:"preferences"
+            }
         },
         success: function(data) {
             console.debug('getPrefs',data);

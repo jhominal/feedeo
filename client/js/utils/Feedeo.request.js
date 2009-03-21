@@ -33,6 +33,11 @@ Feedeo.request = function(options)
     {
         Ext.Msg.alert('Error','Ajax request failed.');
     }
+    
+    if(options.params && options.params.request && typeof(options.params.request)=="object")
+    {
+        options.params.request = Ext.util.JSON.encode(options.params.request);
+    }
     var connection = new Ext.data.Connection();
     connection.request(options);
 }
