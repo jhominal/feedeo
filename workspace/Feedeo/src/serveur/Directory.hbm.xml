@@ -10,7 +10,7 @@
 		</id>
 		<property name="title"/>
 		<property name="idParent" />
-		<property name="leaf" />
+		<property name="hasChildren" />
 		
 	<!-- LIEN MANY TO MANY AVEC L'UTILISATEUR !-->
 	

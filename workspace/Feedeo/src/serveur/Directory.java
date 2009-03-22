@@ -1,15 +1,18 @@
 
 package serveur;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-public class Directory extends HibernateObject{
-	private Long idDirectory;
+public class Directory extends HibernateObject implements JsonObjectSerializable{
+	private long idDirectory;
 	private String title;
 	//ID DU DOSSIER PARENT on ne sait pas encore comment ça va fonctionner avec HIBERNATE
-	private Long idParent;
-	private boolean leaf;
+	private long idParent;
+	private boolean hasChildren;
 	//Lien dossier aux articles many to many
 	private Set<Article> listArticle=new HashSet<Article>();
 	private User user;
@@ -18,15 +21,15 @@ public class Directory extends HibernateObject{
 	public Directory(){}
 	public Directory(String title,User user){
 		this.title=title;
-		this.idParent=null;
+		this.idParent=0;
 		this.user=user;
-		this.leaf=false;
+		this.hasChildren=false;
 	}
-	public Directory(String title,Long dirParent,User user){
+	public Directory(String title,long dirParent,User user){
 		this.title=title;
 		this.idParent=dirParent;
 		this.user=user;
-		this.leaf=false;
+		this.hasChildren=false;
 	}
 	
 	
@@ -37,11 +40,11 @@ public class Directory extends HibernateObject{
 	
 	
 	
-	public Long getIdDirectory(){
+	public long getIdDirectory(){
 		return this.idDirectory;
 	}
 	
-	public void setIdDirectory(Long id){
+	public void setIdDirectory(long id){
 		this.idDirectory=id;
 	}
 	
@@ -52,19 +55,19 @@ public class Directory extends HibernateObject{
 	public void setTitle(String title){
 		this.title=title;
 	}
-	public Long getIdParent(){
+	public long getIdParent(){
 		return this.idParent;
 	}
 	
-	public void setIdParent(Long id){
+	public void setIdParent(long id){
 		this.idParent=id;
 	}
-	public boolean getLeaf(){
-		return this.leaf;
+	public boolean getHasChildren(){
+		return this.hasChildren;
 	}
 	
-	public void setLeaf(boolean leaf){
-		this.leaf=leaf;
+	public void setHasChildren(boolean hasChildren){
+		this.hasChildren=hasChildren;
 	}
 	public User getUser(){
 		return this.user;
@@ -80,7 +83,8 @@ public class Directory extends HibernateObject{
 	public void setlistArticle(Set<Article> articles){
 		this.listArticle=articles;
 	}
-	/*public void addArticle(Article a){
+	/*
+	 * public void addArticle(Article a){
 		this.listArticle.add(a);
 	}*/
 	public boolean isEmpty()
@@ -96,10 +100,22 @@ public class Directory extends HibernateObject{
 		else
 			return false;
 	}
-	public boolean mooveDir(Long IdDest, Long IdOrig)
+	public boolean mooveDir(long IdDest, long IdOrig)
 	{
 		//REQUETE HIBERNATE ET UPDATE
 		return false;
+	}
+	public HashMap<String, Object> toHashMap(){
+		
+		HashMap<String, Object> dir = new HashMap<String, Object>();
+		dir.put("id", ""+this.idDirectory);
+		dir.put("text",this.title);
+		dir.put("leaf", false);
+		if(!this.hasChildren)
+		{
+			dir.put("children", new ArrayList<HashMap<String,Object>>());
+		}
+		return dir;
 	}
 	
 	//METHODES PR LA PERSISTANCE DES DONNEES DANS HIBERNATE

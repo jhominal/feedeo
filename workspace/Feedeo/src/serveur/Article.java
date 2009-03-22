@@ -13,7 +13,7 @@ import com.sun.syndication.feed.synd.SyndEntry;
 
 public class Article extends HibernateObject{
 	//ID de l'article
-	private Long idArticle;
+	private long idArticle;
 	//Tittre de l'article
 	private String title;
 	//Lien de l'article
@@ -101,10 +101,10 @@ public class Article extends HibernateObject{
     }
 	
 // DEBUT SET GET
-	public void setIdArticle(Long id){
+	public void setIdArticle(long id){
 		idArticle=id;
 	}
-	public Long getIdArticle(){
+	public long getIdArticle(){
 		return idArticle;
 	}
 	public void setTitle(String title){

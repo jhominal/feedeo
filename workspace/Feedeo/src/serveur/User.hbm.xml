@@ -24,7 +24,7 @@
 		</set>
 		
 		<!-- LIEN MANY TO MANY AVEC ARTICLE -->
-			<set name="article_properties" table="User_Article" inverse="true"> 
+			<set name="article_properties" cascade="all" inverse="false"> 
 				<key column="idUser" /> 
 				<one-to-many class="serveur.Articles_Properties" /> 
 			</set>

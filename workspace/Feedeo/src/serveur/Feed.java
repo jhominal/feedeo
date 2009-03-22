@@ -23,7 +23,7 @@ import com.sun.syndication.io.SyndFeedInput;
 import java.util.Date;
 public class Feed extends HibernateObject {
 /*Feed's title*/
-private Long idFeed;
+private long idFeed;
 private String title;
 private String url;
 private String link;
@@ -93,16 +93,12 @@ public Feed (String url,Directory dir,User user){
 	}
 	
 }
-public SyndFeed getFeedOrigine(){
-	return this.feedOrig;
-}
-
 
 // DEBUT SET GET
-public Long getIdFeed(){
+public long getIdFeed(){
 	return this.idFeed;
 }
-public void setIdFeed(Long id){
+public void setIdFeed(long id){
 	this.idFeed=id;
 }
 public String getTitle(){
@@ -137,7 +133,8 @@ public void setUser(User user){
 	this.user=user;
 }
 //FIN SET GET
-public void setArticles(SyndFeed feed,Directory dir){
+public void setArticles(Directory dir){
+	SyndFeed feed = this.feedOrig;
     int nbarticles = feed.getEntries().size();
     Set<Article>articles=new HashSet<Article>();
     int i;
@@ -149,7 +146,28 @@ public void setArticles(SyndFeed feed,Directory dir){
             	Article article=new Article((SyndEntry)(feed.getEntries().get(i)),this,dir);
             	articles.add(article);
             	article.createArticle();
-       
+            	Article_PropertiesPK pk =new Article_PropertiesPK(this.user,article);
+            	boolean read=false;
+            	boolean important=false;
+            	Articles_Properties properties=new Articles_Properties(pk,read,important);
+            	properties.createArticles_Properties();
+            	/*
+            	 * User user2 = new User("ghita","sekkat","tita","tite200","merian@yahoo.fr");
+				
+				//In a first time, two preferences: color and police size
+		
+				 Preference color= new Preference("color");
+			 	 Preference police=new Preference ("police");
+			 	 
+			 	 UserPreferencePK pk=new UserPreferencePK(user1, color);
+			 	 UserPreference up= new UserPreference(pk,"vert");
+			 	 color.createPreference();
+			 	 police.createPreference();
+				 user1.createUser();
+				 user2.createUser();
+				 up.createUserPreference();
+				 
+            	 */
             //updater les anciens articles 
             //si lu REMETTRE à NON LU si la date de mise à jour est récente
             //s'il n'est pas encore dans la liste d'article de l'utilisateur alors on l'insère et on l'ajoute au dossier par défaut

@@ -7,13 +7,24 @@ import java.util.List;
 //import hibernate.*;
 
 import org.stringtree.json.JSONReader;
+import org.stringtree.json.JSONWriter;
 
 public class FeedeoHandler {
 	private String userName = null;
+	private User user = null;
 	//private ;
 	public FeedeoHandler(String userName)
 	{
 		this.userName = userName;
+		if(this.userName != null)
+		{
+			List<HibernateObject> rep=HibernateObject.listObject("select user from User as user where login="+ "'"+this.userName+"'");
+			Iterator<HibernateObject> iter = rep.iterator(); 
+			if(iter.hasNext())
+			{
+				this.user=(User)iter.next();
+			}
+		}
 	};
 	public void handle( HashMap<String, Object> request, HashMap<String, Object> response)
 	{
@@ -29,35 +40,33 @@ public class FeedeoHandler {
 		{			
 			if(object.equals("folder"))
 			{
-				String folderId = (String) request.get("folderId");
+				
 				if(action.equals("getChildren"))
 				{
-					//String folderId = (String) request.get("folderId");
+					String folderIdString = (String) request.get("folderId");
+					Integer folderId = Integer.parseInt(folderIdString,10);
 					if(folderId!=null)
 					{
-						//debug tree
-						// [{id:"2",text:"dossier 1",children:[node2]}]
-						
+						List<HibernateObject>rep=HibernateObject.listObject("select distinct dir from Directory as dir, User as user inner join dir.user as user where dir.idParent = "+folderId+" and user.idUser="+this.user.getIdUser());
 						ArrayList<HashMap<String,Object> > children = new ArrayList<HashMap<String,Object>>();
-						HashMap<String, Object> node1 = new HashMap<String, Object>();
-						HashMap<String, Object> node2 = new HashMap<String, Object>();
-						node1.put("id", "2");
-						node1.put("text","Dossier 1");
-						node2.put("id", "4");
-						node2.put("text","Leaf 1");
-						node2.put("leaf", true);
-						ArrayList<HashMap<String,Object> > node1_children = new ArrayList<HashMap<String,Object>>();
-						node1_children.add(node2);
-						node1.put("children",node1_children);
-						children.add(node1);
 						
+						for (Iterator<HibernateObject> iter = rep.iterator(); iter.hasNext();) {
+							HibernateObject obj=iter.next();
+							if (obj instanceof Directory)
+							{
+								Directory dir= (Directory) obj;
+								children.add(dir.toHashMap());
+							}
+						}
 						response.put("children", children);
 						response.put("success", true);
+						
 					}
 				}
 				else if(action.equals("getArticles"))
 				{
-					//String folderId = (String) request.get("folderId");
+					String folderIdString = (String) request.get("folderId");
+					Integer folderId = Integer.parseInt(folderIdString,10);
 					if(folderId!=null)
 					{
 						JSONReader jsonReader = new JSONReader();
@@ -67,14 +76,70 @@ public class FeedeoHandler {
 						response.put("success", true);
 					}
 				}
-				else if(action.equals("..."))
+				else if(action.equals("add"))
 				{
+					String dirName=(String) request.get("name");
+					String id= (String) request.get("parentId");
+					Integer idParent = Integer.parseInt(id,10);
+					Directory dir= new Directory(dirName,idParent,this.user);
+					dir.createDirectory();
+					if (idParent>0)
+					{	
+						List<HibernateObject>rep=HibernateObject.listObject("select distinct dir from Directory as dir, User as user inner join dir.user as user where dir.idDirectory= "+idParent+" and user.idUser="+this.user.getIdUser());
+						for (Iterator<HibernateObject> iter = rep.iterator(); iter.hasNext();) {
+							HibernateObject obj=iter.next();
+							if (obj instanceof Directory)
+							{
+								Directory dirParent= (Directory) obj;
+								if (!dirParent.getHasChildren())
+								{
+									dirParent.setHasChildren(true);
+									dirParent.updateDirectory();
+								}
+							}
+						}
+					}
+					response.put("folder", dir.toHashMap());
+					response.put("success", true);
 					
 				}
-			
+				else if (action.equals("addFeed"))
+				{
+					String folderIdString = (String) request.get("folderId");
+					Integer folderId = Integer.parseInt(folderIdString,10);
+					if(folderId!=null)
+					{
+						List<HibernateObject>rep=HibernateObject.listObject("select distinct dir from Directory as dir, User as user inner join dir.user as user where dir.idDirectory= "+folderId+" and user.idUser="+this.user.getIdUser());
+						for (Iterator<HibernateObject> iter = rep.iterator(); iter.hasNext();) {
+							HibernateObject obj=iter.next();
+							if (obj instanceof Directory)
+							{
+								Directory dir= (Directory) obj;
+								String feedUrl=(String)request.get("feedUrl");
+								Feed feed=new Feed(feedUrl,dir,this.user);
+								feed.createFeed();
+								feed.setArticles(dir);
+								dir.updateDirectory();
+							}
+						}
+						response.put("success", true);
+						/*Directory dir1_user1=new Directory("racine",user1);
+						String url="http://fcargoet.evolix.net/feed/";
+						Feed feed=new Feed(url,dir1_user1,user1);
+						
+						dir1_user1.createDirectory();
+						feed.createFeed();
+						feed.setArticles(feed.getFeedOrigine(),dir1_user1);
+						dir1_user1.updateDirectory();*/
+					}
+					//feedUrl
+					
+				}
 			}
 			else if (object.equals("article"))
 			{
+				String folderIdString = (String) request.get("folderId");
+				Integer folderId = Integer.parseInt(folderIdString,10);
 				if(action.equals("get"))
 				{
 
@@ -96,13 +161,13 @@ public class FeedeoHandler {
 					
 				}
 				
-			}else if(object.equals("..."))
+			}else if(object.equals("feed"))
 			{
 				
 			}		
 		}
 		
-	};
+	}
 	public String login(HashMap<String, Object> loginRequest)
 	{
 		//ckeck login/password

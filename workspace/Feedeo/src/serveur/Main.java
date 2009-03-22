@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
+import org.stringtree.json.JSONWriter;
+
 public class Main {
 
 	
@@ -37,32 +39,23 @@ public class Main {
 		//FIN TEST USER REUSSI
 		 
 		// REUSSI :LECTURE D'UN FLUX CREATION D'ARTICLE DANS UN DOSSIER
-		
 		Directory dir1_user1=new Directory("racine",user1);
 		String url="http://fcargoet.evolix.net/feed/";
 		Feed feed=new Feed(url,dir1_user1,user1);
 		
 		dir1_user1.createDirectory();
 		feed.createFeed();
-		feed.setArticles(feed.getFeedOrigine(),dir1_user1);
+		feed.setArticles(dir1_user1);
 		dir1_user1.updateDirectory();
 		//FIN LECTURE D'UN FLUX
 		
 		//RECUPERER LES SOUS DOSSIER D'UN DOSSIER DONNE DE L'UTILISATEUR
-		List<HibernateObject>rep=HibernateObject.listObject("select dir from Directory as dir, User as user inner join dir.user as user where dir.idParent is null");
-		for (Iterator<HibernateObject> iter = rep.iterator(); iter.hasNext();) {
-			HibernateObject obj=iter.next();
-			if (obj instanceof Directory)
-			{
-			//Directory dir= (Directory) obj;
-			System.out.print(((Directory) obj).getTitle() +"\n");
-			//((Directory) obj).setTitle("hello");
-			//((Directory) obj).updateDirectory();
-			//logger.debug("{}", element);
-			}
-			
+		List<HibernateObject>rep=HibernateObject.listObject("select dir from Directory as dir, User as user inner join dir.user as user where dir.idParent = 0");
+		JSONWriter writer=new JSONWriter(); 
+		String jsonrep=writer.write(rep);
+		System.out.println(jsonrep);
 		//FIN RECUPERER LES SOUS DOSSIER D'UN DOSSIER DONNE DE L'UTILISATEUR
-		
+		/*
 		String login="mimo";
 		FeedeoHandler f=new FeedeoHandler(null);
 		HashMap<String, Object> createAccountRequest = new HashMap<String, Object>();
@@ -71,7 +64,7 @@ public class Main {
 		createAccountRequest.put("mail", "toto@toto.net");
 		f.createAccount(createAccountRequest);
 		
-			
+			*/
 			//Directory dir= (Directory) obj;
 			
 			//((Directory) obj).setTitle("hello");
@@ -82,5 +75,4 @@ public class Main {
 		  System.out.println("JSONWriter result is " + writer.write(feed));
 		  System.exit(0);*/
 	}
-}
 	

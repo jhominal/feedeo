@@ -3,22 +3,22 @@ package serveur;
 public class Articles_Properties extends HibernateObject{
 	
 	//TOUTES LES PROPRIETES D'UN ARTICLE
-	private boolean read;
+	private boolean lu;
 	private boolean important;
 	public Article_PropertiesPK  idUserArticle;
 	
 	public Articles_Properties (){}
 	public Articles_Properties (Article_PropertiesPK  idUserArticle, boolean read, boolean important){
 		this.idUserArticle=idUserArticle;
-		this.read=read;
+		this.lu=read;
 		this.important=important;
 	}
 	
-	public boolean getread(){
-		return read;
+	public boolean getLu(){
+		return lu;
 	}
-	public void setread(boolean read){
-		this.read=read;
+	public void setLu(boolean read){
+		this.lu=read;
 	}
 	public boolean getImportant(){
 		return this.important;
@@ -34,5 +34,18 @@ public class Articles_Properties extends HibernateObject{
 	public void setIdUserArticle(Article_PropertiesPK id){
 		this.idUserArticle=id;
 	}
+// METHODES PR LA PERSISTANCE DES DONNEES DANS HIBERNATE
+	public void createArticles_Properties() {
+		HibernateObject.create(this);	
+	}
+
+	public void deleteArticles_Properties() {
+		HibernateObject.delete(this);	
+	}
+
+	public void updateArticles_Properties() {
+		HibernateObject.update(this);	
+	}
+	//FIN METHODES PR LA PERSISTANCE DES DONNEES DANS HIBERNATE
 
 }
