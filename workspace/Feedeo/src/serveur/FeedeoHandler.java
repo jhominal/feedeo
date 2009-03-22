@@ -69,6 +69,7 @@ public class FeedeoHandler {
 					Integer folderId = Integer.parseInt(folderIdString,10);
 					if(folderId!=null)
 					{
+						
 						JSONReader jsonReader = new JSONReader();
 						String articlesArrayJSON = "[{\"author\":\"Florian\",\"title\":\"Youpi\",\"content\":\"balblabal llazllbal yip yop yup titi tot tata\",\"url\":\"http://fcargoet.evolix.net/2009/03/une-liste-alimentee-automatiquement-avec-jquery/\",\"date\":\"2009-03-12\",\"categories\" : [\"info\",\"jquery\"],\"summary\" : \"balblabal llazllbal\",\"read\" : false,\"important\":false}]";
 						ArrayList<HashMap> articlesArray =  (ArrayList<HashMap>) jsonReader.read(articlesArrayJSON);
