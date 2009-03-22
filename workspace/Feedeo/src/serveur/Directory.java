@@ -15,7 +15,7 @@ public class Directory extends HibernateObject{
 	private User user;
 	
 	
-	
+	public Directory(){}
 	public Directory(String title,User user){
 		this.title=title;
 		this.idParent=null;
@@ -63,7 +63,7 @@ public class Directory extends HibernateObject{
 		return this.leaf;
 	}
 	
-	public void setILeaf(boolean leaf){
+	public void setLeaf(boolean leaf){
 		this.leaf=leaf;
 	}
 	public User getUser(){

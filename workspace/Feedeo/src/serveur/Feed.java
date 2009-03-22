@@ -47,7 +47,8 @@ public Feed (String url,Directory dir,User user){
 	try {
 			URL new_url=new URL(url);
 			SyndFeedInput input = new SyndFeedInput();
-			this.feedOrig=input.build(new XmlReader(new_url));
+			feed=input.build(new XmlReader(new_url));
+			this.feedOrig=feed;
 			this.title=this.feedOrig.getTitle();
 			this.link=this.feedOrig.getLink();
 			this.pubDate=this.feedOrig.getPublishedDate();
@@ -156,7 +157,6 @@ public void setArticles(SyndFeed feed,Directory dir){
             }
             this.setArticles(articles);
             dir.setlistArticle(articles);
-	
 }
 
 public void setArticles(Set<Article> articles){

@@ -94,7 +94,9 @@ public class Article extends HibernateObject{
     		e.printStackTrace();
     	}
        //VERIFIER QUE L'ARTICLE N'EST PASDEJA DANS LE DOSSIER
-       this.addDir(dir);
+        Set<Directory>dirs=new HashSet<Directory>();
+        dirs.add(dir);
+       this.setlistDir(dirs);
        this.feed= feed;
     }
 	
