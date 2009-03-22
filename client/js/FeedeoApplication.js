@@ -3,25 +3,178 @@ Ext.ns('Feedeo');
 Feedeo.addFeed = function(o)
 {
     //o.feedUrl
-    //o.folder_id
+    //o.folderId
+    Feedeo.request(
+    {
+        params:
+        {
+            type : 'simple',
+            request :
+            {
+                action:'addFeed',
+                object:'folder',
+                feedUrl:o.feedUrl,
+                folderId:o.folderId
+            }
+        },
+        success: function(data)
+        {
+            //si folderId = currentFolder, on reload
+            var folderTree = Ext.ComponentMgr.get('folderstree');
+            var currentId = folderTree.getSelectionModel().getSelectedNode().id;
+            //if(currentId==data.)
+        },
+        failure:function(data)
+        {
+            if(data.error)
+            {
+                Ext.Msg.alert('Error',data.error);
+            }
+        }
+    });
+};
+Feedeo.getFeeds = function(o)
+{
+    Feedeo.request(
+    {
+        params:
+        {
+            type : 'simple',
+            request :
+            {
+                action:'get',
+                object:'feed'
+            }
+        },
+        success: o.success,
+        failure:function(data)
+        {
+            if(data.error)
+            {
+                Ext.Msg.alert('Error',data.error);
+            }
+        }
+    });
 };
 Feedeo.deleteFeed = function(o)
 {
     //o.feed_id ?
+    Feedeo.request(
+    {
+        params:
+        {
+            type : 'simple',
+            request :
+            {
+                action:'delete',
+                object:'feed',
+                feedId:o.feedId
+            }
+        },
+        success: function(data)
+        {
+            //si folderId = currentFolder, on reload
+        },
+        failure:function(data)
+        {
+            if(data.error)
+            {
+                Ext.Msg.alert('Error',data.error);
+            }
+        }
+    });
 };
 Feedeo.addFolder = function(o)
 {
     //o.name
     //o.parent_id
+    Feedeo.request(
+    {
+        params:
+        {
+            type : 'simple',
+            request :
+            {
+                action:'add',
+                object:'folder',
+                parentId:o.parentId,
+                name : o.name
+            }
+        },
+        success: function(data)
+        {
+            //ajouter le dossier à l'arbre
+            
+        },
+        failure:function(data)
+        {
+            if(data.error)
+            {
+                Ext.Msg.alert('Error',data.error);
+            }
+        }
+    });
+    
 };
-Feedeo.removeFolder = function(o)
+Feedeo.deleteFolder = function(o)
 {
-    //o.fodler_id
+    //o.folder_id
+    Feedeo.request(
+    {
+        params:
+        {
+            type : 'simple',
+            request :
+            {
+                action:'delete',
+                object:'folder',
+                folderId:o.folderId
+            }
+        },
+        success: function(data)
+        {
+            //supprimer le dossier de l'arbre
+            
+        },
+        failure:function(data)
+        {
+            if(data.error)
+            {
+                Ext.Msg.alert('Error',data.error);
+            }
+        }
+    });
 };
 Feedeo.moveFolder = function(o)
 {
     //o.folder_id
     //o.new_parent_id
+    Feedeo.request(
+    {
+        params:
+        {
+            type : 'simple',
+            request :
+            {
+                action:'move',
+                object:'folder',
+                folderId:o.folderId,
+                newParentId:o.newParentId
+            }
+        },
+        success: function(data)
+        {
+            //déplacer le dossier dans l'arbre
+            
+        },
+        failure:function(data)
+        {
+            if(data.error)
+            {
+                Ext.Msg.alert('Error',data.error);
+            }
+        }
+    });
 };
 Ext.ns('Feedeo.windows','Feedeo.windows.config','Feedeo.windows.help');
 
@@ -163,6 +316,16 @@ Feedeo.windows.loginForm =
                       },
                       {
                           xtype : "textfield",
+                          fieldLabel : "Prénom",
+                          name : "name"
+                      },
+                      {
+                          xtype : "textfield",
+                          fieldLabel : "Nom",
+                          name : "lastname"
+                      },
+                      {
+                          xtype : "textfield",
                           fieldLabel : "Mot de passe",
                           name : "password"
                       },
@@ -223,8 +386,6 @@ Ext.onReady(function() {
     Ext.QuickTips.init();
 
     Feedeo.request({
-        url: Feedeo.SERVER_URL,
-        method: 'POST',
         params:
         {
             type : 'simple',

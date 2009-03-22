@@ -2,6 +2,12 @@ Ext.ns('Feedeo');
 
 Feedeo.request = function(options)
 {
+    Ext.applyIf(options,
+        {
+            url: Feedeo.SERVER_URL,
+            method: 'POST'
+        }
+    );
     options.handlers = {};
     if(options.success != null)
     {

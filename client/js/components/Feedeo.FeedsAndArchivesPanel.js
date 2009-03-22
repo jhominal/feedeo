@@ -18,10 +18,12 @@ Feedeo.FeedsAndTreePanel = Ext.extend(Ext.TabPanel, {
             [
                 {
                     xtype:'feedstreepanel',
+                    id:'folderstree', //pas terrible comme id
                     title:'Réception'
                 },
                 {
                     xtype:'archivestreepanel',
+                    id:'archivestree',
                     title : 'Archives'
                 }
             ]

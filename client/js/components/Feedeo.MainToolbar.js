@@ -18,7 +18,23 @@ Feedeo.MainToolbar = Ext.extend(Ext.Toolbar, {
                     menu: {
                         ignoreParentClicks : true,
                         items: [
-                            {text: 'Ajouter', handler: testHandler, icon: icons+'/feed_add.png'},
+                            {
+                                text: 'Ajouter',
+                                handler: function()
+                                {
+                                    Ext.Msg.prompt('Ajouter un flux RSS','URL du flux :',function(btn, text){
+                                        if(btn == "ok")
+                                        {
+                                            //get current folderId
+                                            var folderTree = Ext.ComponentMgr.get('folderstree');
+                                            var folderId = folderTree.getSelectionModel().getSelectedNode().id;
+                                            Feedeo.addFeed({feedUrl:text,folderId:folderId});
+                                            
+                                        }
+                                    });
+                                },
+                                icon: icons+'/feed_add.png'
+                            },
                             {text: 'Importer', handler: testHandler, icon: icons+'/feed_go.png'},
                             {text: 'Exporter', handler: testHandler, icon: icons+'/feed_go.png'}
                         ]
@@ -29,8 +45,34 @@ Feedeo.MainToolbar = Ext.extend(Ext.Toolbar, {
                     menu: {
                         ignoreParentClicks : true,
                         items: [
-                            {text: 'Créer', handler: testHandler, icon: icons+'/folder_add.png'},
-                            {text: 'Supprimer', handler: testHandler, icon: icons+'/folder_delete.png'},
+                            {
+                                text: 'Créer',
+                                handler: function()
+                                {
+                                    Ext.Msg.prompt('Créer un dossier','Nom du dossier :',function(btn, text){
+                                        if(btn == "ok")
+                                        {
+                                            //get current folderId
+                                            var folderTree = Ext.ComponentMgr.get('folderstree');
+                                            var folderId = folderTree.getSelectionModel().getSelectedNode().id;
+                                            Feedeo.addFolder({name:text,parentId:folderId});
+                                            
+                                        }
+                                    });
+                                },
+                                icon: icons+'/folder_add.png'
+                            },
+                            {
+                                text: 'Supprimer',
+                                handler: function()
+                                {
+                                    //get current folderId
+                                    var folderTree = Ext.ComponentMgr.get('folderstree');
+                                    var folderId = folderTree.getSelectionModel().getSelectedNode().id;
+                                    Feedeo.deleteFolder({folderId:folderId});
+                                },
+                                icon: icons+'/folder_delete.png'
+                            },
                             {text: 'Renommer', handler: testHandler, icon: icons+'/folder_edit.png'},
                             {text: 'Marquer tout comme lu', handler: testHandler},
                             '-',
