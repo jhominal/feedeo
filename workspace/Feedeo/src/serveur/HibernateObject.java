@@ -3,7 +3,6 @@ package serveur;
 import java.util.Iterator;
 import java.util.List;
 
-import hibernate.InitSessionFactory;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -84,7 +83,7 @@ public abstract class HibernateObject {
 		}
 	}
 	@SuppressWarnings("unchecked")
-	static List<HibernateObject> listUser(String requete) {
+	static List<HibernateObject> listObject(String requete) {
 	//static void listUser(String requete) {
 		List<HibernateObject> response=null;
 		Transaction tx = null;

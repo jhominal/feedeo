@@ -1,5 +1,6 @@
 package serveur;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -17,8 +18,8 @@ public class Main {
 		//url[0]="http://fcargoet.evolix.net/feed/";
 		//TEST USER REUSSI 
 				
-				 User user1 = new User("meriam","sekkat","mimi","tintin20");
-				User user2 = new User("ghita","sekkat","tita","tite200");
+				 User user1 = new User("meriam","sekkat","mimi","tintin20","merian@yahoo.fr");
+				User user2 = new User("ghita","sekkat","tita","tite200","merian@yahoo.fr");
 				
 				//In a first time, two preferences: color and police size
 		
@@ -27,8 +28,6 @@ public class Main {
 			 	 
 			 	 UserPreferencePK pk=new UserPreferencePK(user1, color);
 			 	 UserPreference up= new UserPreference(pk,"vert");
-			 	 
-			 	 
 			 	 color.createPreference();
 			 	 police.createPreference();
 				 user1.createUser();
@@ -50,7 +49,7 @@ public class Main {
 		//FIN LECTURE D'UN FLUX
 		
 		//RECUPERER LES SOUS DOSSIER D'UN DOSSIER DONNE DE L'UTILISATEUR
-		List<HibernateObject>rep=HibernateObject.listUser("select dir from Directory as dir, User as user inner join dir.user as user where dir.idParent is null");
+		List<HibernateObject>rep=HibernateObject.listObject("select dir from Directory as dir, User as user inner join dir.user as user where dir.idParent is null");
 		for (Iterator<HibernateObject> iter = rep.iterator(); iter.hasNext();) {
 			HibernateObject obj=iter.next();
 			if (obj instanceof Directory)
@@ -61,19 +60,27 @@ public class Main {
 			//((Directory) obj).updateDirectory();
 			//logger.debug("{}", element);
 			}
+			
 		//FIN RECUPERER LES SOUS DOSSIER D'UN DOSSIER DONNE DE L'UTILISATEUR
-		}
-		//}	
-		/*
-//ID DU DOSSIER PARENT on ne sait pas encore comment ça va fonctionner avec HIBERNATE
-private Long idParent;
-private boolean leaf;
-
-		 */
-		 /* JSONWriter writer = new JSONWriter();
+		
+		String login="mimo";
+		FeedeoHandler f=new FeedeoHandler(null);
+		HashMap<String, Object> createAccountRequest = new HashMap<String, Object>();
+		createAccountRequest.put("login",login);
+		createAccountRequest.put("password", "toto");
+		createAccountRequest.put("mail", "toto@toto.net");
+		f.createAccount(createAccountRequest);
+		
+			
+			//Directory dir= (Directory) obj;
+			
+			//((Directory) obj).setTitle("hello");
+			//((Directory) obj).updateDirectory();
+			//logger.debug("{}", element);
+			}
+		 /*JSONWriter writer = new JSONWriter();
 		  System.out.println("JSONWriter result is " + writer.write(feed));
 		  System.exit(0);*/
-
+	}
 }
 	
-}

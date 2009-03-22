@@ -12,6 +12,7 @@
 		<property name="lastname" column="lastname" />
 		<property name="login" column="login" />
 		<property name="password" column="password" />
+		<property name="email" column="email" />
 
 
 

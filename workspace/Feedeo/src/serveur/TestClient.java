@@ -12,8 +12,8 @@ public class TestClient {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		User user1 = new User("meriam","sekkat","mimi","tintin20");
-		User user2 = new User("ghita","sekkat","tita","tite200");
+		User user1 = new User("meriam","sekkat","mimi","tintin20","merian@yahoo.fr");
+		User user2 = new User("ghita","sekkat","tita","tite200","merian@yahoo.fr");
 		
 		/** In a first time, two preferences: color and police size*/
 
@@ -37,7 +37,7 @@ public class TestClient {
 		
 		
 		
-	HibernateObject.listUser("select name from User as name");
+	HibernateObject.listObject("select name from User as name");
 		
 
 /*		HibernateObject.listUser("select name from User as name");

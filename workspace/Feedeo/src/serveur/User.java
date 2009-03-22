@@ -12,6 +12,7 @@ public class User extends HibernateObject {
 		
 		private String login;
 		private String password;
+		private String email;
 		
 		Set<UserPreference> userPreferences=new HashSet<UserPreference>();
 		
@@ -25,13 +26,20 @@ public class User extends HibernateObject {
 		public User(){
 		}
 		
-		public User(String name, String lastname, String login, String password){
+		public User(String name, String lastname, String login, String password,String email){
 			this.setName(name);
 			this.setLastname(lastname);
 			this.setLogin(login);
 			this.setPassword(password);
+			this.setEmail(email);
 			
 		}
+		public User(String login, String password){
+			this.setLogin(login);
+			this.setPassword(password);
+			
+		}
+		
 		
 		public long getIdUser() {
 		return idUser;
@@ -68,7 +76,13 @@ public class User extends HibernateObject {
 		public void setPassword(String password) {
 			this.password = password;
 			}
+		public String getEmail() {
+			return email;
+			}
 		
+		public void setEmail(String email) {
+			this.email = email;
+			}
 		
 		public Set<UserPreference> getUserPreferences() {
 			return userPreferences;

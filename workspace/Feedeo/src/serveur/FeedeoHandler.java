@@ -2,6 +2,9 @@ package serveur;
 
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+//import hibernate.*;
 
 import org.stringtree.json.JSONReader;
 
@@ -26,12 +29,12 @@ public class FeedeoHandler {
 		{			
 			if(object.equals("folder"))
 			{
+				String folderId = (String) request.get("folderId");
 				if(action.equals("getChildren"))
 				{
-					String folderId = (String) request.get("folderId");
+					//String folderId = (String) request.get("folderId");
 					if(folderId!=null)
 					{
-					
 						//debug tree
 						// [{id:"2",text:"dossier 1",children:[node2]}]
 						
@@ -54,7 +57,7 @@ public class FeedeoHandler {
 				}
 				else if(action.equals("getArticles"))
 				{
-					String folderId = (String) request.get("folderId");
+					//String folderId = (String) request.get("folderId");
 					if(folderId!=null)
 					{
 						JSONReader jsonReader = new JSONReader();
@@ -105,8 +108,26 @@ public class FeedeoHandler {
 		//ckeck login/password
 		String login = (String) loginRequest.get("login");
 		String password = (String) loginRequest.get("password");
+		List<HibernateObject> rep=HibernateObject.listObject("select user from User as user where login="+ "'"+login+"'");
+		Iterator<HibernateObject> iter = rep.iterator(); 
+		if(iter.hasNext())
+		{
+			HibernateObject obj=iter.next();
+			if (obj instanceof User)
+			{
+				String pswd=((User) obj).getPassword();
+				if (pswd.equals(password))
+				{
+					return login;
+				}
+			}
+			return null;
+		}
+		else
+		{
+			return null;
+		}
 			
-		return login;
 		
 	};
 	public String createAccount(HashMap<String, Object> createAccountRequest)
@@ -114,10 +135,31 @@ public class FeedeoHandler {
 		//create account
 		String login = (String) createAccountRequest.get("login");
 		String password = (String) createAccountRequest.get("password");
+		String name= (String) createAccountRequest.get("name");
+		String lastName= (String) createAccountRequest.get("lastName");
+		String email= (String) createAccountRequest.get("email");
+		List<HibernateObject> rep=HibernateObject.listObject("select user from User as user where login="+ "'"+login+"'");
+		Iterator<HibernateObject> iter = rep.iterator(); 
+		if(iter.hasNext())
+		{
+			return null;
+		}
+		else
+		{
+			User user=new User(name,lastName,login,password,email);
+			user.createUser();
+			return user.getLogin();
+		}
+		/*for (Iterator<HibernateObject> iter = rep.iterator(); iter.hasNext();) {
+			HibernateObject obj=iter.next();
+			
+			if (obj instanceof User)
+			{
+				System.out.print(((User) obj).getLogin() +"\n");
+			}
+		*/
 		//and other data...
 		
-		
-		return login;
 
 	};
 }
