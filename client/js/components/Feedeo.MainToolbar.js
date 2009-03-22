@@ -42,6 +42,7 @@ Feedeo.MainToolbar = Ext.extend(Ext.Toolbar, {
                 },
                 {
                     text: 'Dossier',
+                    id:'folderMenu',
                     menu: {
                         ignoreParentClicks : true,
                         items: [
@@ -74,9 +75,7 @@ Feedeo.MainToolbar = Ext.extend(Ext.Toolbar, {
                                 icon: icons+'/folder_delete.png'
                             },
                             {text: 'Renommer', handler: testHandler, icon: icons+'/folder_edit.png'},
-                            {text: 'Marquer tout comme lu', handler: testHandler},
-                            '-',
-                            {text: 'Démarrer la visualisation plein écran', handler: testHandler, icon: icons+'/arrow_out.png'}
+                            {text: 'Marquer tout comme lu', handler: testHandler}
                         ]
                     }
                 },

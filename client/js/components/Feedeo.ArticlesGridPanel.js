@@ -6,7 +6,7 @@ Feedeo.ArticlesGridPanel = Ext.extend(Ext.grid.GridPanel, {
         //create the store to load and store data
         this.jsonStore = new Feedeo.CachedMultiJsonStore({
             url:this.initialConfig.url, //load Json from url
-            baseParams :
+            baseRequestParams :
             {
                 type:'simple',
                 request : {
@@ -17,11 +17,12 @@ Feedeo.ArticlesGridPanel = Ext.extend(Ext.grid.GridPanel, {
             root:'articles',
             //autoLoad:true, // auto call the .load() method
             fields:[
+                {name : 'id'},
                 {name: 'author'},
                 {name: 'title'},
                 {name: 'content'},
                 {name: 'url'},
-                {name : 'date', type :'date', dateFormat:'Y-m-d'},
+                {name : 'date', type :'date', dateFormat:'timestamp'},
                 {name : 'categories'}, //Array
                 {name :'summary'},
                 {name : 'read'},
@@ -116,15 +117,17 @@ Feedeo.ArticlesGridPanel = Ext.extend(Ext.grid.GridPanel, {
         for(var i = 0;i!= modifiedRecords.length;i++)
         {
             currentRecord = modifiedRecords[i]
-            console.debug('changes',currentRecord.getChanges());
+            console.debug('changes',currentRecord,currentRecord.getChanges());
             Feedeo.request(
                 {
                     params :
                     {
+                        type:'simple',
                         request :
                         {
                             action : 'update',
                             object : 'article',
+                            articleId : currentRecord.data.id,
                             changes : currentRecord.getChanges()
                         }
                     },
@@ -136,13 +139,16 @@ Feedeo.ArticlesGridPanel = Ext.extend(Ext.grid.GridPanel, {
     },
     setFolder : function(folderId)
     {
+        
         if(this.folderId !== folderId)
         {
             //TODO : si on a déjà les données, on ne reload pas !
             // un proxy, un store perso ??
             console.log('store',this.jsonStore);
             this.folderId = folderId;
-            this.jsonStore.baseParams.request.folderId = this.folderId;
+            //restore baseParams
+            
+            this.jsonStore.baseRequestParams.request.folderId = this.folderId;
             this.jsonStore.load();
         }
     },
