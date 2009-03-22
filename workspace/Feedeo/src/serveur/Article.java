@@ -22,7 +22,8 @@ public class Article extends HibernateObject implements JsonObjectSerializable{
 	private String link;
 	//Date de l'article
 	private Date date;
-	//Catï¿½gories de l'article /tags
+	private String content;
+	//Catégories de l'article /tags
 	//private Set<String> categories;
 	private Feed feed;
 	
@@ -42,6 +43,7 @@ public class Article extends HibernateObject implements JsonObjectSerializable{
 	private Set<Directory> listDir=new HashSet<Directory>();;
 	//proprio de l'article
 	private String owner;
+	private SyndContent debug;
 	
 	public Article(){}
 	
@@ -88,6 +90,16 @@ public class Article extends HibernateObject implements JsonObjectSerializable{
         	}
         	
         }
+        try{
+        	//this.content=((SyndContent)se.getContents().get(0)).getValue();
+        	ArrayList debug = (ArrayList)se.getContents();
+        	this.content = debug.toString();
+        }
+        catch(Exception e){
+        	
+        	this.content="";
+        }
+        	
        // this.read=(boolean)false;
         try{
         	this.author=se.getAuthor();
@@ -119,10 +131,17 @@ public class Article extends HibernateObject implements JsonObjectSerializable{
 		this.link= link;
 	}
 	
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
 	public String getLink(){
 		return link;
 	}
-	
 	public void setDate(Date date){
 		this.date= date;
 	}
@@ -257,7 +276,7 @@ public HashMap<String, Object> toHashMap() {
 	article.put("title",this.title);
 	article.put("author",this.author);
 	article.put("summary", this.summary);
-	//article.put("content", this.)
+	article.put("content", this.summary); //pour au moins avoir qqch pour la démo
 	article.put("date", this.date.getTime());
 	ArrayList<String> categories = new ArrayList<String>();
 	//add categories

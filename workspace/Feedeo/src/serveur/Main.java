@@ -16,10 +16,32 @@ public class Main {
 	
 
 	public static void main(String[] arg){
+		
+		List<HibernateObject> resp=HibernateObject.listObject("select distinct article from Directory as dir inner join dir.listArticle as article where dir.idDirectory= "+1);
+		for (Iterator<HibernateObject> iter = resp.iterator(); iter.hasNext();) {
+			HibernateObject obj=iter.next();
+			if (obj instanceof Article)
+			{
+				Article art= (Article) obj;
+				List<HibernateObject> respo=HibernateObject.listObject("select artprop from Articles_Properties as artprop where artprop.idUserArticle.idArticle.idArticle= "+art.getIdArticle()+" and artprop.idUserArticle.idUser.idUser="+1);
+				for (Iterator<HibernateObject> iterArt = respo.iterator(); iterArt.hasNext();) {
+					HibernateObject stateObj=iterArt.next();
+					if (stateObj instanceof Articles_Properties)
+					{
+						Articles_Properties articleState=(Articles_Properties)stateObj;
+						System.out.print(art.getTitle());
+						System.out.print(articleState.getLu());
+						
+
+					}
+					
+				}
+			}
+		}
 		//String[] url=new String[1];
 		//url[0]="http://fcargoet.evolix.net/feed/";
 		//TEST USER REUSSI 
-				
+		/*		
 				 User user1 = new User("meriam","sekkat","mimi","tintin20","merian@yahoo.fr");
 				User user2 = new User("ghita","sekkat","tita","tite200","merian@yahoo.fr");
 				

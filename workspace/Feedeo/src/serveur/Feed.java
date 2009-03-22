@@ -29,6 +29,7 @@ private String url;
 private String link;
 private Date pubDate;
 public SyndFeed feedOrig;
+private long idDirOrig;
 //Lien Unidirectionnel vers la liste des articles de ce flux
 private Set<Article> articles=new HashSet<Article>();
 
@@ -53,6 +54,7 @@ public Feed (String url,Directory dir,User user){
 			this.link=this.feedOrig.getLink();
 			this.pubDate=this.feedOrig.getPublishedDate();
 			this.user=user;
+			this.idDirOrig=dir.getIdDirectory();
 			//CREER ICI LES ARTICLES
 		}
 	catch (Exception e){ 
@@ -132,6 +134,13 @@ public User getUser(){
 public void setUser(User user){
 	this.user=user;
 }
+public long getIdDirOrig(){
+	return idDirOrig;
+}
+public void setIdDirOrig(long id){
+	this.idDirOrig=id;
+}
+
 //FIN SET GET
 public void setArticles(Directory dir){
 	SyndFeed feed = this.feedOrig;
@@ -183,6 +192,8 @@ public void setArticles(Set<Article> articles){
 public Set<Article> getArticles(){
 	return articles;
 }
+
+
 
 //METHODES PR LA PERSISTANCE DES DONNEES DANS HIBERNATE
 public void createFeed() {

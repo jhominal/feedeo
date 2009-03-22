@@ -28,6 +28,7 @@ public class FeedeoHandler {
 			}
 		}
 	};
+	@SuppressWarnings("unchecked")
 	public void handle( HashMap<String, Object> request, HashMap<String, Object> response)
 	{
 		//request peut contenir (en général) :
@@ -73,54 +74,42 @@ public class FeedeoHandler {
 
 					if(folderId!=null)
 					{
-						List<HibernateObject> resp=HibernateObject.listObject("select Directory as dir, User as user inner join dir.user as user where dir.idParent = "+folderId+" and user.idUser="+this.user.getIdUser());
-						/*JSONReader jsonReader = new JSONReader();
-						String articlesArrayJSON = "[{\"author\":\"Florian\",\"title\":\"Youpi\",\"content\":\"balblabal llazllbal yip yop yup titi tot tata\",\"url\":\"http://fcargoet.evolix.net/2009/03/une-liste-alimentee-automatiquement-avec-jquery/\",\"date\":\"2009-03-12\",\"categories\" : [\"info\",\"jquery\"],\"summary\" : \"balblabal llazllbal\",\"read\" : false,\"important\":false}]";
-						ArrayList<HashMap> articlesArray =  (ArrayList<HashMap>) jsonReader.read(articlesArrayJSON);
-						response.put("articles",articlesArray);
-						response.put("success", true);
-
-						 */
 
 						ArrayList<HashMap<String,Object> > articlesArray = new ArrayList<HashMap<String,Object>>();
 
-						Set<Article> articles= new HashSet<Article>();
+						//Set<Article> articles= new HashSet<Article>();
+						List<HibernateObject> resp=HibernateObject.listObject("select distinct article from Directory as dir inner join dir.listArticle as article where dir.idDirectory= "+folderId);
 						for (Iterator<HibernateObject> iter = resp.iterator(); iter.hasNext();) {
 							HibernateObject obj=iter.next();
-							if (obj instanceof Directory)
+							if (obj instanceof Article)
 							{
-								Directory dir= (Directory) obj;
-								articles=dir.getlistArticle();
+								Article art= (Article) obj;
+								//System.out.print(dir.getTitle());
+								HashMap<String, Object> article=art.toHashMap();
+								Articles_Properties artState= new Articles_Properties();
 
-								for(Iterator<Article> itera= articles.iterator(); itera.hasNext();){
+								List<HibernateObject> respo=HibernateObject.listObject("select artprop from Articles_Properties as artprop where artprop.idUserArticle.idArticle.idArticle= "+art.getIdArticle()+" and artprop.idUserArticle.idUser.idUser="+1);
 
-									Article art= itera.next();
+								for (Iterator<HibernateObject> iterArt = respo.iterator(); iterArt.hasNext();) {
+									HibernateObject stateObj=iterArt.next();
+									if (stateObj instanceof Articles_Properties)
+									{
+										Articles_Properties articleState=(Articles_Properties)stateObj;
+										article.put("read", articleState.getLu());
+										article.put("important", articleState.getImportant());
 
-									HashMap<String, Object> article=art.toHashMap();
-									Articles_Properties artState= new Articles_Properties();
-
-									List<HibernateObject> respo=HibernateObject.listObject("select Articles_Properties as artprop where artprop.idUserArticle.idArticle = "+art+" and artprop.idUserArticle.idUser="+this.user);
-
-									for (Iterator<HibernateObject> iterArt = resp.iterator(); iterArt.hasNext();) {
-										HibernateObject stateObj=iterArt.next();
-										if (obj instanceof Articles_Properties)
-										{
-											Articles_Properties articleState=(Articles_Properties)stateObj;
-											article.put("read", articleState.getLu());
-											article.put("important", articleState.getImportant());
-
-										}
-										
 									}
-                                  articlesArray.add(article);
+
 								}
-                         
+								articlesArray.add(article);
 							}
+
 						}
-						
-						response.put("success", true);
+						//	}
+
+						response.put("success",true);
 						response.put("articles", articlesArray);
-						
+
 					}
 				}
 				else if(action.equals("add"))
@@ -193,9 +182,33 @@ public class FeedeoHandler {
 				{
 
 				}
-				else if(action.equals("..."))
+				else if(action.equals("update"))
 				{
+					String articleIdString = (String) request.get("articleId");
+					Integer articleId = Integer.parseInt(folderIdString,10);
+					List<HibernateObject> resp=HibernateObject.listObject("select artprop from Articles_Properties as artprop where artprop.idUserArticle.idArticle.idArticle= "+articleId+" and artprop.idUserArticle.idUser.idUser="+1);
 
+					for (Iterator<HibernateObject> iterArt = resp.iterator(); iterArt.hasNext();) {
+						HibernateObject stateObj=iterArt.next();
+						if (stateObj instanceof Articles_Properties)
+						{
+							Articles_Properties articleState=(Articles_Properties)stateObj;
+							HashMap<String,Object> changes=(HashMap<String,Object> )request.get("changes");
+							Boolean read = (Boolean) changes.get("read");
+							Boolean important= (Boolean) changes.get("important");
+							if(read != null)
+							{
+								articleState.setImportant(important);
+							}
+							if(read != null)
+							{
+								articleState.setLu(read);
+							}
+							//ON DEVRAIT GERER L'ECHEC DE TOUS LES CHANGEMENT D'ETAT
+							response.put("success", true);
+						}
+
+					}
 				}
 			}
 			else if(object.equals("preferences"))
@@ -212,7 +225,11 @@ public class FeedeoHandler {
 
 			}else if(object.equals("feed"))
 			{
-
+				if(action.equals("update"))
+				{
+					response.put("success",true);
+					response.put("preferences", null);
+				}
 			}		
 		}
 

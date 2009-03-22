@@ -10,8 +10,9 @@
 		<property name="title"/>
 		<property name="link" />
 		<property name="date"  type="timestamp" column="Article_date" />
-		<property name="summary" type= "text" length="2147483647"/>
+		<property name="summary" type= "text" />
 		<property name="author"/>
+		<property name="content" type= "text" />
 		<!--set name="categories" table="Categories">
 			<key column="IdArticle"/>
 			<element type="string" column="Category"/>

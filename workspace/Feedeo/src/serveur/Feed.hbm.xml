@@ -12,6 +12,7 @@
 		<property name="url" />
 		<property name="pubDate"  type="timestamp" column="Article_date" />
 		<property name="link"/>
+		<property name="idDirOrig"/>
 		
 		<!-- LIEN ONE TO MANY AVEC ARTICLE -->
 		<set name="articles" inverse="true" > <!-- cascade="all-delete-orphan" -->
