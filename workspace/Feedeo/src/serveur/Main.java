@@ -46,7 +46,7 @@ public class Main {
 		dir1_user1.createDirectory();
 		feed.createFeed();
 		feed.setArticles(feed.getFeedOrigine(),dir1_user1);
-		
+		dir1_user1.updateDirectory();
 		//FIN LECTURE D'UN FLUX
 		
 		//RECUPERER LES SOUS DOSSIER D'UN DOSSIER DONNE DE L'UTILISATEUR
