@@ -1,7 +1,9 @@
 package serveur;
 
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import java.util.HashSet;
 //import java.util.List;
@@ -11,7 +13,7 @@ import java.util.Set;
 import com.sun.syndication.feed.synd.SyndContent;
 import com.sun.syndication.feed.synd.SyndEntry;
 
-public class Article extends HibernateObject{
+public class Article extends HibernateObject implements JsonObjectSerializable{
 	//ID de l'article
 	private long idArticle;
 	//Tittre de l'article
@@ -20,11 +22,11 @@ public class Article extends HibernateObject{
 	private String link;
 	//Date de l'article
 	private Date date;
-	//Catégories de l'article /tags
+	//Catï¿½gories de l'article /tags
 	//private Set<String> categories;
 	private Feed feed;
 	
-	//Résumé de l'article()
+	//Rï¿½sumï¿½ de l'article()
 	private String summary;
 	//LIEN AVEC LES PROPRIETES D'UN ARTICLES lien one to many avec la classe Articl_Properties
 	private Set<Articles_Properties> article_properties=new HashSet<Articles_Properties>();
@@ -239,5 +241,29 @@ public void updateArticle() {
 	HibernateObject.update(this);	
 }
 //FIN METHODES PR LA PERSISTANCE DES DONNEES DANS HIBERNATE
+
+@Override
+public HashMap<String, Object> toHashMap() {
+	/*
+	 * 	
+	 *	this.link=url;
+	 *	this.date=date;
+	 *	this.summary=summary;
+	 *	this.author=author;
+	 *	this.owner=owner;
+	 */
+	HashMap<String, Object> article = new HashMap<String, Object>();
+	article.put("id", ""+this.idArticle);
+	article.put("title",this.title);
+	article.put("author",this.author);
+	article.put("summary", this.summary);
+	//article.put("content", this.)
+	article.put("date", this.date.getTime());
+	ArrayList<String> categories = new ArrayList<String>();
+	//add categories
+	article.put("categories", categories);
+	
+	return article;
+}
 
 }
