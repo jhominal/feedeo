@@ -2,8 +2,10 @@ package serveur;
 
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 //import hibernate.*;
 
 import org.stringtree.json.JSONReader;
@@ -33,14 +35,14 @@ public class FeedeoHandler {
 		//object = [article,user,folder,preferences,feed...]
 		//et des params relatifs à l'action id, target, value...
 		//on peut manipuler response, c'est ce qui sera envoyé au client
-		
+
 		String action = (String) request.get("action");
 		String object = (String) request.get("object");
 		if(object != null && action !=null)
 		{			
 			if(object.equals("folder"))
 			{
-				
+
 				if(action.equals("getChildren"))
 				{
 					String folderIdString = (String) request.get("folderId");
@@ -49,7 +51,7 @@ public class FeedeoHandler {
 					{
 						List<HibernateObject>rep=HibernateObject.listObject("select distinct dir from Directory as dir, User as user inner join dir.user as user where dir.idParent = "+folderId+" and user.idUser="+this.user.getIdUser());
 						ArrayList<HashMap<String,Object> > children = new ArrayList<HashMap<String,Object>>();
-						
+
 						for (Iterator<HibernateObject> iter = rep.iterator(); iter.hasNext();) {
 							HibernateObject obj=iter.next();
 							if (obj instanceof Directory)
@@ -60,21 +62,65 @@ public class FeedeoHandler {
 						}
 						response.put("children", children);
 						response.put("success", true);
-						
+
 					}
 				}
 				else if(action.equals("getArticles"))
 				{
 					String folderIdString = (String) request.get("folderId");
 					Integer folderId = Integer.parseInt(folderIdString,10);
+
+
 					if(folderId!=null)
 					{
-						
-						JSONReader jsonReader = new JSONReader();
+						List<HibernateObject> resp=HibernateObject.listObject("select Directory as dir, User as user inner join dir.user as user where dir.idParent = "+folderId+" and user.idUser="+this.user.getIdUser());
+						/*JSONReader jsonReader = new JSONReader();
 						String articlesArrayJSON = "[{\"author\":\"Florian\",\"title\":\"Youpi\",\"content\":\"balblabal llazllbal yip yop yup titi tot tata\",\"url\":\"http://fcargoet.evolix.net/2009/03/une-liste-alimentee-automatiquement-avec-jquery/\",\"date\":\"2009-03-12\",\"categories\" : [\"info\",\"jquery\"],\"summary\" : \"balblabal llazllbal\",\"read\" : false,\"important\":false}]";
 						ArrayList<HashMap> articlesArray =  (ArrayList<HashMap>) jsonReader.read(articlesArrayJSON);
 						response.put("articles",articlesArray);
 						response.put("success", true);
+
+						 */
+
+						ArrayList<HashMap<String,Object> > articlesArray = new ArrayList<HashMap<String,Object>>();
+
+						Set<Article> articles= new HashSet<Article>();
+						for (Iterator<HibernateObject> iter = resp.iterator(); iter.hasNext();) {
+							HibernateObject obj=iter.next();
+							if (obj instanceof Directory)
+							{
+								Directory dir= (Directory) obj;
+								articles=dir.getlistArticle();
+
+								for(Iterator<Article> itera= articles.iterator(); itera.hasNext();){
+
+									Article art= itera.next();
+
+									HashMap<String, Object> article=art.toHashMap();
+									Articles_Properties artState= new Articles_Properties();
+
+									List<HibernateObject> respo=HibernateObject.listObject("select Articles_Properties as artprop where artprop.idUserArticle.idArticle = "+art+" and artprop.idUserArticle.idUser="+this.user);
+
+									for (Iterator<HibernateObject> iterArt = resp.iterator(); iterArt.hasNext();) {
+										HibernateObject stateObj=iterArt.next();
+										if (obj instanceof Articles_Properties)
+										{
+											Articles_Properties articleState=(Articles_Properties)stateObj;
+											article.put("read", articleState.getLu());
+											article.put("important", articleState.getImportant());
+
+										}
+										
+									}
+                                  articlesArray.add(article);
+								}
+                         
+							}
+						}
+						
+						response.put("success", true);
+						response.put("articles", articlesArray);
+						
 					}
 				}
 				else if(action.equals("add"))
@@ -102,7 +148,7 @@ public class FeedeoHandler {
 					}
 					response.put("folder", dir.toHashMap());
 					response.put("success", true);
-					
+
 				}
 				else if (action.equals("addFeed"))
 				{
@@ -127,15 +173,17 @@ public class FeedeoHandler {
 						/*Directory dir1_user1=new Directory("racine",user1);
 						String url="http://fcargoet.evolix.net/feed/";
 						Feed feed=new Feed(url,dir1_user1,user1);
-						
+
 						dir1_user1.createDirectory();
 						feed.createFeed();
 						feed.setArticles(feed.getFeedOrigine(),dir1_user1);
 						dir1_user1.updateDirectory();*/
 					}
 					//feedUrl
-					
+
 				}
+
+
 			}
 			else if (object.equals("article"))
 			{
@@ -147,7 +195,7 @@ public class FeedeoHandler {
 				}
 				else if(action.equals("..."))
 				{
-					
+
 				}
 			}
 			else if(object.equals("preferences"))
@@ -159,15 +207,15 @@ public class FeedeoHandler {
 				}
 				else if(action.equals("..."))
 				{
-					
+
 				}
-				
+
 			}else if(object.equals("feed"))
 			{
-				
+
 			}		
 		}
-		
+
 	}
 	public String login(HashMap<String, Object> loginRequest)
 	{
@@ -193,8 +241,8 @@ public class FeedeoHandler {
 		{
 			return null;
 		}
-			
-		
+
+
 	};
 	public String createAccount(HashMap<String, Object> createAccountRequest)
 	{
@@ -218,14 +266,14 @@ public class FeedeoHandler {
 		}
 		/*for (Iterator<HibernateObject> iter = rep.iterator(); iter.hasNext();) {
 			HibernateObject obj=iter.next();
-			
+
 			if (obj instanceof User)
 			{
 				System.out.print(((User) obj).getLogin() +"\n");
 			}
-		*/
+		 */
 		//and other data...
-		
+
 
 	};
 }
