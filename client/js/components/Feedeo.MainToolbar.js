@@ -54,8 +54,8 @@ Feedeo.MainToolbar = Ext.extend(Ext.Toolbar, {
                                         {
                                             //get current folderId
                                             var folderTree = Ext.ComponentMgr.get('folderstree');
-                                            var folderId = folderTree.getSelectionModel().getSelectedNode().id;
-                                            Feedeo.addFolder({name:text,parentId:folderId});
+                                            var folder = folderTree.getSelectionModel().getSelectedNode();
+                                            Feedeo.addFolder({name:text,parentFolder:folder});
                                             
                                         }
                                     });

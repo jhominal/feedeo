@@ -104,9 +104,35 @@ Feedeo.ArticlesGridPanel = Ext.extend(Ext.grid.GridPanel, {
     {
         //set article as read
         record.set('read',true);
-        
+        //un peu bourrin de commiter à chaque fois...
+        this.commitState();
         console.debug('Event rowselect captured, fire "articleselect" with :',record);
         this.fireEvent('articleselect',record);
+    },
+    commitState : function()
+    {
+        var modifiedRecords = this.store.getModifiedRecords();
+        //un peu bourrin de faire une requete pour chaque
+        for(var i = 0;i!= modifiedRecords.length;i++)
+        {
+            currentRecord = modifiedRecords[i]
+            console.debug('changes',currentRecord.getChanges());
+            Feedeo.request(
+                {
+                    params :
+                    {
+                        request :
+                        {
+                            action : 'update',
+                            object : 'article',
+                            changes : currentRecord.getChanges()
+                        }
+                    },
+                    success:function(){currentRecord.commit();},
+                    failure:function(){currentRecord.reject();}
+                }
+            )
+        }
     },
     setFolder : function(folderId)
     {

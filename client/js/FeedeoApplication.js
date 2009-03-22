@@ -22,7 +22,11 @@ Feedeo.addFeed = function(o)
             //si folderId = currentFolder, on reload
             var folderTree = Ext.ComponentMgr.get('folderstree');
             var currentId = folderTree.getSelectionModel().getSelectedNode().id;
-            //if(currentId==data.)
+            if(currentId==o.folderId)
+            {
+                folderTree.fireEvent('folderselect');
+            }
+
         },
         failure:function(data)
         {
@@ -97,13 +101,20 @@ Feedeo.addFolder = function(o)
             {
                 action:'add',
                 object:'folder',
-                parentId:o.parentId,
+                parentId:o.parentFolder.id,
                 name : o.name
             }
         },
         success: function(data)
         {
             //ajouter le dossier à l'arbre
+            
+            if(o.parentFolder.childrenRendered)//si on a déjà récupéré ses enfants
+            {
+                o.parentFolder.appendChild(data.folder);
+                console.debug('new dir appended');
+            }
+            o.parentFolder.expand(); //on récupère tous les enfants
             
         },
         failure:function(data)
@@ -118,7 +129,7 @@ Feedeo.addFolder = function(o)
 };
 Feedeo.deleteFolder = function(o)
 {
-    //o.folder_id
+    //o.folder (treenode)
     Feedeo.request(
     {
         params:
@@ -128,13 +139,13 @@ Feedeo.deleteFolder = function(o)
             {
                 action:'delete',
                 object:'folder',
-                folderId:o.folderId
+                folderId:o.folder.id
             }
         },
         success: function(data)
         {
             //supprimer le dossier de l'arbre
-            
+            o.folder.remove();
         },
         failure:function(data)
         {
@@ -224,6 +235,7 @@ Feedeo.windows.config.notifications =
     height : 400,
     modal : true
 };
+
 //TODO:reformater tout ça !
 Feedeo.windows.loginForm =
 {

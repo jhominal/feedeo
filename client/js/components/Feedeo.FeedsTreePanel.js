@@ -99,28 +99,41 @@ Feedeo.FeedsTreePanel = Ext.extend(Ext.tree.TreePanel, {
         if(!this.contextMenu)
         {
             this.contextMenu = new Ext.menu.Menu({
-                items: [{
-                    id: 'delete-node',
-                    text: 'Delete Node'
-                }],
-                listeners: {
-                    itemclick: function(item) {
-                        switch (item.id) {
-                            case 'delete-node':
-                                var n = item.parentMenu.contextNode;
-                                if (n.parentNode) {
-                                    n.remove();
-                                }
-                                break;
+                ignoreParentClicks : true,
+                items:
+                [
+                    {
+                        text: 'Supprimer ce dossier',
+                        icon :  Ext.APPLICATION_URL+'/img/icons/folder_delete.png',
+                        handler : function(menuItem)
+                        {
+                            var folder = menuItem.parentMenu.contextFolder;
+                            Feedeo.deleteFolder({folder:folder});
                         }
-                    }
-                }
+                    },
+                    {
+                        text: 'Créer un dossier ici',
+                        icon :  Ext.APPLICATION_URL+'/img/icons/folder_add.png',
+                        handler : function(menuItem)
+                        {
+                            Ext.Msg.prompt('Créer un dossier','Nom du dossier :',function(btn, text){
+                                if(btn == "ok")
+                                {
+                                    //get current folderId
+                                    var folder = menuItem.parentMenu.contextFolder;
+                                    Feedeo.addFolder({name:text,parentFolder:folder});
+                                }
+                            });
+                        }
+                    },
+                    
+                ]
             })
         }
-        //node.select();
+        
         var c = node.getOwnerTree().contextMenu;
-        //attach the node to the menu
-        c.contextNode = node;
+        //attach the folder to the menu(for itemclick listener)
+        c.contextFolder = node;
         //display the menu
         c.showAt(event.getXY());
         console.debug('context node : ',node);
