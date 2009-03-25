@@ -1,4 +1,4 @@
-package serveur;
+package org.feedeo.util;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
