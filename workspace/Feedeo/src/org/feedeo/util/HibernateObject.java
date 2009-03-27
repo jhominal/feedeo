@@ -22,7 +22,7 @@ public abstract class HibernateObject {
 		return id;
 	}
 	
-	void delete() {
+	public void delete() {
 		Transaction tx = null;
 		Session session = InitSessionFactory.getInstance().getCurrentSession();
 		try {
@@ -44,7 +44,7 @@ public abstract class HibernateObject {
 	}
   
 	
-	void update() {
+	public void update() {
 		Transaction tx = null;
 		Session session = InitSessionFactory.getInstance().getCurrentSession();
 		try {
@@ -66,7 +66,7 @@ public abstract class HibernateObject {
 	}
 	
 	
-	void create() {
+	public void create() {
 		Transaction tx = null;
 		Session session = InitSessionFactory.getInstance().getCurrentSession();
 		try {

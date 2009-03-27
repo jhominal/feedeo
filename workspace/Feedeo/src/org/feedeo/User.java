@@ -16,16 +16,16 @@ public class User extends HibernateObject {
 	private String firstName;
 	private String lastName;
 	
-	private Map<Preference, String> prefValues;
+	private Map<String, String> preferences;
 	private Map<Article, ArticleProperties> articleProperties;
 	private Set<Directory> directories;
-	private Set<Feed> feeds;
+	private Map<Feed, Directory> feeds;
 	
 	public User() {
-		prefValues = new HashMap<Preference, String>();
+		preferences = new HashMap<String, String>();
 		articleProperties = new HashMap<Article,ArticleProperties>();
 		directories = new HashSet<Directory>();
-		feeds = new HashSet<Feed>();
+		feeds = new HashMap<Feed, Directory>();
 	}
 
 	public String getLogin() {
@@ -68,12 +68,12 @@ public class User extends HibernateObject {
 		this.lastName = lastName;
 	}
 
-	public Map<Preference, String> getPrefValues() {
-		return prefValues;
+	public Map<String, String> getPreferences() {
+		return preferences;
 	}
 
-	public void setPrefValues(Map<Preference, String> prefValues) {
-		this.prefValues = prefValues;
+	public void setPreferences(Map<String, String> prefValues) {
+		this.preferences = prefValues;
 	}
 
 	public Map<Article, ArticleProperties> getArticleProperties() {
@@ -93,11 +93,11 @@ public class User extends HibernateObject {
 		this.directories = directories;
 	}
 
-	public Set<Feed> getFeeds() {
+	public Map<Feed, Directory> getFeeds() {
 		return feeds;
 	}
 
-	public void setFeeds(Set<Feed> feeds) {
+	public void setFeeds(Map<Feed, Directory> feeds) {
 		this.feeds = feeds;
 	}
 

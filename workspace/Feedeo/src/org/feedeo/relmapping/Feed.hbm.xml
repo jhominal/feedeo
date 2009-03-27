@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.feedeo" default-lazy="false">
+  <class name="Feed">
+  	<id name="id" column="idFeed">
+  		<generator class="native"/>
+  	</id>
+  	<property name="title"/>
+  	<property name="url"/>
+  	<property name="link"/>
+  	<property name="pubDate"/>
+  	
+    <set cascade="all" inverse="true" name="articles" lazy="true">
+      <key column="idFeed"/>
+      <one-to-many class="Article"/>
+    </set>
+  	<set cascade="none" inverse="true" name="readers" table="userFeeds">
+  	  <key column="idFeed"/>
+  	  <many-to-many column="idUser" class="User"/>
+  	</set>
+  
+  </class>
+</hibernate-mapping>

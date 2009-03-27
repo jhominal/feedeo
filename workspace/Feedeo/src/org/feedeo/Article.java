@@ -87,6 +87,7 @@ public class Article extends HibernateObject implements JsonObjectSerializable {
 	}
 
 	@Override
+	//TODO Methode a revoir
 	public Map<String, Object> toMap(boolean shallow) {
 		/*
 		 * 	

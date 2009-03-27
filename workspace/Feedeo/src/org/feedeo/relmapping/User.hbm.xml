@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.feedeo" default-lazy="false">
+  <class name="User">
+  	<id name="id" column="idUser">
+  		<generator class="native"/>
+  	</id>
+  	<property name="login" unique="true"/>
+  	<property name="password"/>
+  	<property name="email"/>
+  	
+  	<property name="firstName"/>
+  	<property name="lastName"/>
+  	
+  	<map name="preferences">
+      <key column="idUser"/>
+      <map-key column="prefName" type="string"/>
+      <element column="prefValue" type="string"/>
+  	</map>
+  	<map name="articleProperties">
+  	  <key column="idUser"/>
+  	  <map-key-many-to-many column="idArticle" class="Article"/>
+  	  <many-to-many column="idProperty" class="ArticleProperties"/>
+  	</map>
+  	<set name="directories">
+  	  <key column="idUser"/>
+  	  <one-to-many class="Directory"/>
+  	</set>
+  	<map name="feeds" table="userFeeds">
+  	  <key column="idUser"/>
+  	  <map-key-many-to-many column="idFeed" class="Feed"/>
+  	  <many-to-many column="idDirectory" class="Directory"/>
+  	</map>
+  </class>
+</hibernate-mapping>

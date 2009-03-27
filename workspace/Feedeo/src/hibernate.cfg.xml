@@ -29,18 +29,23 @@
         <property name="transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
 
         <!-- Drop and re-create the database schema on startup -->
-        <!-- property name="hbm2ddl.auto">create</property>  -->
-
-        <mapping resource="serveur/User.hbm.xml"/>
+        <property name="hbm2ddl.auto">create</property>
         
-        <mapping resource="serveur/Preference.hbm.xml"/> 
-        
-         <mapping resource="serveur/UserPreference.hbm.xml"/> 
 		<mapping resource="serveur/Article.hbm.xml" /> 
-		<mapping resource ="serveur/Articles_Properties.hbm.xml"/>
-		<mapping resource="serveur/Feed.hbm.xml" /> 
+		<mapping resource="serveur/ArticleProperties.hbm.xml"/>
 		<mapping resource="serveur/Directory.hbm.xml" /> 
-
+		<mapping resource="serveur/Feed.hbm.xml" /> 
+        <mapping resource="serveur/Preference.hbm.xml"/>
+        <mapping resource="serveur/User.hbm.xml"/>
+        <mapping resource="serveur/UserPreference.hbm.xml"/>
+        
+        
+<!--		<mapping resource="org/feedeo/relmapping/Article.hbm.xml" /> 
+		<mapping resource="org/feedeo/relmapping/ArticleProperties.hbm.xml"/>
+		<mapping resource="org/feedeo/relmapping/Directory.hbm.xml" /> 
+		<mapping resource="org/feedeo/relmapping/Feed.hbm.xml" /> 
+        <mapping resource="org/feedeo/relmapping/User.hbm.xml"/>
+-->
     </session-factory>
 
 </hibernate-configuration>

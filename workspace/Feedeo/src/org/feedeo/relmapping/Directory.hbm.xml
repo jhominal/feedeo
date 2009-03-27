@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="org.feedeo" default-lazy="false">
+  <class name="Directory">
+  	<id name="id" column="idDirectory">
+  		<generator class="native"/>
+  	</id>
+  	<property name="title"/>
+    <set cascade="all" name="subDirectories" lazy="true">
+      <key column="idDirectory"/>
+      <many-to-many column="idSubDirectory" class="Directory" />
+    </set>
+    <set cascade="all" name="articles" lazy="true">
+      <key column="idDirectory"/>
+      <many-to-many column="idArticle" class="Article"/>
+    </set>
+  	
+  </class>
+</hibernate-mapping>
