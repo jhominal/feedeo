@@ -11,6 +11,7 @@
   	<property name="url"/>
   	<property name="link"/>
   	<property name="pubDate"/>
+  	<property name="description" type="text"/>
   	
     <set cascade="all" inverse="true" name="articles" lazy="true">
       <key column="idFeed"/>

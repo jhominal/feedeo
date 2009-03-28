@@ -3,19 +3,17 @@
 	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="org.feedeo" default-lazy="false">
-  <class name="Directory">
+  <union-subclass name="Directory" extends="DirContainer"><!--
+    <key column="idDirContainer"/>
   	<id name="id" column="idDirectory">
-  		<generator class="native"/>
+  		<generator class="native" />
   	</id>
-  	<property name="title"/>
-    <set cascade="all" name="subDirectories" lazy="true">
-      <key column="idDirectory"/>
-      <many-to-many column="idSubDirectory" class="Directory" />
-    </set>
+   --><property name="title"/>
     <set cascade="all" name="articles" lazy="true">
       <key column="idDirectory"/>
       <many-to-many column="idArticle" class="Article"/>
     </set>
+    <many-to-one name="owner" column="idUser" />
   	
-  </class>
+  </union-subclass>
 </hibernate-mapping>

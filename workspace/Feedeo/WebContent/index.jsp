@@ -1,7 +1,9 @@
+
+<%@page import="java.util.ArrayList"%>
+<%@page import="org.feedeo.clientcomm.FeedeoHandler"%>
+<%@page import="java.util.HashMap"%>
 <%@page import="org.stringtree.json.JSONReader"%>
 <%@page import="org.stringtree.json.JSONWriter"%>
-<%@page import="java.util.*"%>
-<%@page import="serveur.*" %>
 <%
 HashMap<String, Object> jsonResponse = new HashMap<String, Object>();
 //cas par défaut

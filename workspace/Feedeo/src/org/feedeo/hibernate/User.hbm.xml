@@ -3,11 +3,12 @@
 	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
 	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping package="org.feedeo" default-lazy="false">
-  <class name="User">
-  	<id name="id" column="idUser">
+  <union-subclass name="User" extends="DirContainer"><!--
+    <key column="idDirContainer"/>
+    <id name="id" column="idUser">
   		<generator class="native"/>
   	</id>
-  	<property name="login" unique="true"/>
+ 	--><property name="login" unique="true"/>
   	<property name="password"/>
   	<property name="email"/>
   	
@@ -19,19 +20,15 @@
       <map-key column="prefName" type="string"/>
       <element column="prefValue" type="string"/>
   	</map>
-  	<map name="articleProperties">
+  	<map name="articleProperties" cascade="all">
   	  <key column="idUser"/>
   	  <map-key-many-to-many column="idArticle" class="Article"/>
   	  <many-to-many column="idProperty" class="ArticleProperties"/>
   	</map>
-  	<set name="directories">
-  	  <key column="idUser"/>
-  	  <one-to-many class="Directory"/>
-  	</set>
-  	<map name="feeds" table="userFeeds">
+  	<map name="feeds" table="userFeeds" cascade="all">
   	  <key column="idUser"/>
   	  <map-key-many-to-many column="idFeed" class="Feed"/>
   	  <many-to-many column="idDirectory" class="Directory"/>
   	</map>
-  </class>
+  </union-subclass>
 </hibernate-mapping>

@@ -1,4 +1,4 @@
-package org.feedeo.util;
+package org.feedeo.hibernate;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -28,6 +28,9 @@ public class InitSessionFactory {
 		sessionFactory = new Configuration().configure().buildSessionFactory();
 	}
 
+	/**
+	 * @return the unique session instance
+	 */
 	public static SessionFactory getInstance() {
 		return sessionFactory;
 	}
