@@ -20,15 +20,15 @@ public class TestMain {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		testSyndication();
-		testPersistence();
+		// testPersistence();
+		System.out.print(new Long(1L).toString());
 	}
 	
 	/**
 	 * This method tests if the persistent objects
 	 * are mapped to the database correctly.
 	 */
-	@SuppressWarnings("unused")
-	private static void testPersistence() {
+	public static void testPersistence() {
 		User u1 = new User();
 		u1.setLogin("toto");
 		u1.setPassword("bidoule");
@@ -49,13 +49,16 @@ public class TestMain {
 		d1.setTitle("premier dossier");
 		d1.saveOrUpdate();
 		
-		u1.attachDirectory(d1);
+		u1.getRootDirectory().attachDirectory(d1);
 		u1.subscribeFeed(f1, d1);
 		
 		u1.saveOrUpdate();
 	}
 	
-	private static void testSyndication() {
+	/**
+	 * This method tests if feeds are imported correctly
+	 */
+	public static void testSyndication() {
 		// Flux RSS 0.92
 		Feed f1 = FeedReader.checkout("http://fcargoet.evolix.net/feed/rss/");
 		f1.saveOrUpdate();
@@ -63,7 +66,7 @@ public class TestMain {
 		Feed f2 = FeedReader.checkout("http://feedproxy.google.com/TechCrunch");
 		f2.saveOrUpdate();
 		// Flux Atom 1.0
-		Feed f3 = FeedReader.checkout("http://www.joel.lopes-da-silva.com/index.php?format=feed&type=atom");
-		f3.saveOrUpdate();
+//		Feed f3 = FeedReader.checkout("http://www.joel.lopes-da-silva.com/index.php?format=feed&type=atom");
+//		f3.saveOrUpdate();
 	}
 }

@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.feedeo.clientcomm.JsonObjectSerializable;
+import org.feedeo.hibernate.HibernateObject;
 
 /**
  * Directory reprensents the "folders" in which
@@ -17,11 +18,12 @@ import org.feedeo.clientcomm.JsonObjectSerializable;
  * @author Feedeo Team
  *
  */
-public class Directory extends DirContainer implements
+public class Directory extends HibernateObject implements
 		JsonObjectSerializable {
 	
 	private String title;
 	
+	private Set<Directory> subDirectories;
 	private Set<Article> articles;
 	
 	private User owner;
@@ -32,6 +34,7 @@ public class Directory extends DirContainer implements
 	public Directory() {
 		super();
 		articles = new HashSet<Article>();
+		subDirectories = new HashSet<Directory>();
 	}
 	
 	/**
@@ -63,6 +66,20 @@ public class Directory extends DirContainer implements
 	}
 
 	/**
+	 * @return the directory's subDirectories.
+	 */
+	public Set<Directory> getSubDirectories() {
+		return subDirectories;
+	}
+
+	/**
+	 * @param subDirectories
+	 */
+		public void setSubDirectories(Set<Directory> subDirectories) {
+		this.subDirectories = subDirectories;
+	}
+
+	/**
 	 * @return the directory's owner
 	 */
 	public User getOwner() {
@@ -76,23 +93,31 @@ public class Directory extends DirContainer implements
 		this.owner = owner;
 	}
 	
-	protected User getDirUser() {
-		return this.getOwner();
+	/**
+	 * This function makes a given directory a child of
+	 * this directory.
+	 * 
+	 * @param directory
+	 */
+	public void attachDirectory(Directory directory) {
+		this.getSubDirectories().add(directory);
+		directory.setOwner(this.getOwner());
 	}
-	
+
+
 	/* (non-Javadoc)
 	 * @see org.feedeo.clientcomm.JsonObjectSerializable#toMap(boolean)
 	 */
 	@Override
 	public Map<String, Object> toMap(boolean deep) {
 		Map<String, Object> result = new HashMap<String, Object>();
-		result.put("id", this.getId());
+		result.put("id", ((Long) this.getId()).toString());
 		result.put("text", this.getTitle());
-		result.put("leaf", (!this.getDirectories().isEmpty()));
+		result.put("leaf", this.getSubDirectories().isEmpty());
 		// TODO Method stub - to be tested...
-		if (deep && !this.getDirectories().isEmpty()) {
+		if (deep && !this.getSubDirectories().isEmpty()) {
 			List<Map<String, Object>> dirsMapList = new ArrayList<Map<String, Object>>(); 
-			Iterator<Directory> directorIter = this.getDirectories().iterator();
+			Iterator<Directory> directorIter = this.getSubDirectories().iterator();
 			while (directorIter.hasNext()) {
 				Directory currDir = directorIter.next();
 				dirsMapList.add(currDir.toMap(false));
@@ -105,12 +130,12 @@ public class Directory extends DirContainer implements
 			while (artIter.hasNext()) {
 				Article currArticle = artIter.next();
 				Map<String, Object> currMap = currArticle.toMap(false);
-				ArticleProperties currProperties = owner.getArticleProperties(currArticle);
+				ArticleProperties currProperties = getOwner().getArticleProperties(currArticle);
 				currMap.put("read", currProperties.isAlreadyRead());
 				currMap.put("important", currProperties.isImportant());
 				articlesMapList.add(currMap);
 			}
-			result.put("children", articlesMapList);
+			result.put("articles", articlesMapList);
 		}
 		return result;
 	}

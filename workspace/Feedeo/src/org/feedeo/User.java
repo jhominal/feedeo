@@ -3,6 +3,8 @@ package org.feedeo;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.feedeo.hibernate.HibernateObject;
+
 /**
  * This class models the application's users (people who have subscribed to this
  * service).
@@ -10,7 +12,7 @@ import java.util.Map;
  * @author Feedeo Team
  * 
  */
-public class User extends DirContainer {
+public class User extends HibernateObject {
 
 	private String login;
 	private String password;
@@ -19,6 +21,8 @@ public class User extends DirContainer {
 	private String firstName;
 	private String lastName;
 
+	private Directory rootDirectory;
+	
 	private Map<String, String> preferences;
 	private Map<Article, ArticleProperties> articleProperties;
 	private Map<Feed, Directory> feeds;
@@ -28,6 +32,8 @@ public class User extends DirContainer {
 	 */
 	public User() {
 		super();
+		rootDirectory = new Directory();
+		rootDirectory.setOwner(this);
 		preferences = new HashMap<String, String>();
 		articleProperties = new HashMap<Article, ArticleProperties>();
 		feeds = new HashMap<Feed, Directory>();
@@ -101,6 +107,21 @@ public class User extends DirContainer {
 	}
 
 	/**
+	 * @param rootDirectory
+	 *            the rootDirectory to set
+	 */
+	public void setRootDirectory(Directory rootDirectory) {
+		this.rootDirectory = rootDirectory;
+	}
+
+	/**
+	 * @return the lastName
+	 */
+	public Directory getRootDirectory() {
+		return rootDirectory;
+	}
+
+	/**
 	 * @param lastName
 	 *            the lastName to set
 	 */
@@ -152,10 +173,6 @@ public class User extends DirContainer {
 	 */
 	public void setFeeds(Map<Feed, Directory> feeds) {
 		this.feeds = feeds;
-	}
-
-	protected User getDirUser() {
-		return this;
 	}
 
 	/**

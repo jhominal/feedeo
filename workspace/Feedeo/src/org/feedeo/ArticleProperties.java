@@ -13,15 +13,17 @@ import org.feedeo.hibernate.HibernateObject;
  */
 public class ArticleProperties extends HibernateObject {
 
-	private boolean alreadyRead = false;
+	private boolean alreadyRead;
 
-	private boolean important = false;
+	private boolean important;
 
 	/**
 	 * Default constructor.
 	 */
 	public ArticleProperties() {
 		super();
+		alreadyRead = false;
+		important = false;
 	}
 
 	/**

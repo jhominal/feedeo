@@ -187,12 +187,11 @@ public class Feed extends HibernateObject {
 	public static Feed getFeedByUrl(String url) {
 		Feed refFeed = new Feed();
 		refFeed.setUrl(url);
-		refFeed.getSession().beginTransaction();
 		Feed potentialFeed = (Feed) refFeed.getSession().createQuery(
 				"from Feed as feed where feed.url = ?").setString(0, url)
 				.uniqueResult();
-		refFeed.getSession().getTransaction().commit();
 		if (potentialFeed == null) {
+			refFeed.getSession().saveOrUpdate(refFeed);
 			return refFeed;
 		} else {
 			return potentialFeed;
@@ -200,7 +199,7 @@ public class Feed extends HibernateObject {
 	}
 	
 	/**
-	 * This method puts all of a feed's article into a directory.
+	 * This method puts all of a feed's articles into a directory.
 	 * @param targetDir the directory where the articles should go to.
 	 */
 	public void putArticles(Directory targetDir) {

@@ -25,7 +25,7 @@ public class InitSessionFactory {
 		// sessionFactory = new
 		// AnnotationConfiguration().configure().buildSessionFactory();
 		// XML only
-		sessionFactory = new Configuration().configure().buildSessionFactory();
+		sessionFactory = (new Configuration()).configure().buildSessionFactory();
 	}
 
 	/**

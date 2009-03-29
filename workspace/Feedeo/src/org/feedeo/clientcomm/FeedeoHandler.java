@@ -1,6 +1,5 @@
 package org.feedeo.clientcomm;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.feedeo.Article;
@@ -9,6 +8,7 @@ import org.feedeo.Directory;
 import org.feedeo.Feed;
 import org.feedeo.User;
 import org.feedeo.syndication.FeedReader;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
 /**
@@ -55,38 +55,35 @@ public class FeedeoHandler {
 		String action = (String) request.get("action");
 		String object = (String) request.get("object");
 		try {
+			getSession().beginTransaction();
+			user = (User) getSession().merge(user);
 			TargetObject target = TargetObject.valueOf(object);
 			switch (target) {
 			case folder:
 				String folderIdString = (String) request.get("folderId");
 				if (folderIdString != null) {
-					try {
-						long folderId = Long.parseLong(folderIdString);
-						getSession().beginTransaction();
-						Directory targetDirectory = (Directory) getSession()
-								.get(Directory.class, folderId);
-						if (targetDirectory != null) {
-							if ("getChildren".equals(action)) {
-								response.put("children", (targetDirectory
-										.toMap(true)).get("children"));
-								response.put("success", true);
-							} else if ("getArticles".equals(action)) {
-								response.put("articles", (targetDirectory
-										.toMap(true)).get("articles"));
-								response.put("success", true);
-							} else if ("addFeed".equals(action)) {
-								String feedUrl = (String) request
-										.get("feedUrl");
-								Feed targetFeed = FeedReader.checkout(feedUrl);
-								targetFeed.saveOrUpdate();
-								user.subscribeFeed(targetFeed, targetDirectory);
-								targetFeed.putArticles(targetDirectory);
-								user.saveOrUpdate();
-								response.put("success", true);
-							}
+					Directory targetDirectory;
+					long folderId = Long.parseLong(folderIdString);
+					if (folderId == 0L) {
+						targetDirectory = user.getRootDirectory();
+					} else {
+						targetDirectory = (Directory) getSession().get(Directory.class, folderId);
+					}
+					if (targetDirectory != null) {
+						if ("getChildren".equals(action)) {
+							response.put("children", (targetDirectory.toMap(true)).get("children"));
+							response.put("success", true);
+						} else if ("getArticles".equals(action)) {
+							response.put("articles", (targetDirectory.toMap(true)).get("articles"));
+							response.put("success", true);
+						} else if ("addFeed".equals(action)) {
+							String feedUrl = (String) request.get("feedUrl");
+							Feed targetFeed = Feed.getFeedByUrl(feedUrl);
+							FeedReader.update(targetFeed);
+							user.subscribeFeed(targetFeed, targetDirectory);
+							targetFeed.putArticles(targetDirectory);
+							response.put("success", true);
 						}
-						getSession().getTransaction().commit();
-					} catch (NumberFormatException e) {
 					}
 				} else if ("add".equals(action)) {
 					Directory newDirectory = new Directory();
@@ -94,50 +91,49 @@ public class FeedeoHandler {
 					folderIdString = (String) request.get("parentId");
 					if (folderIdString != null) {
 						long parentId = Long.parseLong(folderIdString);
-						getSession().beginTransaction();
-						getSession().getTransaction().commit();
-						Directory parentDirectory = (Directory) getSession()
-								.get(Directory.class, parentId);
+						Directory parentDirectory;
+						if (parentId == 0L) {
+							parentDirectory = user.getRootDirectory();
+						} else {
+							parentDirectory = (Directory) getSession().get(Directory.class, parentId);
+						}
 						if (parentDirectory != null) {
 							parentDirectory.attachDirectory(newDirectory);
-						} else {
-							user.attachDirectory(newDirectory);
+							getSession().persist(newDirectory);
+							response.put("folder", newDirectory.toMap(false));
+							response.put("success", true);
+							
 						}
-						getSession().getTransaction().commit();
-						response.put("folder", newDirectory.toMap(false));
-						response.put("success", true);
 					}
 				}
-
 				break;
+				
 			case article:
 				String folderIdString2 = (String) request.get("folderId");
 				String articleIdString = (String) request.get("articleId");
 				if (folderIdString2 != null && articleIdString != null) {
 					long folderId = Long.parseLong(folderIdString2);
-					getSession().beginTransaction();
-					Directory targetDirectory = (Directory) getSession().get(
+					Directory targetDirectory2 = (Directory) getSession().get(
 							Directory.class, folderId);
 					long articleId = Long.parseLong(articleIdString);
 					Article targetArticle = (Article) getSession().get(
 							Article.class, articleId);
-					if("update".equals(action)) {
-						ArticleProperties properties = user.getArticleProperties(targetArticle);
-						HashMap<String,Object> changes=(HashMap<String,Object>) request.get("changes");
+					if ("update".equals(action)) {
+						ArticleProperties properties = user
+								.getArticleProperties(targetArticle);
+						Map<String, Object> changes = (Map<String, Object>) request.get("changes");
 						Boolean read = (Boolean) changes.get("read");
-						Boolean important= (Boolean) changes.get("important");
-						if(read != null)
-						{
+						Boolean important = (Boolean) changes.get("important");
+						if (read != null) {
 							properties.setImportant(important);
 						}
-						if(read != null)
-						{
+						if (read != null) {
 							properties.setAlreadyRead(read);
 						}
-						//"On devrait gerer l'echec de tous les changements d'etat" kezako ?
+						// "On devrait gerer l'echec de tous les changements d'etat"
+						// kezako ?
 						response.put("success", true);
 					}
-					getSession().getTransaction().commit();
 				}
 				break;
 			case preferences:
@@ -153,17 +149,45 @@ public class FeedeoHandler {
 				}
 				break;
 			}
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
+			getSession().getTransaction().commit();
+		} catch (Exception e) {
+			/*
+			 * Building a readable and complete error message
+			 */
+			StringBuilder errorMessage = new StringBuilder();
+			errorMessage.append("Java error: ").append(e.getClass()).append(" - ").append(e.getMessage()).append('\n');
+			response.put("success", false);
+			
+			if (getSession().getTransaction() != null && getSession().getTransaction().isActive()) {
+				try {
+					// Second try catch as the rollback could fail as well
+					getSession().getTransaction().rollback();
+					errorMessage.append("Transaction Rollback: successful.\n");
+				} catch (HibernateException e1) {
+					errorMessage.append("Transaction Rollback: failed.\n");
+				}
+			} else {
+				errorMessage.append("Transaction Rollback: unnecessary.\n");
+			}
+			/*
+			 * Including stacktrace in the error message.
+			 */
+			StackTraceElement[] stackTrace = e.getStackTrace();
+			for (int i=0; i<stackTrace.length; i++) {
+//				String cName = stackTrace[i].getClassName();
+//				if (cName.contains("org.apache.jsp") || !cName.contains("org.apache"))
+				errorMessage.append(stackTrace[i].toString()).append('\n');
+			}
+			response.put("error", errorMessage.toString());
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @param loginRequest
 	 * @return the login if login is successful.
 	 */
-	public String login(HashMap<String, Object> loginRequest) {
+	public static String login(Map<String, Object> loginRequest) {
 		String login = (String) loginRequest.get("login");
 		String password = (String) loginRequest.get("password");
 		User possibleUser = User.getUserByLogin(login);
@@ -173,20 +197,25 @@ public class FeedeoHandler {
 			return null;
 		}
 	}
-	
-	public String createAccount(HashMap<String, Object> newAccountReq) {
+
+	/**
+	 * Creates a new account, if not already in the database.
+	 * 
+	 * @param newAccountReq a Map specifying "login", "password", "name", "lastName", "email"
+	 * @return the created-user's login
+	 */
+	public static String createAccount(Map<String, Object> newAccountReq) {
 		String login = (String) newAccountReq.get("login");
 		User possibleUser = User.getUserByLogin(login);
 		if (possibleUser.getPassword() == null) {
 			possibleUser.setPassword((String) newAccountReq.get("password"));
 			possibleUser.setFirstName((String) newAccountReq.get("name"));
-			possibleUser.setLastName((String) newAccountReq.get("lastName"));
-			possibleUser.setEmail((String) newAccountReq.get("email"));
+			possibleUser.setLastName((String) newAccountReq.get("lastname"));
+			possibleUser.setEmail((String) newAccountReq.get("mail"));
 			possibleUser.saveOrUpdate();
 			return login;
 		} else {
 			return null;
 		}
 	}
-	
 }

@@ -213,7 +213,7 @@ public class Article extends HibernateObject implements JsonObjectSerializable {
 	@Override
 	public Map<String, Object> toMap(boolean deep) {
 		Map<String, Object> result = new HashMap<String, Object>();
-		result.put("id", "" + this.getId());
+		result.put("id", ((Long) this.getId()).toString());
 		result.put("title", this.getTitle());
 		result.put("author", this.getAuthor());
 		result.put("summary", this.getSummary());
