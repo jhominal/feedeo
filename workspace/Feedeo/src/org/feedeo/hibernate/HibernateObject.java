@@ -56,7 +56,6 @@ public abstract class HibernateObject {
 		return InitSessionFactory.getInstance().getCurrentSession();
 	}
 	
-	
 	/**
 	 * 
 	 */

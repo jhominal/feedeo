@@ -62,6 +62,7 @@ public class FeedeoHandler {
 				if (folderIdString != null) {
 					try {
 						long folderId = Long.parseLong(folderIdString);
+						getSession().beginTransaction();
 						Directory targetDirectory = (Directory) getSession()
 								.get(Directory.class, folderId);
 						if (targetDirectory != null) {
@@ -84,7 +85,7 @@ public class FeedeoHandler {
 								response.put("success", true);
 							}
 						}
-						getSession().close();
+						getSession().getTransaction().commit();
 					} catch (NumberFormatException e) {
 					}
 				} else if ("add".equals(action)) {
@@ -93,6 +94,8 @@ public class FeedeoHandler {
 					folderIdString = (String) request.get("parentId");
 					if (folderIdString != null) {
 						long parentId = Long.parseLong(folderIdString);
+						getSession().beginTransaction();
+						getSession().getTransaction().commit();
 						Directory parentDirectory = (Directory) getSession()
 								.get(Directory.class, parentId);
 						if (parentDirectory != null) {
@@ -100,7 +103,7 @@ public class FeedeoHandler {
 						} else {
 							user.attachDirectory(newDirectory);
 						}
-						getSession().close();
+						getSession().getTransaction().commit();
 						response.put("folder", newDirectory.toMap(false));
 						response.put("success", true);
 					}
@@ -112,6 +115,7 @@ public class FeedeoHandler {
 				String articleIdString = (String) request.get("articleId");
 				if (folderIdString2 != null && articleIdString != null) {
 					long folderId = Long.parseLong(folderIdString2);
+					getSession().beginTransaction();
 					Directory targetDirectory = (Directory) getSession().get(
 							Directory.class, folderId);
 					long articleId = Long.parseLong(articleIdString);
@@ -133,6 +137,7 @@ public class FeedeoHandler {
 						//"On devrait gerer l'echec de tous les changements d'etat" kezako ?
 						response.put("success", true);
 					}
+					getSession().getTransaction().commit();
 				}
 				break;
 			case preferences:

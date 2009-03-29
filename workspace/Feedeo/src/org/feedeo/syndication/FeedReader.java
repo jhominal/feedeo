@@ -80,6 +80,7 @@ public class FeedReader {
 
 	@SuppressWarnings("unchecked")
 	private static boolean putSyndInFeed(SyndFeed syndFeed, Feed targetFeed) {
+		boolean result = false;
 		targetFeed.setTitle(syndFeed.getTitle());
 		targetFeed.setLink(syndFeed.getLink());
 		targetFeed.setPubDate(syndFeed.getPublishedDate());
@@ -96,12 +97,13 @@ public class FeedReader {
 					potentialEntry.setPubDate(calendar.getTime());
 				}
 				targetFeed.addArticle(potentialEntry);
+				result = true;
 			} else {
 			//TODO case where the article in question has been updated.
 			}
 		}
 
-		return false;
+		return result;
 	}
 
 	@SuppressWarnings("unchecked")
