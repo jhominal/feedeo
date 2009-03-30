@@ -113,7 +113,7 @@ public class Directory extends HibernateObject implements
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("id", ((Long) this.getId()).toString());
 		result.put("text", this.getTitle());
-		result.put("leaf", this.getSubDirectories().isEmpty());
+		result.put("leaf", false);
 		// TODO Method stub - to be tested...
 		if (deep && !this.getSubDirectories().isEmpty()) {
 			List<Map<String, Object>> dirsMapList = new ArrayList<Map<String, Object>>(); 
