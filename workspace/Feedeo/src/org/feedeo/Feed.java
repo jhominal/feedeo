@@ -1,16 +1,19 @@
 package org.feedeo;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.feedeo.hibernate.HibernateObject;
+import org.hibernate.criterion.Restrictions;
 
 /**
  * This class models feeds in our application.
  * 
  * @author Feedeo Team
- *
+ * 
  */
 public class Feed extends HibernateObject {
 	private String title;
@@ -18,17 +21,17 @@ public class Feed extends HibernateObject {
 	private String link;
 	private Date pubDate;
 	private String description;
-	
-	private Set<Article> articles;
-	private Set<User> readers;
-	
+
+	private Map<Article, ArticleContent> articles;
+	private Set<Directory> folders;
+
 	/**
 	 * Default constructor.
 	 */
 	public Feed() {
 		super();
-		articles = new HashSet<Article>();
-		readers = new HashSet<User>();
+		articles = new HashMap<Article, ArticleContent>();
+		folders = new HashSet<Directory>();
 	}
 
 	/**
@@ -74,9 +77,8 @@ public class Feed extends HibernateObject {
 	}
 
 	/**
-	 * If this data is unspecified/unreadable in the
-	 * source feed, it should be set to now at the time
-	 * of the feed's checkout by the server.
+	 * If this data is unspecified/unreadable in the source feed, it should be
+	 * set to now at the time of the feed's checkout by the server.
 	 * 
 	 * @return the publication date
 	 */
@@ -108,32 +110,34 @@ public class Feed extends HibernateObject {
 	/**
 	 * @return all articles associated to this feed.
 	 */
-	public Set<Article> getArticles() {
+	public Map<Article, ArticleContent> getArticles() {
 		return articles;
 	}
 
 	/**
 	 * @param articles
 	 */
-	public void setArticles(Set<Article> articles) {
+	public void setArticles(Map<Article, ArticleContent> articles) {
 		this.articles = articles;
 	}
 
 	/**
 	 * @return the feed's subscribers
 	 */
-	public Set<User> getReaders() {
-		return readers;
+	public Set<Directory> getFolders() {
+		return folders;
 	}
 
 	/**
-	 * @param readers
+	 * @param folders
 	 */
-	public void setReaders(Set<User> readers) {
-		this.readers = readers;
+	public void setFolders(Set<Directory> folders) {
+		this.folders = folders;
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -144,7 +148,9 @@ public class Feed extends HibernateObject {
 		return result;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -165,17 +171,19 @@ public class Feed extends HibernateObject {
 	}
 
 	/**
-	 * Method to use to add an article to the
-	 * list (it sets the "sourceFeed" field in
-	 * the article itself).
+	 * Method to use to add an article to the list (it sets the "sourceFeed"
+	 * field in the article itself).
 	 * 
-	 * @param article the article to add.
+	 * @param article
+	 *            the reference to the article to add.
+	 * @param content
+	 *            the content associated to this reference.
 	 */
-	public void addArticle(Article article) {
+	public void addArticle(Article article, ArticleContent content) {
 		article.setSourceFeed(this);
-		this.getArticles().add(article);
+		this.getArticles().put(article, content);
 	}
-	
+
 	/**
 	 * Gets a feed by its url.
 	 * 
@@ -187,24 +195,13 @@ public class Feed extends HibernateObject {
 	public static Feed getFeedByUrl(String url) {
 		Feed refFeed = new Feed();
 		refFeed.setUrl(url);
-		Feed potentialFeed = (Feed) refFeed.getSession().createQuery(
-				"from Feed as feed where feed.url = ?").setString(0, url)
-				.uniqueResult();
+		Feed potentialFeed = (Feed) refFeed.getSession().createCriteria(
+				Feed.class).add(Restrictions.eq("url", url)).uniqueResult();
 		if (potentialFeed == null) {
 			refFeed.getSession().saveOrUpdate(refFeed);
 			return refFeed;
 		} else {
 			return potentialFeed;
-		}
-	}
-	
-	/**
-	 * This method puts all of a feed's articles into a directory.
-	 * @param targetDir the directory where the articles should go to.
-	 */
-	public void putArticles(Directory targetDir) {
-		if (targetDir != null) {
-			targetDir.getArticles().addAll(getArticles());
 		}
 	}
 }

@@ -1,14 +1,14 @@
 <%@ page language="java" contentType="application/json; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@page import="java.util.HashMap"%>
-<%@page import="java.util.List"%>
-<%@page import="java.util.Map"%>
-<%@page import="org.feedeo.clientcomm.FeedeoHandler"%>
-<%@page import="org.stringtree.json.JSONReader"%>
-<%@page import="org.stringtree.json.JSONWriter"%>
-<%
+    pageEncoding="UTF-8"%><%@
+    page import="java.util.HashMap"%><%@
+    page import="java.util.List"%><%@
+    page import="java.util.Map"%><%@
+    page import="org.feedeo.clientcomm.FeedeoHandler"%><%@
+    page import="org.stringtree.json.JSONReader"%><%@
+    page import="org.stringtree.json.JSONWriter"%><%
 	Map<String, Object> jsonResponse = new HashMap<String, Object>();
-	//cas par défaut
+	
+    //cas par défaut
 	jsonResponse.put("success", false);
 	jsonResponse.put("error", "No handler for your request");
 
@@ -64,7 +64,7 @@
 		} catch (Exception e) {
 			jsonResponse.put("success", false);
 			jsonResponse
-					.put("error", "Request failed. You must login.");
+					.put("error", e.getMessage());
 		}
 	} else {
 		FeedeoHandler handler = new FeedeoHandler(userName);

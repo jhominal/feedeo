@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.feedeo.hibernate.HibernateObject;
+import org.hibernate.criterion.Example;
+import org.hibernate.criterion.Restrictions;
 
 /**
  * This class models the application's users (people who have subscribed to this
@@ -22,10 +24,9 @@ public class User extends HibernateObject {
 	private String lastName;
 
 	private Directory rootDirectory;
-	
+
 	private Map<String, String> preferences;
 	private Map<Article, ArticleProperties> articleProperties;
-	private Map<Feed, Directory> feeds;
 
 	/**
 	 * Default constructor.
@@ -36,7 +37,6 @@ public class User extends HibernateObject {
 		rootDirectory.setOwner(this);
 		preferences = new HashMap<String, String>();
 		articleProperties = new HashMap<Article, ArticleProperties>();
-		feeds = new HashMap<Feed, Directory>();
 	}
 
 	/**
@@ -161,48 +161,10 @@ public class User extends HibernateObject {
 	}
 
 	/**
-	 * @return the feeds
-	 */
-	public Map<Feed, Directory> getFeeds() {
-		return feeds;
-	}
-
-	/**
-	 * @param feeds
-	 *            the feeds to set
-	 */
-	public void setFeeds(Map<Feed, Directory> feeds) {
-		this.feeds = feeds;
-	}
-
-	/**
-	 * Lets the User subscribe to a Feed.
-	 * 
-	 * @param feed
-	 *            the feed to subscribe to
-	 * @param targetDirectory
-	 *            the directory where this feed should be put
-	 */
-	public void subscribeFeed(Feed feed, Directory targetDirectory) {
-		this.getFeeds().put(feed, targetDirectory);
-		feed.getReaders().add(this);
-	}
-
-	/**
-	 * Lets the User cancel his subscription to a Feed.
-	 * 
-	 * @param feed
-	 *            the feed to cancel.
-	 */
-	public void unsubscribeFeed(Feed feed) {
-		this.getFeeds().remove(feed);
-		feed.getReaders().remove(this);
-	}
-	
-	/**
 	 * Gets an article properties for this user.
 	 * 
-	 * @param article the article in question
+	 * @param article
+	 *            the article in question
 	 * @return the corresponding ArticleProperties object
 	 */
 	public ArticleProperties getArticleProperties(Article article) {
@@ -224,9 +186,8 @@ public class User extends HibernateObject {
 		User refUser = new User();
 		refUser.setLogin(login);
 		refUser.getSession().beginTransaction();
-		User potentialUser = (User) refUser.getSession().createQuery(
-				"from User as user where user.login = ?").setString(0, login)
-				.uniqueResult();
+		User potentialUser = (User) refUser.getSession().createCriteria(
+				User.class).add(Restrictions.eq("login", login)).uniqueResult();
 		refUser.getSession().getTransaction().commit();
 		if (potentialUser == null) {
 			return refUser;

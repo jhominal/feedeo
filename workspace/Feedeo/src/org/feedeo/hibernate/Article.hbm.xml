@@ -12,8 +12,6 @@
   	<property name="pubDate"/>
   	<many-to-one name="sourceFeed" column="idFeed" class="Feed" not-null="true" lazy="proxy"/>
   	<property name="author"/>
-  	<property name="summary" type="text"/>
-  	<property name="content" type="text"/>
   	
   </class>
 </hibernate-mapping>

@@ -54,131 +54,149 @@ public class FeedeoHandler {
 		// the response object is the one that will be sent to the client.
 		String action = (String) request.get("action");
 		String object = (String) request.get("object");
-		try {
-			getSession().beginTransaction();
-			user = (User) getSession().merge(user);
-			TargetObject target = TargetObject.valueOf(object);
-			switch (target) {
-			case folder:
-				String folderIdString = (String) request.get("folderId");
-				if (folderIdString != null) {
-					Directory targetDirectory;
-					long folderId = Long.parseLong(folderIdString);
-					if (folderId == 0L) {
-						targetDirectory = user.getRootDirectory();
-					} else {
-						targetDirectory = (Directory) getSession().get(Directory.class, folderId);
-					}
-					if (targetDirectory != null) {
-						if ("getChildren".equals(action)) {
-							response.put("children", (targetDirectory.toMap(true)).get("children"));
-							response.put("success", true);
-						} else if ("getArticles".equals(action)) {
-							response.put("articles", (targetDirectory.toMap(true)).get("articles"));
-							response.put("success", true);
-						} else if ("addFeed".equals(action)) {
-							String feedUrl = (String) request.get("feedUrl");
-							Feed targetFeed = Feed.getFeedByUrl(feedUrl);
-							FeedReader.update(targetFeed);
-							user.subscribeFeed(targetFeed, targetDirectory);
-							targetFeed.putArticles(targetDirectory);
-							response.put("success", true);
-						}
-					}
-				} else if ("add".equals(action)) {
-					Directory newDirectory = new Directory();
-					newDirectory.setTitle((String) request.get("name"));
-					folderIdString = (String) request.get("parentId");
+		if ("login".equals(action)) {
+			response.put("error", "Already logged");
+		} else {
+			try {
+				getSession().beginTransaction();
+				user = (User) getSession().merge(user);
+				TargetObject target = TargetObject.valueOf(object);
+				switch (target) {
+				case folder:
+					String folderIdString = (String) request.get("folderId");
 					if (folderIdString != null) {
-						long parentId = Long.parseLong(folderIdString);
-						Directory parentDirectory;
-						if (parentId == 0L) {
-							parentDirectory = user.getRootDirectory();
+						Directory targetDirectory;
+						long folderId = Long.parseLong(folderIdString);
+						if (folderId == 0L) {
+							targetDirectory = user.getRootDirectory();
 						} else {
-							parentDirectory = (Directory) getSession().get(Directory.class, parentId);
+							targetDirectory = (Directory) getSession().get(
+									Directory.class, folderId);
 						}
-						if (parentDirectory != null) {
-							parentDirectory.attachDirectory(newDirectory);
-							getSession().persist(newDirectory);
-							response.put("folder", newDirectory.toMap(false));
+						if (targetDirectory != null) {
+							if ("getChildren".equals(action)) {
+								response.put("children", (targetDirectory
+										.toMap(true)).get("children"));
+								response.put("success", true);
+							} else if ("getArticles".equals(action)) {
+								targetDirectory.updateArticles();
+								response.put("articles", (targetDirectory
+										.toMap(true)).get("articles"));
+								response.put("success", true);
+							} else if ("addFeed".equals(action)) {
+								String feedUrl = (String) request
+										.get("feedUrl");
+								Feed targetFeed = Feed.getFeedByUrl(feedUrl);
+								FeedReader.update(targetFeed);
+								targetDirectory.subscribeFeed(targetFeed);
+								response.put("success", true);
+							}
+						}
+					} else if ("add".equals(action)) {
+						Directory newDirectory = new Directory();
+						newDirectory.setTitle((String) request.get("name"));
+						folderIdString = (String) request.get("parentId");
+						if (folderIdString != null) {
+							long parentId = Long.parseLong(folderIdString);
+							Directory parentDirectory;
+							if (parentId == 0L) {
+								parentDirectory = user.getRootDirectory();
+							} else {
+								parentDirectory = (Directory) getSession().get(
+										Directory.class, parentId);
+							}
+							if (parentDirectory != null) {
+								parentDirectory.attachDirectory(newDirectory);
+								getSession().persist(newDirectory);
+								response.put("folder", newDirectory
+										.toMap(false));
+								response.put("success", true);
+
+							}
+						}
+					}
+					break;
+
+				case article:
+					String articleIdString = (String) request.get("articleId");
+					if (articleIdString != null) {
+						long articleId = Long.parseLong(articleIdString);
+						Article targetArticle = (Article) getSession().get(
+								Article.class, articleId);
+						if ("update".equals(action)) {
+							ArticleProperties properties = user
+									.getArticleProperties(targetArticle);
+							Map<String, Object> changes = (Map<String, Object>) request
+									.get("changes");
+							Boolean read = (Boolean) changes.get("read");
+							Boolean important = (Boolean) changes
+									.get("important");
+							if (read != null) {
+								properties.setImportant(important);
+							}
+							if (read != null) {
+								properties.setAlreadyRead(read);
+							}
+							// "On devrait gerer l'echec de tous les changements d'etat"
+							// kezako ?
 							response.put("success", true);
-							
 						}
 					}
-				}
-				break;
-				
-			case article:
-				String folderIdString2 = (String) request.get("folderId");
-				String articleIdString = (String) request.get("articleId");
-				if (folderIdString2 != null && articleIdString != null) {
-					long folderId = Long.parseLong(folderIdString2);
-					Directory targetDirectory2 = (Directory) getSession().get(
-							Directory.class, folderId);
-					long articleId = Long.parseLong(articleIdString);
-					Article targetArticle = (Article) getSession().get(
-							Article.class, articleId);
-					if ("update".equals(action)) {
-						ArticleProperties properties = user
-								.getArticleProperties(targetArticle);
-						Map<String, Object> changes = (Map<String, Object>) request.get("changes");
-						Boolean read = (Boolean) changes.get("read");
-						Boolean important = (Boolean) changes.get("important");
-						if (read != null) {
-							properties.setImportant(important);
-						}
-						if (read != null) {
-							properties.setAlreadyRead(read);
-						}
-						// "On devrait gerer l'echec de tous les changements d'etat"
-						// kezako ?
+					break;
+				case preferences:
+					if ("get".equals(action)) {
 						response.put("success", true);
+						response.put("preferences", null);
 					}
+					break;
+				case feed:
+					if ("update".equals(action)) {
+						response.put("success", true);
+						response.put("preferences", null);
+					}
+					break;
 				}
-				break;
-			case preferences:
-				if ("get".equals(action)) {
-					response.put("success", true);
-					response.put("preferences", null);
+				getSession().getTransaction().commit();
+			} catch (Exception e) {
+				/*
+				 * Building a readable and complete error message
+				 */
+				StringBuilder errorMessage = new StringBuilder();
+				errorMessage.append("Java error: ").append(e.getMessage())
+						.append('\n');
+				response.put("success", false);
+
+				/*
+				 * Trying to roll back the transaction if active.
+				 */
+				if (getSession().getTransaction() != null
+						&& getSession().getTransaction().isActive()) {
+					try {
+						// Second try catch as the rollback could fail as well
+						getSession().getTransaction().rollback();
+						errorMessage
+								.append("Transaction Rollback: successful.\n");
+					} catch (HibernateException e1) {
+						errorMessage.append("Transaction Rollback: failed.\n");
+					}
+				} else {
+					errorMessage.append("Transaction Rollback: unnecessary.\n");
 				}
-				break;
-			case feed:
-				if ("update".equals(action)) {
-					response.put("success", true);
-					response.put("preferences", null);
+				/*
+				 * Including stacktrace in the error message.
+				 */
+				StackTraceElement[] stackTrace = e.getStackTrace();
+				int i;
+				for (i = 0; i < stackTrace.length; i++) {
+					String cName = stackTrace[i].getClassName();
+					if (cName.contains("org.apache.jasper"))
+						break;
+					errorMessage.append(stackTrace[i].toString()).append('\n');
 				}
-				break;
+				errorMessage.append(stackTrace.length - 1 - i).append(
+						" elements from Tomcat stacktrace skipped.");
+				response.put("error", errorMessage.toString());
 			}
-			getSession().getTransaction().commit();
-		} catch (Exception e) {
-			/*
-			 * Building a readable and complete error message
-			 */
-			StringBuilder errorMessage = new StringBuilder();
-			errorMessage.append("Java error: ").append(e.getClass()).append(" - ").append(e.getMessage()).append('\n');
-			response.put("success", false);
-			
-			if (getSession().getTransaction() != null && getSession().getTransaction().isActive()) {
-				try {
-					// Second try catch as the rollback could fail as well
-					getSession().getTransaction().rollback();
-					errorMessage.append("Transaction Rollback: successful.\n");
-				} catch (HibernateException e1) {
-					errorMessage.append("Transaction Rollback: failed.\n");
-				}
-			} else {
-				errorMessage.append("Transaction Rollback: unnecessary.\n");
-			}
-			/*
-			 * Including stacktrace in the error message.
-			 */
-			StackTraceElement[] stackTrace = e.getStackTrace();
-			for (int i=0; i<stackTrace.length; i++) {
-//				String cName = stackTrace[i].getClassName();
-//				if (cName.contains("org.apache.jsp") || !cName.contains("org.apache"))
-				errorMessage.append(stackTrace[i].toString()).append('\n');
-			}
-			response.put("error", errorMessage.toString());
 		}
 	}
 
@@ -201,7 +219,9 @@ public class FeedeoHandler {
 	/**
 	 * Creates a new account, if not already in the database.
 	 * 
-	 * @param newAccountReq a Map specifying "login", "password", "name", "lastName", "email"
+	 * @param newAccountReq
+	 *            a Map specifying "login", "password", "name", "lastName",
+	 *            "email"
 	 * @return the created-user's login
 	 */
 	public static String createAccount(Map<String, Object> newAccountReq) {

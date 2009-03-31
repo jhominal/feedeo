@@ -22,45 +22,46 @@ public abstract class HibernateObject {
 	 * Default constructor.
 	 */
 	public HibernateObject() {
-
+		super();
 	}
 
-	private long id;
+	private Long id;
 
 	/**
-	 * Sets the object's id in the corresponding table in the database.
-	 * Its visibility, protected, means that only Hibernate will access
-	 * it.
+	 * Sets the object's id in the corresponding table in the database. Its
+	 * visibility, protected, means that only Hibernate will access it.
 	 * 
 	 * @param id
 	 */
-	protected void setId(long id) {
+	protected void setId(Long id) {
 		this.id = id;
 	}
 
 	/**
 	 * @return the object's id in the corresponding table in the database.
 	 */
-	protected long getId() {
+	protected Long getId() {
 		return id;
 	}
-	
+
 	/**
-	 * gets the session appropriate for the given object
-	 * for now it refers to a singleton, but it should not
-	 * say this way.
+	 * gets the session appropriate for the given object for now it refers to a
+	 * singleton, but it should not stay this way.
+	 * 
+	 * Probably, it would be wise to have a mechanism where every user and every
+	 * feed has his/her/its own session
 	 * 
 	 * @return the session associated to a User or to a Feed.
 	 */
 	public Session getSession() {
 		return InitSessionFactory.getInstance().getCurrentSession();
 	}
-	
+
 	/**
-	 * 
+	 * Makes a detached object transient. Should not be used with persistent instances.
 	 */
 	public void delete() {
-		//TODO to be redone for multi-session use.
+		// TODO to be redone for multi-session use.
 		Transaction tx = null;
 		Session session = getSession();
 		try {
@@ -85,7 +86,7 @@ public abstract class HibernateObject {
 	 * 
 	 */
 	public void saveOrUpdate() {
-		//TODO to be redone for multi-session use.
+		// TODO to be redone for multi-session use.
 		Transaction tx = null;
 		Session session = getSession();
 		try {

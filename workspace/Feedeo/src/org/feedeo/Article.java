@@ -19,15 +19,12 @@ public class Article extends HibernateObject implements JsonObjectSerializable {
 	private boolean reliablePubDate;
 	private Date pubDate;
 	private Feed sourceFeed;
-	private String summary;
 	private String author;
-	private String content;
-	
 
 	// private Set<String> categories;
 
 	/**
-	 * Default constructor
+	 * Default constructor.
 	 */
 	public Article() {
 		super();
@@ -41,7 +38,8 @@ public class Article extends HibernateObject implements JsonObjectSerializable {
 	}
 
 	/**
-	 * @param title the title to set
+	 * @param title
+	 *            the title to set
 	 */
 	public void setTitle(String title) {
 		this.title = title;
@@ -55,7 +53,8 @@ public class Article extends HibernateObject implements JsonObjectSerializable {
 	}
 
 	/**
-	 * @param link the link to set
+	 * @param link
+	 *            the link to set
 	 */
 	public void setLink(String link) {
 		this.link = link;
@@ -69,7 +68,8 @@ public class Article extends HibernateObject implements JsonObjectSerializable {
 	}
 
 	/**
-	 * @param reliablePubDate the reliablePubDate to set
+	 * @param reliablePubDate
+	 *            the reliablePubDate to set
 	 */
 	public void setReliablePubDate(boolean reliablePubDate) {
 		this.reliablePubDate = reliablePubDate;
@@ -83,7 +83,8 @@ public class Article extends HibernateObject implements JsonObjectSerializable {
 	}
 
 	/**
-	 * @param pubDate the pubDate to set
+	 * @param pubDate
+	 *            the pubDate to set
 	 */
 	public void setPubDate(Date pubDate) {
 		this.pubDate = pubDate;
@@ -97,24 +98,11 @@ public class Article extends HibernateObject implements JsonObjectSerializable {
 	}
 
 	/**
-	 * @param sourceFeed the sourceFeed to set
+	 * @param sourceFeed
+	 *            the sourceFeed to set
 	 */
 	public void setSourceFeed(Feed sourceFeed) {
 		this.sourceFeed = sourceFeed;
-	}
-
-	/**
-	 * @return the summary
-	 */
-	public String getSummary() {
-		return summary;
-	}
-
-	/**
-	 * @param summary the summary to set
-	 */
-	public void setSummary(String summary) {
-		this.summary = summary;
 	}
 
 	/**
@@ -125,27 +113,16 @@ public class Article extends HibernateObject implements JsonObjectSerializable {
 	}
 
 	/**
-	 * @param author the author to set
+	 * @param author
+	 *            the author to set
 	 */
 	public void setAuthor(String author) {
 		this.author = author;
 	}
 
-	/**
-	 * @return the content
-	 */
-	public String getContent() {
-		return content;
-	}
-
-	/**
-	 * @param content the content to set
-	 */
-	public void setContent(String content) {
-		this.content = content;
-	}
-	
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -154,13 +131,18 @@ public class Article extends HibernateObject implements JsonObjectSerializable {
 		int result = 1;
 		result = prime * result + ((author == null) ? 0 : author.hashCode());
 		result = prime * result + ((link == null) ? 0 : link.hashCode());
+		if (isReliablePubDate())
+			result = prime * result
+					+ ((pubDate == null) ? 0 : pubDate.hashCode());
 		result = prime * result
 				+ ((sourceFeed == null) ? 0 : sourceFeed.hashCode());
 		result = prime * result + ((title == null) ? 0 : title.hashCode());
 		return result;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -182,6 +164,13 @@ public class Article extends HibernateObject implements JsonObjectSerializable {
 				return false;
 		} else if (!link.equals(other.link))
 			return false;
+		if (isReliablePubDate() && other.isReliablePubDate()) {
+			if (pubDate == null) {
+				if (other.pubDate != null)
+					return false;
+			} else if (!pubDate.equals(other.pubDate))
+				return false;
+		}
 		if (sourceFeed == null) {
 			if (other.sourceFeed != null)
 				return false;
@@ -194,30 +183,29 @@ public class Article extends HibernateObject implements JsonObjectSerializable {
 			return false;
 		return true;
 	}
-	
+
 	/**
-	 * This function updates the article with
-	 * the data from a newer version.
+	 * Retrieves the article's contents (via the feed's map)
 	 * 
-	 * @param newVersion
+	 * @return the content associated to this Article reference
 	 */
-	public void sync(Article newVersion) {
-		if (equals(newVersion)) {
-			
-		}
+	public ArticleContent getArticleContent() {
+		return getSourceFeed().getArticles().get(this);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.feedeo.clientcomm.JsonObjectSerializable#toMap(boolean)
 	 */
 	@Override
 	public Map<String, Object> toMap(boolean deep) {
 		Map<String, Object> result = new HashMap<String, Object>();
-		result.put("id", ((Long) this.getId()).toString());
+		result.put("id", this.getId().toString());
 		result.put("title", this.getTitle());
 		result.put("author", this.getAuthor());
-		result.put("summary", this.getSummary());
-		result.put("content", this.getContent());
+		result.put("summary", this.getArticleContent().getSummary());
+		result.put("content", this.getArticleContent().getContent());
 		result.put("date", this.getPubDate().getTime());
 		result.put("url", this.getLink());
 		// ArrayList<String> categories = new ArrayList<String>();

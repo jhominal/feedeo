@@ -7,14 +7,19 @@
   	<id name="id" column="idDirectory">
   		<generator class="native" />
   	</id>
-   <property name="title"/>
-    <set cascade="all" name="articles" lazy="true">
-      <key column="idDirectory"/>
-      <many-to-many column="idArticle" class="Article"/>
-    </set>
+    <property name="title"/>
+    <property name="lastUpdate"/>
     <set cascade="all-delete-orphan" name="subDirectories" lazy="true">
       <key column="idParent"/>
       <one-to-many class="Directory" />
+    </set>
+    <set name="feeds" table="directoryFeeds" lazy="true">
+      <key column="idDirectory"/>
+      <many-to-many column="idFeed" class="Feed"/>
+    </set>
+    <set cascade="all" name="articles" lazy="true">
+      <key column="idDirectory"/>
+      <many-to-many column="idArticle" class="Article"/>
     </set>
     <many-to-one name="owner" column="idUser" not-null="true" />
   </class>
