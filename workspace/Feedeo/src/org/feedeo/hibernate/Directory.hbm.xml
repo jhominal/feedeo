@@ -17,7 +17,7 @@
       <key column="idDirectory"/>
       <many-to-many column="idFeed" class="Feed"/>
     </set>
-    <set cascade="all" name="articles" lazy="true">
+    <set cascade="all" name="articles" table="dirArticles" lazy="true">
       <key column="idDirectory"/>
       <many-to-many column="idArticle" class="Article"/>
     </set>

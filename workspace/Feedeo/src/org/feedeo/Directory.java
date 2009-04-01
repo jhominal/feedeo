@@ -42,9 +42,9 @@ public class Directory extends HibernateObject implements
 	public Directory() {
 		super();
 		lastUpdate = GregorianCalendar.getInstance().getTime();
+		subDirectories = new HashSet<Directory>();
 		feeds = new HashSet<Feed>();
 		articles = new HashSet<Article>();
-		subDirectories = new HashSet<Directory>();
 	}
 
 	/**

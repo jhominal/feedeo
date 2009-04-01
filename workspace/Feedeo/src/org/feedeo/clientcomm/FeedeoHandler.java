@@ -131,7 +131,7 @@ public class FeedeoHandler {
 							Boolean read = (Boolean) changes.get("read");
 							Boolean important = (Boolean) changes
 									.get("important");
-							if (read != null) {
+							if (important != null) {
 								properties.setImportant(important);
 							}
 							if (read != null) {
