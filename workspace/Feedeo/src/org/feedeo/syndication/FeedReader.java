@@ -9,7 +9,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.feedeo.Article;
-import org.feedeo.ArticleContent;
 import org.feedeo.Feed;
 
 import com.sun.syndication.feed.synd.SyndContent;
@@ -91,27 +90,24 @@ public class FeedReader {
 
 		while (entryIter.hasNext()) {
 			SyndEntry currEntry = entryIter.next();
-			Article potentialEntry = readArticleReference(currEntry);
-			ArticleContent potentialContent = readArticleContent(currEntry);
-			if (!targetFeed.getArticles().containsKey(potentialEntry)) {
+			Article potentialEntry = readArticle(currEntry);
+			if (!targetFeed.getArticles().contains(potentialEntry)) {
 				if (!potentialEntry.isReliablePubDate()) {
 					Calendar calendar = GregorianCalendar.getInstance();
 					potentialEntry.setPubDate(calendar.getTime());
 				}
-				targetFeed.addArticle(potentialEntry, potentialContent);
+				targetFeed.addArticle(potentialEntry);
 				result = true;
 			} else {
-				ArticleContent contentToUpdate = targetFeed.getArticles().get(potentialEntry);
-				if (!potentialContent.equals(contentToUpdate)) {
-					contentToUpdate.sync(potentialContent);
-				}
+				//TODO Traiter le cas où le contenu a été mis à jour.
 			}
 		}
 
 		return result;
 	}
 
-	private static Article readArticleReference(SyndEntry syndEntry) {
+	@SuppressWarnings("unchecked")
+	private static Article readArticle(SyndEntry syndEntry) {
 		Article result = new Article();
 
 		result.setTitle(syndEntry.getTitle());
@@ -120,23 +116,18 @@ public class FeedReader {
 		result.setPubDate(syndEntry.getPublishedDate());
 		result.setAuthor(syndEntry.getAuthor());
 
-		return result;
-	}
-	
-	@SuppressWarnings("unchecked")
-	private static ArticleContent readArticleContent(SyndEntry syndEntry) {
-		ArticleContent result = new ArticleContent();
-		result.setSummary(syndEntry.getDescription().getValue());
+		if (syndEntry.getDescription()!=null)
+			result.setSummary(syndEntry.getDescription().getValue());
 
 		String potentialContent = getMainTextLikeContent(syndEntry.getContents());
 
 		if (potentialContent == null || potentialContent.equals(""))
-			potentialContent = syndEntry.getDescription().getValue();
+			potentialContent = result.getSummary();
 		result.setContent(potentialContent);
 		
 		return result;
 	}
-
+	
 	private static String getMainTextLikeContent(List<SyndContent> contents) {
 		if (contents.size() <= 0) {
 			return null;

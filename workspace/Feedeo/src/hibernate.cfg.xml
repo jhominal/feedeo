@@ -29,10 +29,9 @@
         <property name="transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
 
         <!-- Drop and re-create the database schema on startup -->
-        <!--property name="hbm2ddl.auto">create</property-->
+        <property name="hbm2ddl.auto">create</property>
         
 		<mapping resource="org/feedeo/hibernate/Article.hbm.xml" /> 
-		<mapping resource="org/feedeo/hibernate/ArticleContent.hbm.xml"/>
 		<mapping resource="org/feedeo/hibernate/ArticleProperties.hbm.xml"/>
 		<mapping resource="org/feedeo/hibernate/Directory.hbm.xml" />
 		<mapping resource="org/feedeo/hibernate/Feed.hbm.xml" /> 

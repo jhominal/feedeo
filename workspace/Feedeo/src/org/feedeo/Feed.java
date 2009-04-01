@@ -1,9 +1,7 @@
 package org.feedeo;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import org.feedeo.hibernate.HibernateObject;
@@ -22,7 +20,7 @@ public class Feed extends HibernateObject {
 	private Date pubDate;
 	private String description;
 
-	private Map<Article, ArticleContent> articles;
+	private Set<Article> articles;
 	private Set<Directory> folders;
 
 	/**
@@ -30,7 +28,7 @@ public class Feed extends HibernateObject {
 	 */
 	public Feed() {
 		super();
-		articles = new HashMap<Article, ArticleContent>();
+		articles = new HashSet<Article>();
 		folders = new HashSet<Directory>();
 	}
 
@@ -110,14 +108,14 @@ public class Feed extends HibernateObject {
 	/**
 	 * @return all articles associated to this feed.
 	 */
-	public Map<Article, ArticleContent> getArticles() {
+	public Set<Article> getArticles() {
 		return articles;
 	}
 
 	/**
 	 * @param articles
 	 */
-	public void setArticles(Map<Article, ArticleContent> articles) {
+	public void setArticles(Set<Article> articles) {
 		this.articles = articles;
 	}
 
@@ -176,12 +174,10 @@ public class Feed extends HibernateObject {
 	 * 
 	 * @param article
 	 *            the reference to the article to add.
-	 * @param content
-	 *            the content associated to this reference.
 	 */
-	public void addArticle(Article article, ArticleContent content) {
+	public void addArticle(Article article) {
 		article.setSourceFeed(this);
-		this.getArticles().put(article, content);
+		this.getArticles().add(article);
 	}
 
 	/**

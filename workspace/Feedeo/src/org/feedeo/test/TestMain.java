@@ -1,9 +1,6 @@
 package org.feedeo.test;
 
-import java.util.Iterator;
-
 import org.feedeo.*;
-import org.feedeo.hibernate.InitSessionFactory;
 import org.feedeo.syndication.FeedReader;
 
 /**
@@ -22,8 +19,8 @@ public class TestMain {
 	 */
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-//		testSyndication();
-//		testPersistence();
+		testSyndication();
+		testPersistence();
 		
 		User u1 = User.getUserByLogin("toto");
 		
@@ -31,16 +28,13 @@ public class TestMain {
 		
 		Feed f2 = Feed.getFeedByUrl("http://fcargoet.evolix.net/feed/atom/");
 		
-		Feed f1 = Feed.getFeedByUrl("http://feedproxy.google.com/TechCrunch");
-		
 		FeedReader.update(f2);
 		
 		User u2 = (User) u1.getSession().merge(u1);
 		
-		u2.getRootDirectory().unsubscribeFeed(f1);
 		u2.getRootDirectory().subscribeFeed(f2);
 		
-		u2.getRootDirectory().updateArticles();
+		System.out.println(u2.getRootDirectory().toMap(true).get("articles"));
 		
 		u1.getSession().getTransaction().commit();
 	}
@@ -62,18 +56,18 @@ public class TestMain {
 		
 		u1.saveOrUpdate();
 		
-		u1.getSession().beginTransaction();
-		
-		Feed f1 = Feed.getFeedByUrl("http://feedproxy.google.com/TechCrunch");
-		
-		Directory d1 = new Directory();
-		d1.setTitle("premier dossier");
-		
-		u1.getRootDirectory().attachDirectory(d1);
-		d1.subscribeFeed(f1);
-		u1.getSession().getTransaction().commit();
-		
-		u1.saveOrUpdate();
+//		u1.getSession().beginTransaction();
+//		
+//		Feed f1 = Feed.getFeedByUrl("http://feedproxy.google.com/TechCrunch");
+//		
+//		Directory d1 = new Directory();
+//		d1.setTitle("premier dossier");
+//		
+//		u1.getRootDirectory().attachDirectory(d1);
+//		d1.subscribeFeed(f1);
+//		u1.getSession().getTransaction().commit();
+//		
+//		u1.saveOrUpdate();
 	}
 	
 	/**
@@ -81,7 +75,7 @@ public class TestMain {
 	 */
 	public static void testSyndication() {
 		// Flux RSS 0.92
-		Feed f1 = FeedReader.checkout("http://fcargoet.evolix.net/feed/rss/");
+		Feed f1 = FeedReader.checkout("http://fcargoet.evolix.net/feed/atom/");
 		f1.saveOrUpdate();
 		// Flux RSS 2.0
 		Feed f2 = FeedReader.checkout("http://feedproxy.google.com/TechCrunch");

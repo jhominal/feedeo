@@ -13,12 +13,11 @@
   	<property name="pubDate"/>
   	<property name="description" type="text"/>
   	
-    <map cascade="all" name="articles" lazy="true">
+    <set cascade="all" name="articles" lazy="true">
       <key column="idFeed"/>
-      <map-key-many-to-many column="idArticle" class="Article"/>
-      <many-to-many column="idArticleContent" class="ArticleContent"/>
-    </map>
-  	<set cascade="none" inverse="true" name="folders" table="directoryFeeds">
+      <one-to-many class="Article"/>
+    </set>
+  	<set cascade="none" inverse="true" name="folders" table="directoryFeeds" lazy="true">
   	  <key column="idFeed"/>
   	  <many-to-many column="idDirectory" class="Directory"/>
   	</set>

@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.feedeo.hibernate.HibernateObject;
-import org.hibernate.criterion.Example;
 import org.hibernate.criterion.Restrictions;
 
 /**

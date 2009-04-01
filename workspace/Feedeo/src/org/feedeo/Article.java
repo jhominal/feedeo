@@ -21,6 +21,9 @@ public class Article extends HibernateObject implements JsonObjectSerializable {
 	private Feed sourceFeed;
 	private String author;
 
+	private String summary;
+	private String content;
+
 	// private Set<String> categories;
 
 	/**
@@ -61,6 +64,11 @@ public class Article extends HibernateObject implements JsonObjectSerializable {
 	}
 
 	/**
+	 * This boolean tells whether the pubDate for this article was found in the
+	 * feed, or if the pubDate has been filled by Feedeo.
+	 * 
+	 * Should the latter be true, the pubDate property should not be used for comparisons.
+	 * 
 	 * @return the reliablePubDate
 	 */
 	public boolean isReliablePubDate() {
@@ -120,6 +128,34 @@ public class Article extends HibernateObject implements JsonObjectSerializable {
 		this.author = author;
 	}
 
+	/**
+	 * @return the summary
+	 */
+	public String getSummary() {
+		return summary;
+	}
+
+	/**
+	 * @param summary the summary to set
+	 */
+	public void setSummary(String summary) {
+		this.summary = summary;
+	}
+
+	/**
+	 * @return the content
+	 */
+	public String getContent() {
+		return content;
+	}
+
+	/**
+	 * @param content the content to set
+	 */
+	public void setContent(String content) {
+		this.content = content;
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -154,16 +190,20 @@ public class Article extends HibernateObject implements JsonObjectSerializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Article other = (Article) obj;
+		
 		if (author == null) {
 			if (other.author != null)
 				return false;
 		} else if (!author.equals(other.author))
 			return false;
+		
 		if (link == null) {
 			if (other.link != null)
 				return false;
 		} else if (!link.equals(other.link))
 			return false;
+		
+		//Use the pubDate in the hashCode if and only if both entries have reliable publication dates.
 		if (isReliablePubDate() && other.isReliablePubDate()) {
 			if (pubDate == null) {
 				if (other.pubDate != null)
@@ -171,26 +211,20 @@ public class Article extends HibernateObject implements JsonObjectSerializable {
 			} else if (!pubDate.equals(other.pubDate))
 				return false;
 		}
+		
 		if (sourceFeed == null) {
 			if (other.sourceFeed != null)
 				return false;
 		} else if (!sourceFeed.equals(other.sourceFeed))
 			return false;
+		
 		if (title == null) {
 			if (other.title != null)
 				return false;
 		} else if (!title.equals(other.title))
 			return false;
+		
 		return true;
-	}
-
-	/**
-	 * Retrieves the article's contents (via the feed's map)
-	 * 
-	 * @return the content associated to this Article reference
-	 */
-	public ArticleContent getArticleContent() {
-		return getSourceFeed().getArticles().get(this);
 	}
 
 	/*
@@ -204,8 +238,8 @@ public class Article extends HibernateObject implements JsonObjectSerializable {
 		result.put("id", this.getId().toString());
 		result.put("title", this.getTitle());
 		result.put("author", this.getAuthor());
-		result.put("summary", this.getArticleContent().getSummary());
-		result.put("content", this.getArticleContent().getContent());
+		result.put("summary", this.getSummary());
+		result.put("content", this.getContent());
 		result.put("date", this.getPubDate().getTime());
 		result.put("url", this.getLink());
 		// ArrayList<String> categories = new ArrayList<String>();

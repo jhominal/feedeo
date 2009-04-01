@@ -1,7 +1,6 @@
 package org.feedeo;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
@@ -14,7 +13,6 @@ import java.util.Set;
 import org.feedeo.clientcomm.JsonObjectSerializable;
 import org.feedeo.hibernate.HibernateObject;
 import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.criterion.Restrictions;
 
 /**
@@ -154,7 +152,7 @@ public class Directory extends HibernateObject implements
 	 */
 	public void subscribeFeed(Feed feed) {
 		this.getFeeds().add(feed);
-		this.getArticles().addAll(feed.getArticles().keySet());
+		this.getArticles().addAll(feed.getArticles());
 		feed.getFolders().add(this);
 	}
 
@@ -175,14 +173,14 @@ public class Directory extends HibernateObject implements
 	 */
 	@SuppressWarnings("unchecked")
 	public void updateArticles() {
-		Date tentativeLastUpdate = GregorianCalendar.getInstance().getTime();
+		Date attemptUpdate = GregorianCalendar.getInstance().getTime();
 
 		Criteria criteria = getSession().createCriteria(Article.class, "article");
-		criteria.add( Restrictions.between("pubDate", getLastUpdate(), tentativeLastUpdate) );
+		criteria.add( Restrictions.between("pubDate", getLastUpdate(), attemptUpdate) );
 		criteria.add( Restrictions.in("sourceFeed", getFeeds()) );
 		List<Article> resultList = criteria.list();
 		getArticles().addAll(resultList);
-		setLastUpdate(tentativeLastUpdate);
+		setLastUpdate(attemptUpdate);
 	}
 
 	/*
