@@ -30,6 +30,9 @@ public final class FeedeoServlet extends HttpServlet {
     }
     
 	/**
+	 * This method passes the request and the response to the doPost method of
+	 * this class. This method is used mainly for testing purposes.
+	 * 
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -98,6 +101,8 @@ public final class FeedeoServlet extends HttpServlet {
 			} catch (Exception e) {
 				jsonResponse.put("success", false);
 				jsonResponse.put("error", e.getMessage());
+				JsonExceptionPrinter ePrinter = new JsonExceptionPrinter(e);
+				jsonResponse.put("JavaProblem", ePrinter.toMap(true));
 			}
 		} else {
 			FeedeoHandler handler = new FeedeoHandler(userName);
@@ -116,6 +121,8 @@ public final class FeedeoServlet extends HttpServlet {
 				} catch (Exception e) {
 					jsonResponse.put("success", false);
 					jsonResponse.put("error", "bad multiple request");
+					JsonExceptionPrinter ePrinter = new JsonExceptionPrinter(e);
+					jsonResponse.put("JavaProblem", ePrinter.toMap(true));
 				}
 			} else if (requestType != null && requestType.equals("simple")) {
 				try {
@@ -124,6 +131,8 @@ public final class FeedeoServlet extends HttpServlet {
 				} catch (Exception e) {
 					jsonResponse.put("success", false);
 					jsonResponse.put("error", "bad simple request");
+					JsonExceptionPrinter ePrinter = new JsonExceptionPrinter(e);
+					jsonResponse.put("JavaProblem", ePrinter.toMap(true));
 				}
 			} else {
 				jsonResponse.put("success", false);

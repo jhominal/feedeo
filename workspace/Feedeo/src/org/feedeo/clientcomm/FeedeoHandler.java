@@ -147,55 +147,38 @@ public class FeedeoHandler {
 					if ("get".equals(action)) {
 						response.put("success", true);
 						response.put("preferences", null);
+						response.put("note", "not really implemented");
 					}
 					break;
 				case feed:
 					if ("update".equals(action)) {
 						response.put("success", true);
 						response.put("preferences", null);
+						response.put("note", "not really implemented");
 					}
 					break;
 				}
 				getSession().getTransaction().commit();
 			} catch (Exception e) {
-				/*
-				 * Building a readable and complete error message
-				 */
-				StringBuilder errorMessage = new StringBuilder();
-				errorMessage.append("Java error: ").append(e.getMessage())
-						.append('\n');
-				response.put("success", false);
-
-				/*
-				 * Trying to roll back the transaction if active.
-				 */
+				JsonExceptionPrinter ePrinter = new JsonExceptionPrinter(e);
+				
+				//Trying to roll back the transaction if active.
 				if (getSession().getTransaction() != null
 						&& getSession().getTransaction().isActive()) {
 					try {
 						// Second try catch as the rollback could fail as well
 						getSession().getTransaction().rollback();
-						errorMessage
-								.append("Transaction Rollback: successful.\n");
+						ePrinter.setTransactionRollback("successful");
 					} catch (HibernateException e1) {
-						errorMessage.append("Transaction Rollback: failed.\n");
+						ePrinter.setTransactionRollback("failed");
 					}
 				} else {
-					errorMessage.append("Transaction Rollback: unnecessary.\n");
+					ePrinter.setTransactionRollback("unnecessary");
 				}
-				/*
-				 * Including stacktrace in the error message.
-				 */
-				StackTraceElement[] stackTrace = e.getStackTrace();
-				int i;
-				for (i = 0; i < stackTrace.length; i++) {
-					String cName = stackTrace[i].getClassName();
-					if (cName.contains("org.apache.jasper"))
-						break;
-					errorMessage.append(stackTrace[i].toString()).append('\n');
-				}
-				errorMessage.append(stackTrace.length - 1 - i).append(
-						" elements from Tomcat stacktrace skipped.");
-				response.put("error", errorMessage.toString());
+				
+				response.put("success", false);
+				response.put("error", e.getMessage());
+				response.put("JavaProblem", ePrinter.toMap(true));
 			}
 		}
 	}
