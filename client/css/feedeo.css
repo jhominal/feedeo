@@ -3,6 +3,7 @@
 .unread .x-grid3-cell-inner
 {
     font-style:italic;
+    color : blue;
 }
 .important .x-grid3-cell-inner
 {

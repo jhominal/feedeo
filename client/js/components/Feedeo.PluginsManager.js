@@ -108,11 +108,12 @@ Feedeo.plugins =
 
 //plugin sample
 
+/*
 var mySamplePlugin =
 {
     name : 'samplePlugin',
     description : 'Plugin d\'exemple',
-    /* methodes pour le onInit de chaque composant */
+    // methodes pour le onInit de chaque composant 
     onInit :
     {
         maintoolbar : function(component)
@@ -120,7 +121,7 @@ var mySamplePlugin =
             console.debug(this.name,' acts at ',component,' initialisation');
         }
     },
-    /* methodes appelées par le coeur */
+    // methodes appelées par le coeur 
     actions :
     {
         beforeArticleRefresh : function(object)
@@ -132,7 +133,7 @@ var mySamplePlugin =
             console.debug(this.name,' acts after ',object,' refreshes the article');
         }
     },
-    /* methodes pour modifier les variables */
+    // methodes pour modifier les variables 
     filters :
     {
         articleContent : function(data)
@@ -144,3 +145,4 @@ var mySamplePlugin =
     }
 }
 Feedeo.plugins.register(mySamplePlugin);
+*/

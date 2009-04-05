@@ -76,6 +76,7 @@ var fullScreenSites =
                                                         html:'<object style="width:100%;height:100%;" data="'+article.data.url+'"></object>'
                                                     }
                                                 );
+                                                console.debug('added preview article : ',article);
                                                 win.activeItem = 0;
                                             });
                                         }
@@ -83,10 +84,12 @@ var fullScreenSites =
                                     //un peu moche tout ça...
                                     var prevNextManager = function(direction)
                                     {
+                                        console.debug('prevNextManager called ',direction);
                                         if(direction == -1)
                                         {
                                             if(win.activeItem > 0)
                                             {
+                                                console.debug('-1 : ',win.activeItem);
                                                 win.layout.setActiveItem(win.activeItem--);
                                             }
                                         }

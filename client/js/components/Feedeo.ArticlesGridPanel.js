@@ -27,16 +27,24 @@ Feedeo.ArticlesGridPanel = Ext.extend(Ext.grid.GridPanel, {
                 {name :'summary'},
                 {name : 'read'},
                 {name : 'important'}
-            ]
+            ],
+            sortInfo :{field: "date", direction: "DESC"}
         });
 
 
         var titleStateSummaryRenderer = function(val,metadata,record /*,...*/ )
         {
+            var sum = record.get('summary');
+            /*
+            console.log(sum);
+            //sum = sum.replace(/<.+>/, '');
+            // marche pas là, bizarre (marche à la main dans la console)
+            var sumShort = sum.replace(/^(.{40}).*$/,'$1');
+            console.log(sumShort);
+            */
             var html='';
-            //html+=(record.get('important')?'<img src="'+Ext.APPLICATION_URL+'/img/icons/flag_red.png"/>':'');
             html+='<b>'+val+'</b>';
-            html+='<br/>'+record.get('summary');
+            html+='<br/>'+sum+'...';
             return html;
         }
         var tagsRenderer = function(tagsArray)
@@ -106,7 +114,7 @@ Feedeo.ArticlesGridPanel = Ext.extend(Ext.grid.GridPanel, {
         //set article as read
         record.set('read',true);
         //un peu bourrin de commiter à chaque fois...
-        this.commitState();
+        //this.commitState();
         console.debug('Event rowselect captured, fire "articleselect" with :',record);
         this.fireEvent('articleselect',record);
     },
