@@ -21,6 +21,6 @@
       <key column="idDirectory"/>
       <many-to-many column="idArticle" class="Article"/>
     </set>
-    <many-to-one name="owner" column="idUser" not-null="true" />
+    <many-to-one name="owner" column="idUser"/>
   </class>
 </hibernate-mapping>

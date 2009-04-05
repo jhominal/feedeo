@@ -4,7 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Type a description for JsonExceptionPrinter here.
+ * This class makes it easy to print an exception, with its whole stacktrace, as
+ * a JSON object.
  * 
  * @author Feedeo Team
  * 
@@ -14,10 +15,20 @@ final class JsonExceptionPrinter implements JsonObjectSerializable {
 	private Exception exception;
 	private String transactionRollback;
 
+	/**
+	 * Builds a JsonExceptionPrinter object, given a JavaException.
+	 * @param e the referenced Java Exception
+	 */
 	JsonExceptionPrinter(Exception e) {
 		exception = e;
 	}
 
+	/**
+	 * sets a message, whose goal is to tell whether the
+	 * transaction's rollback was successful.
+	 * 
+	 * @param message
+	 */
 	void setTransactionRollback(String message) {
 		transactionRollback = message;
 	}

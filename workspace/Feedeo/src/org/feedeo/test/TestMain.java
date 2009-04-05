@@ -1,7 +1,10 @@
 package org.feedeo.test;
 
+import java.util.ArrayList;
+
 import org.feedeo.*;
 import org.feedeo.syndication.FeedReader;
+import org.stringtree.json.JSONWriter;
 
 /**
  * This class implements various tests, in order
@@ -18,25 +21,27 @@ public class TestMain {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		testSyndication();
-		testPersistence();
-		
-		User u1 = User.getUserByLogin("toto");
-		
-		u1.getSession().beginTransaction();
-		
-		Feed f2 = Feed.getFeedByUrl("http://fcargoet.evolix.net/feed/atom/");
-		
-		FeedReader.update(f2);
-		
-		User u2 = (User) u1.getSession().merge(u1);
-		
-		u2.getRootDirectory().subscribeFeed(f2);
-		
-		System.out.println(u2.getRootDirectory().toMap(true).get("articles"));
-		
-		u1.getSession().getTransaction().commit();
+//		testSyndication();
+//		testPersistence();
+//		
+//		User u1 = User.getUserByLogin("toto");
+//		
+//		u1.getSession().beginTransaction();
+//		
+//		Feed f2 = Feed.getFeedByUrl("http://fcargoet.evolix.net/feed/atom/");
+//		
+//		FeedReader.update(f2);
+//		
+//		User u2 = (User) u1.getSession().merge(u1);
+//		
+//		u2.getRootDirectory().subscribeFeed(f2);
+//		
+//		System.out.println(u2.getRootDirectory().toMap(true).get("articles"));
+//		
+//		u1.getSession().getTransaction().commit();
+		JSONWriter jsonWriter = new JSONWriter();
+		String test = jsonWriter.write(new ArrayList<Directory>());
+		System.out.print(test);
 	}
 	
 	/**

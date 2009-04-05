@@ -83,6 +83,32 @@ public abstract class HibernateObject {
 	}
 
 	/**
+	 * Makes a detached object transient. Should not be used with persistent instances.
+	 */
+	public void persist() {
+		// TODO to be redone for multi-session use.
+		Transaction tx = null;
+		Session session = getSession();
+		try {
+			tx = session.beginTransaction();
+			session.persist(this);
+			tx.commit();
+		} catch (RuntimeException e) {
+			if (tx != null && tx.isActive()) {
+				try {
+					// Second try catch as the rollback could fail as well
+					tx.rollback();
+				} catch (HibernateException e1) {
+					// logger.debug("Error rolling back transaction");
+				}
+				// throw again the first exception
+				throw e;
+			}
+		}
+	}
+
+	
+	/**
 	 * 
 	 */
 	public void saveOrUpdate() {

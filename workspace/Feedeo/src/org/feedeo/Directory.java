@@ -144,8 +144,8 @@ public class Directory extends HibernateObject implements
 	}
 
 	/**
-	 * Lets the owner subscribe to a Feed and makes this folder
-	 * a destination for this feed.
+	 * Lets the owner subscribe to a Feed and makes this folder a destination
+	 * for this feed.
 	 * 
 	 * @param feed
 	 *            the feed to subscribe to
@@ -166,7 +166,7 @@ public class Directory extends HibernateObject implements
 		this.getFeeds().remove(feed);
 		feed.getFolders().remove(this);
 	}
-	
+
 	/**
 	 * This functions updates all of a folder's default feeds, and puts the
 	 * articles published after the lastUpdate date into this folder.
@@ -175,11 +175,15 @@ public class Directory extends HibernateObject implements
 	public void updateArticles() {
 		Date attemptUpdate = GregorianCalendar.getInstance().getTime();
 
-		Criteria criteria = getSession().createCriteria(Article.class, "article");
-		criteria.add( Restrictions.between("pubDate", getLastUpdate(), attemptUpdate) );
-		criteria.add( Restrictions.in("sourceFeed", getFeeds()) );
-		List<Article> resultList = criteria.list();
-		getArticles().addAll(resultList);
+		if (!getFeeds().isEmpty()) {
+			Criteria criteria = getSession().createCriteria(Article.class,
+					"article");
+			criteria.add(Restrictions.between("pubDate", getLastUpdate(),
+					attemptUpdate));
+			criteria.add(Restrictions.in("sourceFeed", getFeeds()));
+			List<Article> resultList = criteria.list();
+			getArticles().addAll(resultList);
+		}
 		setLastUpdate(attemptUpdate);
 	}
 
@@ -194,7 +198,7 @@ public class Directory extends HibernateObject implements
 		result.put("id", this.getId().toString());
 		result.put("text", this.getTitle());
 		result.put("leaf", false);
-		if (deep && !this.getSubDirectories().isEmpty()) {
+		if (deep) {
 			List<Map<String, Object>> dirsMapList = new ArrayList<Map<String, Object>>();
 			Iterator<Directory> directorIter = this.getSubDirectories()
 					.iterator();
@@ -204,7 +208,7 @@ public class Directory extends HibernateObject implements
 			}
 			result.put("children", dirsMapList);
 		}
-		if (deep && !this.getArticles().isEmpty()) {
+		if (deep) {
 			List<Map<String, Object>> articlesMapList = new ArrayList<Map<String, Object>>();
 			Iterator<Article> artIter = this.getArticles().iterator();
 			while (artIter.hasNext()) {

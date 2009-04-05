@@ -14,7 +14,7 @@
   	<property name="firstName"/>
   	<property name="lastName"/>
   	
-  	<one-to-one name="rootDirectory" class="Directory" cascade="all"/>
+  	<many-to-one name="rootDirectory" class="Directory" column="idRootDir" cascade="all"/>
   	
   	<map name="preferences">
       <key column="idUser"/>

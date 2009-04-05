@@ -90,6 +90,9 @@ public class FeedeoHandler {
 								FeedReader.update(targetFeed);
 								targetDirectory.subscribeFeed(targetFeed);
 								response.put("success", true);
+							} else if ("delete".equals(action)) {
+								getSession().delete(targetDirectory);
+								response.put("success", true);
 							}
 						}
 					} else if ("add".equals(action)) {
@@ -215,7 +218,7 @@ public class FeedeoHandler {
 			possibleUser.setFirstName((String) newAccountReq.get("name"));
 			possibleUser.setLastName((String) newAccountReq.get("lastname"));
 			possibleUser.setEmail((String) newAccountReq.get("mail"));
-			possibleUser.saveOrUpdate();
+			possibleUser.persist();
 			return login;
 		} else {
 			return null;

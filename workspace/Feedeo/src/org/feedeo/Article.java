@@ -67,7 +67,8 @@ public class Article extends HibernateObject implements JsonObjectSerializable {
 	 * This boolean tells whether the pubDate for this article was found in the
 	 * feed, or if the pubDate has been filled by Feedeo.
 	 * 
-	 * Should the latter be true, the pubDate property should not be used for comparisons.
+	 * Should the latter be true, the pubDate property should not be used for
+	 * comparisons.
 	 * 
 	 * @return the reliablePubDate
 	 */
@@ -136,7 +137,8 @@ public class Article extends HibernateObject implements JsonObjectSerializable {
 	}
 
 	/**
-	 * @param summary the summary to set
+	 * @param summary
+	 *            the summary to set
 	 */
 	public void setSummary(String summary) {
 		this.summary = summary;
@@ -150,12 +152,13 @@ public class Article extends HibernateObject implements JsonObjectSerializable {
 	}
 
 	/**
-	 * @param content the content to set
+	 * @param content
+	 *            the content to set
 	 */
 	public void setContent(String content) {
 		this.content = content;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -190,20 +193,21 @@ public class Article extends HibernateObject implements JsonObjectSerializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Article other = (Article) obj;
-		
+
 		if (author == null) {
 			if (other.author != null)
 				return false;
 		} else if (!author.equals(other.author))
 			return false;
-		
+
 		if (link == null) {
 			if (other.link != null)
 				return false;
 		} else if (!link.equals(other.link))
 			return false;
-		
-		//Use the pubDate in the hashCode if and only if both entries have reliable publication dates.
+
+		// Use the pubDate in the hashCode if and only if both entries have
+		// reliable publication dates.
 		if (isReliablePubDate() && other.isReliablePubDate()) {
 			if (pubDate == null) {
 				if (other.pubDate != null)
@@ -211,19 +215,19 @@ public class Article extends HibernateObject implements JsonObjectSerializable {
 			} else if (!pubDate.equals(other.pubDate))
 				return false;
 		}
-		
+
 		if (sourceFeed == null) {
 			if (other.sourceFeed != null)
 				return false;
 		} else if (!sourceFeed.equals(other.sourceFeed))
 			return false;
-		
+
 		if (title == null) {
 			if (other.title != null)
 				return false;
 		} else if (!title.equals(other.title))
 			return false;
-		
+
 		return true;
 	}
 
@@ -240,7 +244,9 @@ public class Article extends HibernateObject implements JsonObjectSerializable {
 		result.put("author", this.getAuthor());
 		result.put("summary", this.getSummary());
 		result.put("content", this.getContent());
-		result.put("date", this.getPubDate().getTime());
+		// Nécessaire de passer du timestamp java en millisecondes à un
+		// timestamp en secondes pour extJS.
+		result.put("date", (this.getPubDate().getTime() / 1000L));
 		result.put("url", this.getLink());
 		// ArrayList<String> categories = new ArrayList<String>();
 		// add categories
