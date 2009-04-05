@@ -16,7 +16,8 @@ import org.stringtree.json.JSONWriter;
 
 /**
  * This servlet is the one called when the Feedeo client posts
- * data to the server. It seamlessly replaces the former "index.jsp".
+ * data to the server. It seamlessly replaces the former index.jsp
+ * file.
  */
 public final class FeedeoServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -27,6 +28,14 @@ public final class FeedeoServlet extends HttpServlet {
     public FeedeoServlet() {
         super();
     }
+    
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doPost(request, response);
+	}
+
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
@@ -38,14 +47,13 @@ public final class FeedeoServlet extends HttpServlet {
 
 		Map<String, Object> jsonResponse = new HashMap<String, Object>();
 		
-	    //cas par défaut
+	    //cas par dÃ©faut
 		jsonResponse.put("success", false);
 		jsonResponse.put("error", "No handler for your request");
 
 		//jsonResponse.put("debug",request.getQueryString());
 
 		JSONReader jsonReader = new JSONReader();
-		JSONWriter jsonWriter = new JSONWriter();
 
 		String userName = (String) session.getAttribute("userName");
 
@@ -55,7 +63,7 @@ public final class FeedeoServlet extends HttpServlet {
 		String requestType = request.getParameter("type");
 
 		if (userName == null) {
-			//pas loggé
+			//pas loggÃ©
 			//traite une requete de login ou de creation
 			try {
 				Map<String, Object> loginOrCreateRequest = (Map<String, Object>) jsonReader.read(jsonRequest);
@@ -66,7 +74,7 @@ public final class FeedeoServlet extends HttpServlet {
 						session.setAttribute("userName", userName);
 						jsonResponse.put("success", true);
 						jsonResponse.put("msg", "login successful");
-						//ajouter qq données sur l'user
+						//ajouter qq donnÃ©es sur l'user
 					} else {
 						jsonResponse.put("success", false);
 						jsonResponse.put("error", "login failed");
@@ -77,17 +85,15 @@ public final class FeedeoServlet extends HttpServlet {
 						//log him
 						session.setAttribute("userName", userName);
 						jsonResponse.put("success", true);
-						jsonResponse.put("msg",
-								"Account creation successful");
-						//ajouter qq données sur l'user
+						jsonResponse.put("msg",	"Account creation successful");
+						//ajouter qq donnÃ©es sur l'user
 					} else {
 						jsonResponse.put("success", false);
 						jsonResponse.put("error", "Account creation failed");
 					}
 				} else {
 					jsonResponse.put("success", false);
-					jsonResponse.put("error",
-							"Request failed. You must login.");
+					jsonResponse.put("error","Request failed. You must login.");
 				}
 			} catch (Exception e) {
 				jsonResponse.put("success", false);
@@ -121,14 +127,14 @@ public final class FeedeoServlet extends HttpServlet {
 				}
 			} else {
 				jsonResponse.put("success", false);
-				jsonResponse.put("error",
-						"bad request type [multiple, simple]");
+				jsonResponse.put("error","bad request type [multiple, simple]");
 			}
 		}
-		//enlever le error par défaut si succès
+		//enlever le error par dÃ©faut si succÃ¨s
 		if ((Boolean) jsonResponse.get("success"))
 			jsonResponse.remove("error");
 
+		JSONWriter jsonWriter = new JSONWriter();
 		
 		response.getWriter().write(jsonWriter.write(jsonResponse));
 		response.getWriter().flush();
