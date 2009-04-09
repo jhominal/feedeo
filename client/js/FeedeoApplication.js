@@ -21,10 +21,10 @@ Feedeo.addFeed = function(o)
         {
             //si folderId = currentFolder, on reload
             var folderTree = Ext.ComponentMgr.get('folderstree');
-            var currentId = folderTree.getSelectionModel().getSelectedNode().id;
-            if(currentId==o.folderId)
+            var currentFolder = folderTree.getSelectionModel().getSelectedNode();
+            if(currentFolder.id==o.folderId)
             {
-                folderTree.fireEvent('folderselect');
+                folderTree.fireEvent('folderselect', currentFolder.id);
             }
 
         },
@@ -273,24 +273,24 @@ Feedeo.windows.loginForm =
                 defaults : //Default defaults ^^
                 {
                     listeners :
+                    {
+                        specialkey : function(f,e)
                         {
-                            specialkey : function(f,e)
+                            if(e.getKey()==e.ENTER)
                             {
-                                if(e.getKey()==e.ENTER)
-                                {
-                                    this.ownerCt.getForm().submit
-                                    (
+                                this.ownerCt.getForm().submit
+                                (
+                                    {
+                                        success:function(form,data)
                                         {
-                                            success:function(form,data)
-                                            {
-                                                //console.log('login success:',data);
-                                                Feedeo.init(data.preferences||{});
-                                            }
+                                            //console.log('login success:',data);
+                                            Feedeo.init(data.preferences||{});
                                         }
-                                    );
-                                }
+                                    }
+                                );
                             }
                         }
+                    }
                 }
             },
             items :
@@ -397,6 +397,8 @@ Feedeo.init = function(options)
 Ext.onReady(function() {
     Ext.QuickTips.init();
 
+    //on chope les préferences et si c'est ok, on initialise l'appli avec
+    //sinon, on prompt le loginForm
     Feedeo.request({
         params:
         {

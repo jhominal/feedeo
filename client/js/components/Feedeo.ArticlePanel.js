@@ -4,30 +4,30 @@ Ext.ns('Feedeo');
 Feedeo.ArticlePanel = Ext.extend(Ext.Panel, {
     record : null,
     initComponent:function() {
-    // hard coded - cannot be changed from outside
-
-    var config = {
-        tbar:
-        [{
-            text:'Ouvrir dans un onglet',
-            tooltip: 'Ouvre l\'article dans un onglet',
-            handler: this.openInTabClick,
-            scope:this //comme ça, le "this" dans le handler sera "articlePanel" au lieu de "button"
-        }],
-        autoScroll:true,
-        bodyStyle:'padding:15px',
-        html:'Ce flux ne dispose pas d\'informations'
-    }; // eo config object
+        // hard coded - cannot be changed from outside
     
-
-    // apply config
-    Ext.apply(this, Ext.apply(this.initialConfig, config));
+        var config = {
+            tbar:
+            [{
+                text:'Ouvrir dans un onglet',
+                tooltip: 'Ouvre l\'article dans un onglet',
+                handler: this.openInTabClick,
+                scope:this //comme ça, le "this" dans le handler sera "articlePanel" au lieu de "button"
+            }],
+            autoScroll:true,
+            bodyStyle:'padding:15px',
+            html:'Ce flux ne dispose pas d\'informations'
+        }; // eo config object
+        
     
-    // call parent
-    Feedeo.ArticlePanel.superclass.initComponent.apply(this, arguments);
-    
-    //define events
-    this.addEvents('openintabclick');
+        // apply config
+        Ext.apply(this, Ext.apply(this.initialConfig, config));
+        
+        // call parent
+        Feedeo.ArticlePanel.superclass.initComponent.apply(this, arguments);
+        
+        //define events
+        this.addEvents('openintabclick');
     }, // eo function initComponent
     openInTabClick : function()
     {

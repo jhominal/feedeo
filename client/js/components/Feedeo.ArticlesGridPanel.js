@@ -44,7 +44,7 @@ Feedeo.ArticlesGridPanel = Ext.extend(Ext.grid.GridPanel, {
             */
             var html='';
             html+='<b>'+val+'</b>';
-            html+='<br/>'+sum+'...';
+            html+='<br/>'+sum.stripScripts().stripTags()+'...';
             return html;
         }
         var tagsRenderer = function(tagsArray)
@@ -120,6 +120,9 @@ Feedeo.ArticlesGridPanel = Ext.extend(Ext.grid.GridPanel, {
     },
     commitState : function()
     {
+        //vague souvenir (donc à tester) :
+        //les champs (dans record.data) complexes, ne sont pas gérés par ExtJS
+        //pas marqué dirty (c'est pour ca que read et important ne sont pas rangés dans data.state)
         var modifiedRecords = this.store.getModifiedRecords();
         //un peu bourrin de faire une requete pour chaque
         for(var i = 0;i!= modifiedRecords.length;i++)

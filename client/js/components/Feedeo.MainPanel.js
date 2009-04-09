@@ -18,7 +18,8 @@ Feedeo.MainPanel = Ext.extend(Ext.Panel, {
                 },
                 {
                     xtype:'articlepanel',
-                    region : 'center'
+                    region : 'center',
+                    plugins : Feedeo.plugins.onInit('articlepanel') //ici ou dans la classe ?
                 }
             ]
         }; // eo config object

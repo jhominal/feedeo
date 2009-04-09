@@ -1,3 +1,50 @@
+var navHandler = function(direction){
+    console.debug('navH : ',direction);
+};
+
+Feedeo.PNPanel = Ext.extend(Ext.Panel, {
+
+    layout:'card',
+    activeItem: 0, // make sure the active item is set on the container config!
+    bodyStyle: 'padding:15px',
+    defaults: {
+        // applied to each contained panel
+        border:false
+    },
+    // just an example of one possible navigation scheme, using buttons
+    bbar: [
+        {
+            id: 'move-prev',
+            text: 'Back',
+            handler: navHandler.createDelegate(this, [-1]),
+            disabled: true
+        },
+        '->', // greedy spacer so that the buttons are aligned to each side
+        {
+            id: 'move-next',
+            text: 'Next',
+            handler: navHandler.createDelegate(this, [1])
+        }
+    ],
+    // the panels (or "cards") within the layout
+    items: [{
+        id: 'card-0',
+        html: '<h1>Welcome to the Wizard!</h1><p>Step 1 of 3</p>'
+    },{
+        id: 'card-1',
+        html: '<p>Step 2 of 3</p>'
+    },{
+        id: 'card-2',
+        html: '<h1>Congratulations!</h1><p>Step 3 of 3 - Complete</p>'
+    }]
+});
+
+
+Ext.reg('prevnextpanel', Feedeo.PNPanel);
+
+
+/* le plugin ! */
+
 
 var fullScreenSites =
 {
@@ -35,74 +82,39 @@ var fullScreenSites =
                                 icon: Ext.APPLICATION_URL+'/img/icons/arrow_out.png',
                                 handler : function()
                                 {
-                                    
+                                    var pvpItems = [];
+                                    var store = Ext.ComponentMgr.get('articlesgridpanel').store;
+                                    if(store)
+                                    {
+                                        store.each(function(article)
+                                        {
+                                            pvpItems.push(
+                                                {
+                                                    html:'<object style="width:100%;height:100%;" data="'+article.data.url+'"></object>'
+                                                }
+                                            );
+                                            console.debug('added preview article : ',article);
+                                        });
+                                    }
                                     var win = new Ext.Window({
                                         title : 'Visualisation plein écran',
                                         width : 600,
                                         height : 400,
-                                        store : Ext.ComponentMgr.get('articlesgridpanel').store,
                                         maximized : true,
                                         modal : true,
-                                        layout : 'card',
-                                        defaultType : 'panel',
-                                        tbar : 
+                                        items :
                                         [
-                                            {
-                                                icon: Ext.APPLICATION_URL+'/img/icons/arrow_left.png',
-                                                cls: 'x-btn-icon',
-                                                handler : function()
-                                                {
-                                                    prevNextManager(-1);
-                                                },
-                                                tooltip: '<b>Précedent</b><br/>Revenir sur l\'article précédent'
-                                            },
-                                            {
-                                                icon: Ext.APPLICATION_URL+'/img/icons/arrow_right.png',
-                                                cls: 'x-btn-icon',
-                                                handler : function()
-                                                {
-                                                    prevNextManager(+1);
-                                                },
-                                                tooltip: '<b>Suivant</b><br/>Passer à l\'article suivant'
+                                            {   //Previous/NextPanel
+                                                //xtype : 'prevnextpanel',
+                                                xtype : 'tabpanel', //pour la démo
+                                                deferredRender : false,
+                                                defaultType : 'panel',
+                                                activeItem:0, //?
+                                                activeTab:0,  //?
+                                                items : pvpItems
                                             }
-                                        ],
-                                        initFSF : function()
-                                        {
-                                            this.store.each(function(article)
-                                            {
-                                                //win.addToolbar
-                                                win.add(
-                                                    {
-                                                        html:'<object style="width:100%;height:100%;" data="'+article.data.url+'"></object>'
-                                                    }
-                                                );
-                                                console.debug('added preview article : ',article);
-                                                win.activeItem = 0;
-                                            });
-                                        }
-                                    });//.show();
-                                    //un peu moche tout ça...
-                                    var prevNextManager = function(direction)
-                                    {
-                                        console.debug('prevNextManager called ',direction);
-                                        if(direction == -1)
-                                        {
-                                            if(win.activeItem > 0)
-                                            {
-                                                console.debug('-1 : ',win.activeItem);
-                                                win.layout.setActiveItem(win.activeItem--);
-                                            }
-                                        }
-                                        else if(direction == 1)
-                                        {
-                                            if(win.activeItem < win.items.length)
-                                            {
-                                                console.debug('+1 : ',win.activeItem);
-                                                win.layout.setActiveItem(win.activeItem++);
-                                            }
-                                        }
-                                    }
-                                    win.initFSF();
+                                        ]
+                                    });
                                     win.show();
                                 }
                             }
@@ -113,3 +125,26 @@ var fullScreenSites =
     }
 }
 Feedeo.plugins.register(fullScreenSites);
+
+/*tbar : 
+    [
+        {
+            icon: Ext.APPLICATION_URL+'/img/icons/arrow_left.png',
+            cls: 'x-btn-icon',
+            handler : function()
+            {
+                prevNextManager(-1);
+            },
+            tooltip: '<b>Précedent</b><br/>Revenir sur l\'article précédent'
+        },
+        {
+            icon: Ext.APPLICATION_URL+'/img/icons/arrow_right.png',
+            cls: 'x-btn-icon',
+            handler : function()
+            {
+                prevNextManager(+1);
+            },
+            tooltip: '<b>Suivant</b><br/>Passer à l\'article suivant'
+        }
+    ],
+                                   */
