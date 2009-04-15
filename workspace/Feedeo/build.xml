@@ -1,0 +1,75 @@
+<project name="Feedeo" default="deploy" basedir=".">
+  <description>A build file for the Feedeo server</description>
+
+  <property name="src" location="src"/>
+  <property name="build" location="build"/>
+  <property name="lib" location="lib"/>
+  <property name="web" location="WebContent"/>
+  <property name="dist" location="dist"/>
+  <property name="web-app" location="${dist}/web-app"/>
+
+  <!-- The tomcat path property should be changed to match your own tomcat installation path (or a symlink to it). -->
+  <property name="tomcat-path" location="/usr/local/tomcat"/>
+
+  <path id="feedeo.classpath">
+    <pathelement path="${classpath}"/>
+    <fileset dir="${lib}">
+      <include name="**/*.jar"/>
+    </fileset>
+    <pathelement path="${tomcat-path}/lib/servlet-api.jar"/>
+  </path>
+
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+  </target>
+
+  <target name="compile" depends="init"
+        description="compile the source " >
+    <!-- Compile the java code from ${src} into ${build} -->
+    <javac srcdir="${src}" destdir="${build}" classpathref="feedeo.classpath"/>
+    <!-- Copy non-java resources from ${src} into ${build} -->
+    <copy todir="${build}">
+      <fileset dir="${src}">
+        <include name="**/*"/>
+        <exclude name="**/*.java"/>
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="deploy" depends="compile"
+        description="deploy the application to a self-sufficient, uncompressed directory" >
+    <!-- Create the web application directory -->
+    <copy todir="${web-app}">
+      <fileset dir="${web}" includes="**/*"/>
+    </copy>
+    <copy todir="${web-app}/WEB-INF/lib">
+      <fileset dir="${lib}" includes="**/*"/>
+    </copy>
+    <copy todir="${web-app}/WEB-INF/classes">
+      <fileset dir="${build}" includes="**/*"/>
+    </copy>
+  </target>
+
+  <target name="war" depends="compile" 
+        description="generate a war file">
+    <!-- Create the war file -->
+    <war destfile="${dist}/Feedeo.war" webxml="${web}/WEB-INF/web.xml" manifest="${web}/META-INF/MANIFEST.MF">
+      <lib dir="${lib}" includes="**/*.jar"/>
+      <classes dir="${build}" includes="**/*"/>
+    </war>
+  </target>
+
+  <target name="clean"
+        description="clean up all files in dist and build" >
+    <!-- Delete the ${build}/org and ${dist}/web-app directory trees -->
+    <delete dir="${web-app}"/>
+    <delete>
+      <fileset dir="${dist}" includes="*"/>
+    </delete>
+    <delete dir="${build}/org"/>
+    <delete>
+      <fileset dir="${build}" includes="*"/>
+    </delete>
+  </target>
+</project>
