@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -187,6 +186,26 @@ public class Directory extends HibernateObject implements
 		setLastUpdate(attemptUpdate);
 	}
 
+	/**
+	 * @return The list of the children's maps.
+	 */
+	public List<Map<String, Object>> getChildrenMap() {
+		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+		for (Directory directory : getSubDirectories())
+			result.add(directory.toMap(false));
+		return result;
+	}
+
+	/**
+	 * @return a list of the maps of all the articles
+	 */
+	public List<Map<String, Object>> getAllArticlesMap() {
+		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+		for (Article article : getArticles())
+			result.add(getOwner().articleMap(article));
+		return result;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -199,28 +218,10 @@ public class Directory extends HibernateObject implements
 		result.put("text", this.getTitle());
 		result.put("leaf", false);
 		if (deep) {
-			List<Map<String, Object>> dirsMapList = new ArrayList<Map<String, Object>>();
-			Iterator<Directory> directorIter = this.getSubDirectories()
-					.iterator();
-			while (directorIter.hasNext()) {
-				Directory currDir = directorIter.next();
-				dirsMapList.add(currDir.toMap(false));
-			}
-			result.put("children", dirsMapList);
+			result.put("children", getChildrenMap());
 		}
 		if (deep) {
-			List<Map<String, Object>> articlesMapList = new ArrayList<Map<String, Object>>();
-			Iterator<Article> artIter = this.getArticles().iterator();
-			while (artIter.hasNext()) {
-				Article currArticle = artIter.next();
-				Map<String, Object> currMap = currArticle.toMap(false);
-				ArticleProperties currProperties = getOwner()
-						.getArticleProperties(currArticle);
-				currMap.put("read", currProperties.isAlreadyRead());
-				currMap.put("important", currProperties.isImportant());
-				articlesMapList.add(currMap);
-			}
-			result.put("articles", articlesMapList);
+			result.put("articles", getAllArticlesMap());
 		}
 		return result;
 	}

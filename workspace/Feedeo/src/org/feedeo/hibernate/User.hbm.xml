@@ -19,7 +19,7 @@
   	<map name="preferences">
       <key column="idUser"/>
       <map-key column="prefName" type="string"/>
-      <element column="prefValue" type="string"/>
+      <element column="prefValue" type="java.io.Serializable"/>
   	</map>
   	<map name="articleProperties" cascade="all">
   	  <key column="idUser"/>

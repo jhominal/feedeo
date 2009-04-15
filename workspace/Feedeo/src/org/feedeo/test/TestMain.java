@@ -1,6 +1,8 @@
 package org.feedeo.test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.feedeo.*;
 import org.feedeo.syndication.FeedReader;
@@ -13,6 +15,7 @@ import org.stringtree.json.JSONWriter;
  * @author Feedeo Team
  *
  */
+@SuppressWarnings({ "unused" })
 public class TestMain {
 
 	/**
@@ -20,28 +23,28 @@ public class TestMain {
 	 * 
 	 * @param args
 	 */
+	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
 //		testSyndication();
-//		testPersistence();
-//		
-//		User u1 = User.getUserByLogin("toto");
-//		
-//		u1.getSession().beginTransaction();
-//		
-//		Feed f2 = Feed.getFeedByUrl("http://fcargoet.evolix.net/feed/atom/");
-//		
-//		FeedReader.update(f2);
-//		
-//		User u2 = (User) u1.getSession().merge(u1);
-//		
-//		u2.getRootDirectory().subscribeFeed(f2);
-//		
-//		System.out.println(u2.getRootDirectory().toMap(true).get("articles"));
-//		
-//		u1.getSession().getTransaction().commit();
-		JSONWriter jsonWriter = new JSONWriter();
-		String test = jsonWriter.write(new ArrayList<Directory>());
-		System.out.print(test);
+		testPersistence();
+		
+		User u1 = User.getUserByLogin("toto");
+		
+		u1.getSession().beginTransaction();
+		
+		String pref1 = (String) u1.getPreferences().get("pref-string");
+		Boolean pref2 = (Boolean) u1.getPreferences().get("pref-bool");
+		Long pref3 = (Long) u1.getPreferences().get("pref-int");
+		HashMap<String, String> pref4 = (HashMap<String, String>) u1.getPreferences().get("pref-map");
+		
+		System.out.println(pref1);
+		System.out.println(pref2);
+		System.out.println(pref3);
+		System.out.println(pref4.get("1"));
+		System.out.println(pref4.get("2"));
+		
+		u1.getSession().getTransaction().commit();
+		
 	}
 	
 	/**
@@ -57,7 +60,15 @@ public class TestMain {
 		u1.setFirstName("toto");
 		u1.setLastName("lateteatoto");
 		
-		u1.getPreferences().put("pref1","val1");
+		u1.getPreferences().put("pref-string","valString");
+		u1.getPreferences().put("pref-string-bool","false");
+		u1.getPreferences().put("pref-bool", false);
+		u1.getPreferences().put("pref-string-int","15");
+		u1.getPreferences().put("pref-int", 15L);
+		HashMap<String, String> configObject = new HashMap<String,String>();
+		configObject.put("1", "val1");
+		configObject.put("2", "val2");
+		u1.getPreferences().put("pref-map", configObject);
 		
 		u1.saveOrUpdate();
 		

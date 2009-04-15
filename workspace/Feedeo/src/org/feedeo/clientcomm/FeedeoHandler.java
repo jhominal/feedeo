@@ -75,17 +75,14 @@ public class FeedeoHandler {
 						}
 						if (targetDirectory != null) {
 							if ("getChildren".equals(action)) {
-								response.put("children", (targetDirectory
-										.toMap(true)).get("children"));
+								response.put("children", targetDirectory.getChildrenMap());
 								response.put("success", true);
 							} else if ("getArticles".equals(action)) {
 								targetDirectory.updateArticles();
-								response.put("articles", (targetDirectory
-										.toMap(true)).get("articles"));
+								response.put("articles", targetDirectory.getAllArticlesMap());
 								response.put("success", true);
 							} else if ("addFeed".equals(action)) {
-								String feedUrl = (String) request
-										.get("feedUrl");
+								String feedUrl = (String) request.get("feedUrl");
 								Feed targetFeed = Feed.getFeedByUrl(feedUrl);
 								FeedReader.update(targetFeed);
 								targetDirectory.subscribeFeed(targetFeed);

@@ -1,5 +1,6 @@
 package org.feedeo;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,7 +25,7 @@ public class User extends HibernateObject {
 
 	private Directory rootDirectory;
 
-	private Map<String, String> preferences;
+	private Map<String, Serializable> preferences;
 	private Map<Article, ArticleProperties> articleProperties;
 
 	/**
@@ -34,7 +35,7 @@ public class User extends HibernateObject {
 		super();
 		rootDirectory = new Directory();
 		rootDirectory.setOwner(this);
-		preferences = new HashMap<String, String>();
+		preferences = new HashMap<String, Serializable>();
 		articleProperties = new HashMap<Article, ArticleProperties>();
 	}
 
@@ -131,7 +132,7 @@ public class User extends HibernateObject {
 	/**
 	 * @return the preferences
 	 */
-	public Map<String, String> getPreferences() {
+	public Map<String, Serializable> getPreferences() {
 		return preferences;
 	}
 
@@ -139,7 +140,7 @@ public class User extends HibernateObject {
 	 * @param preferences
 	 *            the preferences to set
 	 */
-	public void setPreferences(Map<String, String> preferences) {
+	public void setPreferences(Map<String, Serializable> preferences) {
 		this.preferences = preferences;
 	}
 
@@ -173,6 +174,20 @@ public class User extends HibernateObject {
 		return articleProperties.get(article);
 	}
 
+	/**
+	 * @param article the article whose map is desired
+	 * @return an article's map with its parameters.
+	 */
+	public Map<String, Object> articleMap(Article article) {
+		Map<String, Object> result = article.toMap(true);
+		ArticleProperties currProperties = getArticleProperties(article);
+		result.put("read", currProperties.isAlreadyRead());
+		result.put("important", currProperties.isImportant());
+		return result;
+	}
+	
+
+	
 	/**
 	 * Gets a User by his login.
 	 * 
