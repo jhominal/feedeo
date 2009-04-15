@@ -99,7 +99,7 @@ public class FeedReader {
 				targetFeed.addArticle(potentialEntry);
 				result = true;
 			} else {
-				//TODO Traiter le cas où le contenu a été mis à jour.
+				//TODO Traiter le cas oÃ¹ le contenu a Ã©tÃ© mis Ã  jour.
 			}
 		}
 
