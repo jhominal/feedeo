@@ -11,6 +11,7 @@ import java.util.Set;
 
 import org.feedeo.clientcomm.JsonObjectSerializable;
 import org.feedeo.hibernate.HibernateObject;
+import org.feedeo.hibernate.ObjSession;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 
@@ -224,6 +225,14 @@ public class Directory extends HibernateObject implements
 			result.put("articles", getAllArticlesMap());
 		}
 		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.feedeo.hibernate.HibernateObject#getReference()
+	 */
+	@Override
+	protected ObjSession getReference() {
+		return owner;
 	}
 
 }

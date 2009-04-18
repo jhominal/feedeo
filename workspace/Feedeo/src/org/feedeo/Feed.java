@@ -5,6 +5,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.feedeo.hibernate.HibernateObject;
+import org.feedeo.hibernate.ObjSession;
+import org.feedeo.hibernate.ObjSessionGetter;
+import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
 /**
@@ -13,7 +16,7 @@ import org.hibernate.criterion.Restrictions;
  * @author Feedeo Team
  * 
  */
-public class Feed extends HibernateObject {
+public class Feed extends HibernateObject implements ObjSession {
 	private String title;
 	private String url;
 	private String link;
@@ -200,4 +203,22 @@ public class Feed extends HibernateObject {
 			return potentialFeed;
 		}
 	}
+
+	/* (non-Javadoc)
+	 * @see org.feedeo.hibernate.HibernateObject#getReference()
+	 */
+	@Override
+	protected ObjSession getReference() {
+		return this;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.feedeo.hibernate.ObjSession#getObjectSession()
+	 */
+	@Override
+	public Session getObjectSession() {
+		return ObjSessionGetter.get(this);
+	}
+
+
 }

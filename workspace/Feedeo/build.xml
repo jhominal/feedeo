@@ -64,10 +64,11 @@
         description="clean up all files in dist and build" >
     <!-- Delete the ${build}/org and ${dist}/web-app directory trees -->
     <delete dir="${web-app}"/>
+    <delete dir="${build}/org"/>
+  	<!-- Delete the contents of ${dist} and of ${build} -->
     <delete>
       <fileset dir="${dist}" includes="*"/>
     </delete>
-    <delete dir="${build}/org"/>
     <delete>
       <fileset dir="${build}" includes="*"/>
     </delete>

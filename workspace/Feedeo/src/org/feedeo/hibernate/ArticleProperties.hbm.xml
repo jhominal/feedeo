@@ -9,5 +9,6 @@
   	</id>
   	<property name="alreadyRead"/>
   	<property name="important"/>
+  	<many-to-one name="owner" column="idUser"/>
   </class>
 </hibernate-mapping>
