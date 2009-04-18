@@ -1,0 +1,120 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Feedeo</title>
+<style type="text/css">
+
+/* style for loading mask */
+    #loading-mask{
+        position:absolute;
+        left:0;
+        top:0;
+        width:100%;
+        height:100%;
+        z-index:20000;
+        background-color:white;
+    }
+    #loading{
+        position:absolute;
+        left:45%;
+        top:40%;
+        padding:2px;
+        z-index:20001;
+        height:auto;
+    }
+    #loading a {
+        color:#225588;
+    }
+    #loading .loading-indicator{
+        background:white;
+        color:#444;
+        font:bold 13px tahoma,arial,helvetica;
+        padding:10px;
+        margin:0;
+        height:auto;
+    }
+    #loading-msg {
+        font: normal 10px arial,tahoma,sans-serif;
+    }
+    
+    </style>
+</head>
+<body>
+<div id="loading-mask"></div>
+<div id="loading">
+    <div class="loading-indicator">
+	<img src="../img/extanim32.gif" width="32" height="32" style="margin-right:8px;float:left;vertical-align:top;"/>
+        Feedeo - Lecteur de flux RSS<br />
+        <span id="loading-msg">Loading styles and images...</span>
+    </div>
+</div>    
+        <!-- ExtJS CSS -->
+    <link rel="stylesheet" type="text/css" href="http://extjs.cachefly.net/ext-2.2/resources/css/ext-all.css">
+        <!-- Feedeo CSS -->
+    <link rel="stylesheet" type="text/css" href="../css/feedeo.css">
+        <!-- ExtJS lib -->
+    <script type="text/javascript">document.getElementById('loading-msg').innerHTML = 'Loading ExtJS...';</script>
+    <script type="text/javascript" src="http://extjs.cachefly.net/ext-2.2/adapter/ext/ext-base.js"></script>
+    <script type="text/javascript" src="http://extjs.cachefly.net/ext-2.2/ext-all-debug.js"></script>
+    
+    <!-- Ext, Feedeo & Firebug config -->
+    <script type="text/javascript">
+        //relative path to application files
+        Ext.BLANK_IMAGE_URL = '../js/ext-2.2/resources/images/default/s.gif';
+        Ext.APPLICATION_URL = '..';
+        Ext.ns('Feedeo');
+        Feedeo.SERVER_URL = '/feedeo-test/';
+        //si pas de firebug, faire pointer les console.* vers des fonctions vides
+        // pour ne pas faire d'erreurs...
+        if (!window.console || !console.firebug)
+        {
+            var names = ["log", "debug", "info", "warn", "error", "assert", "dir", "dirxml",
+            "group", "groupEnd", "time", "timeEnd", "count", "trace", "profile", "profileEnd"];
+        
+            window.console = {};
+            for (var i = 0; i < names.length; ++i)
+                window.console[names[i]] = function() {};
+        }
+    </script>
+    
+    <script type="text/javascript">document.getElementById('loading-msg').innerHTML = 'Loading Feedeo Plugins...';</script>
+    
+    <!-- Gestionnaire de plugins et plugins -->
+    <script type="text/javascript" src="../js/components/Feedeo.PluginsManager.js"></script>  
+    <script type="text/javascript" src="../js/plugins/PressReview.js"></script>
+    <script type="text/javascript" src="../js/plugins/FullScreenSites.js"></script>
+	<script type="text/javascript" src="../js/plugins/Highlight.js"></script>
+    
+    <script type="text/javascript">document.getElementById('loading-msg').innerHTML = 'Loading Feedeo Components...';</script>
+   
+    <!-- Classes utilitaires -->
+    <script type="text/javascript" src="../js/utils/Feedeo.CachedMultiJsonStore.js"></script>
+    <script type="text/javascript" src="../js/utils/Feedeo.request.js"></script>
+    <script type="text/javascript" src="../js/utils/Feedeo.TreeLoader.js"></script>
+    <script type="text/javascript" src="../js/utils/Proto.js"></script>
+	
+    <!-- Composants graphiques -->
+    <script type="text/javascript" src="../js/components/Feedeo.ArticlesGridPanel.js"></script>
+    <script type="text/javascript" src="../js/components/Feedeo.ArticlePanel.js"></script>
+    <script type="text/javascript" src="../js/components/Feedeo.MainPanel.js"></script>
+    <script type="text/javascript" src="../js/components/Feedeo.MainView.js"></script>
+    <script type="text/javascript" src="../js/components/Feedeo.FeedsTreePanel.js"></script>
+    <script type="text/javascript" src="../js/components/Feedeo.ArchivesTreePanel.js"></script>
+    <script type="text/javascript" src="../js/components/Feedeo.FeedsAndArchivesPanel.js"></script>
+    <script type="text/javascript" src="../js/components/Feedeo.MainToolbar.js"></script>
+    
+    <script type="text/javascript">document.getElementById('loading-msg').innerHTML = 'Loading Feedeo Core Application...';</script>
+   
+    <!-- Feedeo -->
+    <script type="text/javascript" src="../js/FeedeoApplication.js"></script>
+    <script type="text/javascript">
+    setTimeout(function(){
+        Ext.get('loading').remove();
+        Ext.fly('loading-mask').fadeOut({remove:true,duration:2});//hide mask
+    }, 250);
+
+
+    </script>
+   
+</body>
+</html>
