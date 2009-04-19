@@ -45,20 +45,26 @@ public abstract class HibernateObject {
 	}
 
 	/**
-	 * gets the session appropriate for the given object for now it refers to a
-	 * singleton, but it should not stay this way.
+	 * @return an Object that will be the reference from which Hibernate
+	 *         Sessions concerning this object will be obtained.
+	 */
+	abstract protected ObjSession getReference();
+
+	/**
+	 * gets the session appropriate for the given object; it is the object
+	 * session of the "ObjSession" object returned by the "getReference"
+	 * function.
 	 * 
-	 * Probably, it would be wise to have a mechanism where every user and every
-	 * feed has his/her/its own session
-	 * 
-	 * @return the session associated to a User or to a Feed.
+	 * @return the session associated to the ObjSession reference (usually a
+	 *         Feed or a User).
 	 */
 	public Session getSession() {
-		return InitSessionFactory.getInstance().getCurrentSession();
+		return getReference().getObjectSession();
 	}
 
 	/**
-	 * Makes a detached object transient. Should not be used with persistent instances.
+	 * Makes a detached object transient. Should not be used with persistent
+	 * instances.
 	 */
 	public void delete() {
 		// TODO to be redone for multi-session use.
@@ -83,7 +89,8 @@ public abstract class HibernateObject {
 	}
 
 	/**
-	 * Makes a detached object transient. Should not be used with persistent instances.
+	 * Makes a detached object transient. Should not be used with persistent
+	 * instances.
 	 */
 	public void persist() {
 		// TODO to be redone for multi-session use.
@@ -107,7 +114,6 @@ public abstract class HibernateObject {
 		}
 	}
 
-	
 	/**
 	 * 
 	 */
