@@ -34,4 +34,26 @@
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.wst.jsdt.core.jsNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>lib</name>
+			<type>2</type>
+			<locationURI>FeedeoServer/lib</locationURI>
+		</link>
+		<link>
+			<name>lib-ref</name>
+			<type>2</type>
+			<locationURI>FeedeoServer/lib-ref</locationURI>
+		</link>
+		<link>
+			<name>src</name>
+			<type>2</type>
+			<locationURI>FeedeoServer/src</locationURI>
+		</link>
+		<link>
+			<name>web</name>
+			<type>2</type>
+			<locationURI>FeedeoServer/web</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>
