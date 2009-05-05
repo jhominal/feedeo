@@ -12,6 +12,7 @@
 		<url-pattern>/FeedeoServlet</url-pattern>
 	</servlet-mapping>
 	<welcome-file-list>
+		<welcome-file>/TestsComposants/Application.html</welcome-file>
 		<welcome-file>FeedeoServlet</welcome-file>
 	</welcome-file-list>
 </web-app>
