@@ -5,11 +5,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.Iterator;
 import java.util.List;
-
-import org.feedeo.Article;
-import org.feedeo.Feed;
 
 import com.sun.syndication.feed.synd.SyndContent;
 import com.sun.syndication.feed.synd.SyndEntry;
@@ -17,6 +13,9 @@ import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.SyndFeedInput;
 import com.sun.syndication.io.XmlReader;
+
+import org.feedeo.Article;
+import org.feedeo.Feed;
 
 /**
  * We felt that this class would be needed in order to build Feeds while still
@@ -33,7 +32,7 @@ public class FeedReader {
 	 * the last ten feeds).
 	 * 
 	 * In reality, this method creates a new Feed with the given url as a property
-	 * and calls this class's update method on it.
+	 * and calls this class's static update method on it.
 	 * 
 	 * @param url
 	 *            the XML feed's url.
@@ -86,23 +85,20 @@ public class FeedReader {
 		targetFeed.setPubDate(syndFeed.getPublishedDate());
 		targetFeed.setDescription(syndFeed.getDescription());
 
-		Iterator<SyndEntry> entryIter = syndFeed.getEntries().iterator();
+		List<SyndEntry> entries = (List<SyndEntry>) syndFeed.getEntries();
 
-		while (entryIter.hasNext()) {
-			SyndEntry currEntry = entryIter.next();
-			Article potentialEntry = readArticle(currEntry);
-			if (!targetFeed.getArticles().contains(potentialEntry)) {
-				if (!potentialEntry.isReliablePubDate()) {
-					Calendar calendar = GregorianCalendar.getInstance();
-					potentialEntry.setPubDate(calendar.getTime());
-				}
-				targetFeed.addArticle(potentialEntry);
+		for (SyndEntry entry : entries) {
+			Article entryArticle = readArticle(entry);
+			if (!targetFeed.getArticles().contains(entryArticle)) {
+				Calendar calendar = GregorianCalendar.getInstance();
+				entryArticle.setDownloadDate(calendar.getTime());
+				targetFeed.addArticle(entryArticle);
 				result = true;
 			} else {
-				//TODO Traiter le cas où le contenu a été mis à jour.
+				//TODO Cas où le contenu a été mis à jour
 			}
 		}
-
+		
 		return result;
 	}
 
@@ -112,7 +108,6 @@ public class FeedReader {
 
 		result.setTitle(syndEntry.getTitle());
 		result.setLink(syndEntry.getLink());
-		result.setReliablePubDate(syndEntry.getPublishedDate() != null);
 		result.setPubDate(syndEntry.getPublishedDate());
 		result.setAuthor(syndEntry.getAuthor());
 

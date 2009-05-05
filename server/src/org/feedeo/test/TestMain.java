@@ -70,7 +70,7 @@ public class TestMain {
 		configObject.put("2", "val2");
 		u1.getPreferences().put("pref-map", configObject);
 		
-		u1.saveOrUpdate();
+		u1.getSession().saveOrUpdate(u1);
 		
 //		u1.getSession().beginTransaction();
 //		
@@ -92,10 +92,10 @@ public class TestMain {
 	public static void testSyndication() {
 		// Flux RSS 0.92
 		Feed f1 = FeedReader.checkout("http://fcargoet.evolix.net/feed/atom/");
-		f1.saveOrUpdate();
+		f1.getSession().saveOrUpdate(f1);
 		// Flux RSS 2.0
 		Feed f2 = FeedReader.checkout("http://feedproxy.google.com/TechCrunch");
-		f2.saveOrUpdate();
+		f2.getSession().saveOrUpdate(f2);
 		// Flux Atom 1.0
 //		Feed f3 = FeedReader.checkout("http://www.joel.lopes-da-silva.com/index.php?format=feed&type=atom");
 //		f3.saveOrUpdate();

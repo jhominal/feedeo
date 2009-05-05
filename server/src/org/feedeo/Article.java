@@ -17,8 +17,8 @@ public class Article extends HibernateObject implements JsonObjectSerializable {
 
 	private String title;
 	private String link;
-	private boolean reliablePubDate;
 	private Date pubDate;
+	private Date downloadDate;
 	private Feed sourceFeed;
 	private String author;
 
@@ -65,27 +65,6 @@ public class Article extends HibernateObject implements JsonObjectSerializable {
 	}
 
 	/**
-	 * This boolean tells whether the pubDate for this article was found in the
-	 * feed, or if the pubDate has been filled by Feedeo.
-	 * 
-	 * Should the latter be true, the pubDate property should not be used for
-	 * comparisons.
-	 * 
-	 * @return the reliablePubDate
-	 */
-	public boolean isReliablePubDate() {
-		return reliablePubDate;
-	}
-
-	/**
-	 * @param reliablePubDate
-	 *            the reliablePubDate to set
-	 */
-	public void setReliablePubDate(boolean reliablePubDate) {
-		this.reliablePubDate = reliablePubDate;
-	}
-
-	/**
 	 * @return the pubDate
 	 */
 	public Date getPubDate() {
@@ -98,6 +77,21 @@ public class Article extends HibernateObject implements JsonObjectSerializable {
 	 */
 	public void setPubDate(Date pubDate) {
 		this.pubDate = pubDate;
+	}
+
+	/**
+	 * @return the downloadDate
+	 */
+	public Date getDownloadDate() {
+		return downloadDate;
+	}
+
+	/**
+	 * @param downloadDate
+	 *            the downloadDate to set
+	 */
+	public void setDownloadDate(Date downloadDate) {
+		this.downloadDate = downloadDate;
 	}
 
 	/**
@@ -160,6 +154,17 @@ public class Article extends HibernateObject implements JsonObjectSerializable {
 		this.content = content;
 	}
 
+	/**
+	 * @return the date displayed by the client.
+	 */
+	public Date getDisplayDate() {
+		if (getPubDate() == null) {
+			return getDownloadDate();
+		} else {
+			return getPubDate();
+		}
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -171,8 +176,7 @@ public class Article extends HibernateObject implements JsonObjectSerializable {
 		int result = 1;
 		result = prime * result + ((author == null) ? 0 : author.hashCode());
 		result = prime * result + ((link == null) ? 0 : link.hashCode());
-		if (isReliablePubDate())
-			result = prime * result
+		result = prime * result
 					+ ((pubDate == null) ? 0 : pubDate.hashCode());
 		result = prime * result
 				+ ((sourceFeed == null) ? 0 : sourceFeed.hashCode());
@@ -207,15 +211,11 @@ public class Article extends HibernateObject implements JsonObjectSerializable {
 		} else if (!link.equals(other.link))
 			return false;
 
-		// Use the pubDate in the hashCode if and only if both entries have
-		// reliable publication dates.
-		if (isReliablePubDate() && other.isReliablePubDate()) {
-			if (pubDate == null) {
-				if (other.pubDate != null)
-					return false;
-			} else if (!pubDate.equals(other.pubDate))
+		if (pubDate == null) {
+			if (other.pubDate != null)
 				return false;
-		}
+		} else if (!pubDate.equals(other.pubDate))
+			return false;
 
 		if (sourceFeed == null) {
 			if (other.sourceFeed != null)
@@ -247,7 +247,7 @@ public class Article extends HibernateObject implements JsonObjectSerializable {
 		result.put("content", this.getContent());
 		// Nécessaire de passer du timestamp java en millisecondes à un
 		// timestamp en secondes pour extJS.
-		result.put("date", (this.getPubDate().getTime() / 1000L));
+		result.put("date", (this.getDisplayDate().getTime() / 1000L));
 		result.put("url", this.getLink());
 		// ArrayList<String> categories = new ArrayList<String>();
 		// add categories
@@ -257,7 +257,9 @@ public class Article extends HibernateObject implements JsonObjectSerializable {
 		return result;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.feedeo.hibernate.HibernateObject#getReference()
 	 */
 	@Override

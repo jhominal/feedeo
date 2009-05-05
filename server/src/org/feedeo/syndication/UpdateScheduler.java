@@ -6,18 +6,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 
+import org.hibernate.Session;
+
 import org.feedeo.Feed;
 import org.feedeo.hibernate.ObjSession;
 import org.feedeo.hibernate.ObjSessionGetter;
-import org.hibernate.Session;
 
 /**
- * Provides a class to schedule updates, with most interactions being a
- * trace over a number of the standard methods of the java.util.Map interface.
+ * Provides a class to schedule updates, with most interactions being a trace
+ * over a number of the standard methods of the java.util.Map interface.
  * 
- * The implementation for this Scheduler combines:
- * -A Map<Feed,UpdateTask> to keep a reference to all currently run tasks
- * -A Timer that effectively runs the 
+ * The implementation for this Scheduler combines: -A Map<Feed,UpdateTask> to
+ * keep a reference to all currently run tasks -A Timer that effectively runs
+ * the
  * 
  * @author Feedeo Team
  * 
@@ -25,6 +26,11 @@ import org.hibernate.Session;
 public final class UpdateScheduler implements ObjSession {
 
 	private static UpdateScheduler instance;
+	
+	static {
+		getInstance();
+	}
+
 	/**
 	 * Gets the active UpdateScheduler instance.
 	 * 
@@ -45,7 +51,7 @@ public final class UpdateScheduler implements ObjSession {
 	private boolean initialized;
 
 	private UpdateScheduler() {
-		timer = new Timer("Feedeod",true);
+		timer = new Timer("Feedeod", true);
 		taskMap = Collections.synchronizedMap(new HashMap<Feed, UpdateTask>());
 		initialized = false;
 	}
@@ -60,9 +66,9 @@ public final class UpdateScheduler implements ObjSession {
 	}
 
 	/**
-	 * This functions adds a Feed to the Scheduler.
-	 * However, if the Feed is already in the Scheduler, then it will not
-	 * be replaced by a new generated UpdateTask.
+	 * This functions adds a Feed to the Scheduler. However, if the Feed is
+	 * already in the Scheduler, then it will not be replaced by a new generated
+	 * UpdateTask.
 	 * 
 	 * @param feed
 	 * @return true if the adding was successful, false otherwise
@@ -77,11 +83,10 @@ public final class UpdateScheduler implements ObjSession {
 	}
 
 	/**
-	 * This functions stops the UpdateScheduler instance by:
-	 * -cancelling all remaining tasks (timer.cancel())
-	 * -clearing the underlying Map (map.clear())
-	 * -marking that an initialization is necessary the next time that
-	 * getInstance() will be called.
+	 * This functions stops the UpdateScheduler instance by: -cancelling all
+	 * remaining tasks (timer.cancel()) -clearing the underlying Map
+	 * (map.clear()) -marking that an initialization is necessary the next time
+	 * that getInstance() will be called.
 	 */
 	public void stop() {
 		initialized = false;
@@ -96,7 +101,7 @@ public final class UpdateScheduler implements ObjSession {
 	public boolean contains(Feed feed) {
 		return containsKey(feed);
 	}
-	
+
 	/**
 	 * @see java.util.Map#containsKey(Object)
 	 * 
@@ -126,7 +131,7 @@ public final class UpdateScheduler implements ObjSession {
 	public UpdateTask get(Object key) {
 		return taskMap.get(key);
 	}
-	
+
 	/**
 	 * @return true if the Scheduler has been initialized
 	 */
@@ -174,8 +179,8 @@ public final class UpdateScheduler implements ObjSession {
 	/**
 	 * @see java.util.Map#size()
 	 * 
-	 * @return the size of the underlying HashMap, which is also the number
-	 * of scheduled feeds.
+	 * @return the size of the underlying HashMap, which is also the number of
+	 *         scheduled feeds.
 	 */
 	public int size() {
 		return taskMap.size();

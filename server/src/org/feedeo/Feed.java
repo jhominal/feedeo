@@ -1,5 +1,6 @@
 package org.feedeo;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -31,8 +32,8 @@ public class Feed extends HibernateObject implements ObjSession {
 	 */
 	public Feed() {
 		super();
-		articles = new HashSet<Article>();
-		folders = new HashSet<Directory>();
+		articles = Collections.synchronizedSet(new HashSet<Article>());
+		folders = Collections.synchronizedSet(new HashSet<Directory>());
 	}
 
 	/**
@@ -111,7 +112,7 @@ public class Feed extends HibernateObject implements ObjSession {
 	/**
 	 * @return all articles associated to this feed.
 	 */
-	public Set<Article> getArticles() {
+	public final Set<Article> getArticles() {
 		return articles;
 	}
 
@@ -219,6 +220,5 @@ public class Feed extends HibernateObject implements ObjSession {
 	public Session getObjectSession() {
 		return ObjSessionGetter.get(this);
 	}
-
 
 }

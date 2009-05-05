@@ -10,6 +10,7 @@
   	<property name="title"/>
   	<property name="link"/>
   	<property name="pubDate"/>
+  	<property name="downloadDate"/>
   	<many-to-one name="sourceFeed" column="idFeed" class="Feed" not-null="true" lazy="proxy"/>
   	<property name="author"/>
 

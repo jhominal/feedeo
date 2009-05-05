@@ -178,7 +178,7 @@ public class Directory extends HibernateObject implements
 		if (!getFeeds().isEmpty()) {
 			Criteria criteria = getSession().createCriteria(Article.class,
 					"article");
-			criteria.add(Restrictions.between("pubDate", getLastUpdate(),
+			criteria.add(Restrictions.between("downloadDate", getLastUpdate(),
 					attemptUpdate));
 			criteria.add(Restrictions.in("sourceFeed", getFeeds()));
 			List<Article> resultList = criteria.list();
@@ -234,5 +234,4 @@ public class Directory extends HibernateObject implements
 	protected ObjSession getReference() {
 		return owner;
 	}
-
 }

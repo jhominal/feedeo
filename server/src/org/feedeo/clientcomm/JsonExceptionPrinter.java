@@ -1,6 +1,8 @@
 package org.feedeo.clientcomm;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -47,12 +49,12 @@ final class JsonExceptionPrinter implements JsonObjectSerializable {
 			result.put("rollback", transactionRollback);
 		}
 		if (deep) {
-			Map<Integer, String> stackTraceMap = new HashMap<Integer, String>();
+			List<String> stackTraceList = new ArrayList<String>();
 			StackTraceElement[] stackTraceArray = exception.getStackTrace();
 			for (int i = 0; i < stackTraceArray.length; i++) {
-				stackTraceMap.put(i, stackTraceArray[i].toString());
+				stackTraceList.add(i+": "+stackTraceArray[i].toString());
 			}
-			result.put("stacktrace", stackTraceMap);
+			result.put("stacktrace", stackTraceList);
 		}
 		return result;
 	}

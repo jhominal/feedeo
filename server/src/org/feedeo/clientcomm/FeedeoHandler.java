@@ -215,7 +215,7 @@ public class FeedeoHandler {
 			possibleUser.setFirstName((String) newAccountReq.get("name"));
 			possibleUser.setLastName((String) newAccountReq.get("lastname"));
 			possibleUser.setEmail((String) newAccountReq.get("mail"));
-			possibleUser.persist();
+			possibleUser.getSession().saveOrUpdate(possibleUser);
 			return login;
 		} else {
 			return null;
