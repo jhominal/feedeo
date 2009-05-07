@@ -9,7 +9,17 @@
   <property name="build" location="${server}/build"/>
   <property name="lib" location="${server}/lib"/>
   <property name="web" location="${server}/web"/>
-  
+
+  <path id="feedeo.classpath">
+    <pathelement path="${classpath}"/>
+    <fileset dir="${lib}">
+      <include name="**/*.jar"/>
+    </fileset>
+    <pathelement path="${tomcat-path}/lib/servlet-api.jar"/>
+  </path>
+
+
+  <property name="client-build" location="${dist}/client-build"/>
   <property name="web-app" location="${dist}/web-app"/>
 
   <!-- First attempts to load properties from config/user.properties; then will load config/default.properties -->
@@ -21,24 +31,25 @@
  
   <!-- This property is a message returned when a property is not present. -->
   <property name="nodef.message" value="must be defined, in the config/user.properties (use default.properties as a model)"/>
-  <!-- The tomcat path property should be changed to match your own tomcat installation path (or a symlink to it). -->
-  <fail message="tomcat-path ${nodef.message}" unless="tomcat-path"/>
-
-  <path id="feedeo.classpath">
-    <pathelement path="${classpath}"/>
-    <fileset dir="${lib}">
-      <include name="**/*.jar"/>
-    </fileset>
-    <pathelement path="${tomcat-path}/lib/servlet-api.jar"/>
-  </path>
-
   <target name="init">
     <!-- Create the time stamp -->
     <tstamp/>
   </target>
 
-  <target name="compile" depends="init"
-        description="compile the source " >
+  <target name="build" depends="init, build-client, build-server"
+        description="compile the source by calling the two other ant build files" >
+  </target>
+
+  <target name="build-client"> 
+    <!-- TODO: Vrai build du client (concaténation, suppression des trucs de debug/test). -->
+    <copy todir="${client-build}">
+      <fileset dir="${client}" includes="**/*"/>
+    </copy>
+  </target>
+
+  <target name="build-server"> 
+    <!-- The tomcat path property should be changed to match your own tomcat installation path (or a symlink to it). -->
+    <fail message="tomcat-path ${nodef.message}" unless="tomcat-path"/>
     <!-- Compile the java code from ${src} into ${build} -->
     <javac srcdir="${src}" destdir="${build}" classpathref="feedeo.classpath"/>
     <!-- Copy non-java resources from ${src} into ${build} -->
@@ -48,11 +59,10 @@
         <exclude name="**/*.java"/>
       </fileset>
     </copy>
-    <!-- Replace the data in hibernate.cfg.xml (the "feedeo") with the appropriate context -->
-    
+    <!-- TODO: Replace the data in hibernate.cfg.xml (the "feedeo") with the appropriate context -->
   </target>
 
-  <target name="deploy" depends="compile"
+  <target name="deploy" depends="build"
         description="deploy the application to ${web-dir} as a self-sufficient, uncompressed application" >
     <!-- Create the web application directory -->
     <copy todir="${web-app}">
@@ -65,17 +75,17 @@
       <fileset dir="${build}" includes="**/*"/>
     </copy>
     <copy todir="${web-app}/WEB-INF">
-      <fileset dir="${client}" includes="**/*"/>
+      <fileset dir="${client-build}" includes="**/*"/>
     </copy>
   </target>
 
-  <target name="war" depends="compile" 
+  <target name="war" depends="build" 
         description="generate a war file for the application">
     <!-- Create the war file -->
     <war destfile="${dist}/Feedeo.war" webxml="${web}/WEB-INF/web.xml" manifest="${web}/META-INF/MANIFEST.MF">
       <lib dir="${lib}" includes="**/*.jar"/>
       <classes dir="${build}" includes="**/*"/>
-      <webinf dir="${client}" includes="**/*"/>
+      <webinf dir="${client-build}" includes="**/*"/>
     </war>
   </target>
 
@@ -89,6 +99,9 @@
     <delete dir="${build}/org"/>
     <delete>
       <fileset dir="${build}" includes="*"/>
+    </delete>
+    <delete>
+      <fileset dir="${client-build}" includes="**/*"/>
     </delete>
   </target>
 </project>
