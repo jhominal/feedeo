@@ -47,3 +47,46 @@ Feedeo.request = function(options)
     var connection = new Ext.data.Connection();
     connection.request(options);
 }
+
+/* To copy object in depth
+   Usage :
+   var a = Feedeo.clone(b);
+*/
+
+Feedeo.clone = function()
+{
+    var clone;
+    if(this instanceof Array)
+    {
+        clone = [];
+        for(var i=0;i!= this.length;i++)
+        {
+            if(typeof this[i] == 'object')
+            {
+                clone.push(this[i].clone());
+            }
+            else
+            {
+                clone.push(this[i]);
+            }
+        }
+        
+    }
+    else //object
+    {
+        clone = {};
+        for(var i in this)
+        {
+            if(typeof this[i] == 'object')
+            {
+                clone[i] = this[i].clone();
+            }
+            else
+            {
+                clone[i] = this[i];
+            }
+        }
+    }
+    return clone;
+};
+
