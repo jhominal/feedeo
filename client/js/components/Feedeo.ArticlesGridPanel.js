@@ -184,20 +184,36 @@ Feedeo.ArticlesGridPanel = Ext.extend(Ext.grid.GridPanel, {
                         }
                     }
                 }
-            })
+            });
+	    this.contextMenu.on('hide', this.onRowContextHide, this);
         }
         //on empeche la propagation de l'event
         event.stopEvent();
         //node.select();
         var article = grid.store.getAt(rowIndex);//find the record
+	
+	//style on contextArticle
+	if(this.contextRow){
+		Ext.fly(this.contextRow).removeClass('x-article-ctx');
+		this.contextRow=null;
+	}
+	this.contextRow = this.view.getRow(rowIndex);
+	Ext.fly(this.contextRow).addClass('x-article-ctx');
+
         //attach the article and the grid to the menu
-        var ctxMenu = grid.contextMenu;
-        ctxMenu.contextArticle = article;
-        ctxMenu.contextGrid = grid;
+        this.contextMenu.contextArticle = article;
+        this.contextMenu.contextGrid = grid;
         
         //display the menu
-        ctxMenu.showAt(event.getXY());
+        this.contextMenu.showAt(event.getXY());
         console.debug('context article : ',article);
+    },
+    onRowContextHide : function()
+    {
+	if(this.contextRow){
+	    Ext.fly(this.contextRow).removeClass('x-article-ctx');
+	    this.contextRow = null;
+	}
     }
 });
  
