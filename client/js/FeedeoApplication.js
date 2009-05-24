@@ -387,7 +387,7 @@ Feedeo.init = function(options)
             }
         ]
     });
-    vp.items.itemAt(1).on( //events on treepanels
+    vp.items.itemAt(1).items.itemAt(0).on( //events on treepanels
         {
             'folderselect' : function(folder_id)
             {

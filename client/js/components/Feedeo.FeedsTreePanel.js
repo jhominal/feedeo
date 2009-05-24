@@ -108,7 +108,8 @@ Feedeo.FeedsTreePanel = Ext.extend(Ext.tree.TreePanel, {
                         icon :  Ext.APPLICATION_URL+'/img/icons/folder_delete.png',
                         handler : function(menuItem)
                         {
-                            var folder = menuItem.parentMenu.contextFolder;
+                            var folder = menuItem.parentMenu.contextNode;
+				//bof de passer un treeNode ?
                             Feedeo.deleteFolder({folder:folder});
                         }
                     },
@@ -120,8 +121,9 @@ Feedeo.FeedsTreePanel = Ext.extend(Ext.tree.TreePanel, {
                             Ext.Msg.prompt('Créer un dossier','Nom du dossier :',function(btn, text){
                                 if(btn == "ok")
                                 {
-                                    //get current folderId
-                                    var folder = menuItem.parentMenu.contextFolder;
+                                    //get current folder
+                                    var folder = menuItem.parentMenu.contextNode;
+					//bof de passer un treeNode ?
                                     Feedeo.addFolder({name:text,parentFolder:folder});
                                 }
                             });
@@ -129,15 +131,30 @@ Feedeo.FeedsTreePanel = Ext.extend(Ext.tree.TreePanel, {
                     },
                     
                 ]
-            })
+            });
+	    this.contextMenu.on('hide', this.onContextHide, this);
+
         }
-        
-        var c = node.getOwnerTree().contextMenu;
-        //attach the folder to the menu(for itemclick listener)
-        c.contextFolder = node;
+        if(this.contextMenu.contextNode){
+            this.contextMenu.contextNode.ui.removeClass('x-node-ctx');
+            this.contextMenu.contextNode = null;
+        }
+	//attach the folder to the menu(for itemclick listener)
+        this.contextMenu.contextNode = node;
+	//add class to highlight the clicked node
+        this.contextMenu.contextNode.ui.addClass('x-node-ctx');
+
         //display the menu
-        c.showAt(event.getXY());
+        this.contextMenu.showAt(event.getXY());
         console.debug('context node : ',node);
+    },
+    onContextHide : function()
+    {
+        if(this.contextMenu.contextNode){
+            this.contextMenu.contextNode.ui.removeClass('x-node-ctx');
+            this.contextMenu.contextNode = null;
+        }
+
     }
 
 });

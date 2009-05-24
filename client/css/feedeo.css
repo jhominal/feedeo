@@ -9,3 +9,11 @@
 {
     color:red;
 }
+
+.x-node-ctx
+{ 
+    background:#EEEEEE;
+    margin : -1px 0 -1px 0;
+    border-top:1px solid #CCCCCC;
+    border-bottom:1px solid #CCCCCC;
+}

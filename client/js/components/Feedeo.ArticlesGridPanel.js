@@ -150,7 +150,7 @@ Feedeo.ArticlesGridPanel = Ext.extend(Ext.grid.GridPanel, {
     },
     setFolder : function(folderId, forceReload)
     {
-        
+    	console.log('setFolder(',folderId,',',forceReload,')');    
         if(forceReload || this.folderId !== folderId)
         {
             //TODO : si on a déjà les données, on ne reload pas !
