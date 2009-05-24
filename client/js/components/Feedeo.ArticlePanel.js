@@ -64,6 +64,8 @@ Feedeo.ArticlePanel = Ext.extend(Ext.Panel, {
 	        	articleContent = Feedeo.plugins.filters('articleContent',articleContent);
 	        	this.body.dom.innerHTML = articleContent;
 		}
+		this.body.scrollTo('top',0);
+		this.body.scrollTo('left',0);
 	        Feedeo.plugins.actions('afterArticleRefresh',this);
 	}
     }
