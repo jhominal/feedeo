@@ -26,8 +26,8 @@ Feedeo.FeedsTreePanel = Ext.extend(Ext.tree.TreePanel, {
             {
                 beforeload : function(tl,node) //format the request
                 {
-                    console.debug('treeNode getChildren',node)
-                    request =
+                    console.debug('treeNode getChildren',node);
+                    var request =
                     {
                         action:"getChildren",
                         object:"folder",
@@ -73,8 +73,8 @@ Feedeo.FeedsTreePanel = Ext.extend(Ext.tree.TreePanel, {
        this.on
        (
             {
-                'click' : this.onFolderClick,
-                'contextmenu' : this.onContextMenu,
+                'click' : this.onFolderClick, 
+                'contextmenu' : this.onContextMenu, //clic droit
                 scope : this
             }
        );
@@ -98,6 +98,7 @@ Feedeo.FeedsTreePanel = Ext.extend(Ext.tree.TreePanel, {
         //create the menu on first right-click
         if(!this.contextMenu)
         {
+            // on pourrait utiliser une Factory pour les menus ?
             this.contextMenu = new Ext.menu.Menu({
                 ignoreParentClicks : true,
                 items:

@@ -46,9 +46,9 @@ Feedeo.MainPanel = Ext.extend(Ext.Panel, {
         //give the article to the articlePanel !
         this.articlePanel.setArticle(article);
     },
-    setFolder : function(folder_id)
+    setFolder : function(folder_id, force_reload)
     {
-        this.articlesGridPanel.setFolder(folder_id);
+        this.articlesGridPanel.setFolder(folder_id, force_reload);
     }
 });
  

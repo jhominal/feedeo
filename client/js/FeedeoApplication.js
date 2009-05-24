@@ -387,7 +387,7 @@ Feedeo.init = function(options)
         {
             'folderselect' : function(folder_id)
             {
-                this.items.itemAt(2).mainPanel.setFolder(folder_id);
+                this.items.itemAt(2).mainPanel.setFolder(folder_id,true);//true to force reload if folder already set
             },
             scope:vp
         }
