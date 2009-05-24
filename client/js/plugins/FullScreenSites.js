@@ -1,3 +1,5 @@
+(function(){ //no-footprint-function
+
 var navHandler = function(direction){
     console.debug('navH : ',direction);
 };
@@ -125,6 +127,8 @@ var fullScreenSites =
     }
 }
 Feedeo.plugins.register(fullScreenSites);
+
+})();//eo no-footprint-function
 
 /*tbar : 
     [

@@ -1,6 +1,5 @@
 
 Ext.ns('Feedeo');
-var icons = Ext.APPLICATION_URL+'/img/icons';
  
 Feedeo.MainToolbar = Ext.extend(Ext.Toolbar, {
     initComponent:function() {
@@ -33,10 +32,10 @@ Feedeo.MainToolbar = Ext.extend(Ext.Toolbar, {
                                         }
                                     });
                                 },
-                                icon: icons+'/feed_add.png'
+                                icon: Feedeo.ICONS_URL+'/feed_add.png'
                             },
-                            {text: 'Importer', handler: testHandler, icon: icons+'/feed_go.png'},
-                            {text: 'Exporter', handler: testHandler, icon: icons+'/feed_go.png'}
+                            {text: 'Importer', handler: testHandler, icon: Feedeo.ICONS_URL+'/feed_go.png'},
+                            {text: 'Exporter', handler: testHandler, icon: Feedeo.ICONS_URL+'/feed_go.png'}
                         ]
                     }
                 },
@@ -61,7 +60,7 @@ Feedeo.MainToolbar = Ext.extend(Ext.Toolbar, {
                                         }
                                     });
                                 },
-                                icon: icons+'/folder_add.png'
+                                icon: Feedeo.ICONS_URL+'/folder_add.png'
                             },
                             {
                                 text: 'Supprimer',
@@ -72,9 +71,9 @@ Feedeo.MainToolbar = Ext.extend(Ext.Toolbar, {
                                     var folderId = folderTree.getSelectionModel().getSelectedNode().id;
                                     Feedeo.deleteFolder({folderId:folderId});
                                 },
-                                icon: icons+'/folder_delete.png'
+                                icon: Feedeo.ICONS_URL+'/folder_delete.png'
                             },
-                            {text: 'Renommer', handler: testHandler, icon: icons+'/folder_edit.png'},
+                            {text: 'Renommer', handler: testHandler, icon: Feedeo.ICONS_URL+'/folder_edit.png'},
                             {text: 'Marquer tout comme lu', handler: testHandler}
                         ]
                     }
@@ -85,20 +84,20 @@ Feedeo.MainToolbar = Ext.extend(Ext.Toolbar, {
                     menu: {
                         ignoreParentClicks : true,
                         items: [
-                            {text: 'Ouvrir l\'article dans un onglet', handler: testHandler, icon: icons+'/tab_go.png'},
-                            {text: 'Ouvrir la sélection dans des onglets', handler: testHandler, icon: icons+'/tab_go.png'},
-                            {text: 'Ouvrir l\'article dans le navigateur', handler: testHandler, icon: icons+'/world_go.png'},
-                            {text: 'Ouvrir la sélection dans le navigateur', handler: testHandler, icon: icons+'/world_go.png'},
+                            {text: 'Ouvrir l\'article dans un onglet', handler: testHandler, icon: Feedeo.ICONS_URL+'/tab_go.png'},
+                            {text: 'Ouvrir la sélection dans des onglets', handler: testHandler, icon: Feedeo.ICONS_URL+'/tab_go.png'},
+                            {text: 'Ouvrir l\'article dans le navigateur', handler: testHandler, icon: Feedeo.ICONS_URL+'/world_go.png'},
+                            {text: 'Ouvrir la sélection dans le navigateur', handler: testHandler, icon: Feedeo.ICONS_URL+'/world_go.png'},
                             
                             '-',
                             {text: 'Marquer l\'article comme lu', handler: testHandler},
                             {text: 'Marquer la sélection comme lue', handler: testHandler},
                             '-',
-                            {text: 'Marquer l\'article comme important', handler: testHandler, icon: icons+'/flag_red.png'},
-                            {text: 'Marquer la sélection comme importante', handler: testHandler, icon: icons+'/flag_red.png'},
+                            {text: 'Marquer l\'article comme important', handler: testHandler, icon: Feedeo.ICONS_URL+'/flag_red.png'},
+                            {text: 'Marquer la sélection comme importante', handler: testHandler, icon: Feedeo.ICONS_URL+'/flag_red.png'},
                             '-',
-                            {text: 'Supprimer l\'article', handler: testHandler, icon: icons+'/page_white_delete.png'},
-                            {text: 'Supprimer la sélection', handler: testHandler, icon: icons+'/delete.png'}
+                            {text: 'Supprimer l\'article', handler: testHandler, icon: Feedeo.ICONS_URL+'/page_white_delete.png'},
+                            {text: 'Supprimer la sélection', handler: testHandler, icon: Feedeo.ICONS_URL+'/delete.png'}
                             
                             
                         ]
@@ -115,7 +114,7 @@ Feedeo.MainToolbar = Ext.extend(Ext.Toolbar, {
                                 {
                                     new Ext.Window(Feedeo.windows.config.appearence).show();
                                 },
-                                icon: icons+'/layout_edit.png'
+                                icon: Feedeo.ICONS_URL+'/layout_edit.png'
                             },
                             {
                                 text: 'Configurer les raccourcis clavier',
@@ -130,7 +129,7 @@ Feedeo.MainToolbar = Ext.extend(Ext.Toolbar, {
                                 {
                                     new Ext.Window(Feedeo.windows.config.notifications).show();
                                 },
-                                icon: icons+'/email_edit.png'
+                                icon: Feedeo.ICONS_URL+'/email_edit.png'
                             }
                         ]
                     }
@@ -146,7 +145,7 @@ Feedeo.MainToolbar = Ext.extend(Ext.Toolbar, {
                                 {
                                     new Ext.Window(Feedeo.windows.help.manual).show();
                                 },
-                                icon: icons+'/help.png'
+                                icon: Feedeo.ICONS_URL+'/help.png'
                             },
                             '-',
                             {
@@ -155,12 +154,12 @@ Feedeo.MainToolbar = Ext.extend(Ext.Toolbar, {
                                 {
                                     new Ext.Window(Feedeo.windows.help.bugReport).show();
                                 },
-                                icon: icons+'/bug.png'
+                                icon: Feedeo.ICONS_URL+'/bug.png'
                             },
                             '-',
                             {
                                 text: 'A propos de Feedeo',
-                                icon: icons+'/vcard.png',
+                                icon: Feedeo.ICONS_URL+'/vcard.png',
                                 handler : function()
                                 {
                                     new Ext.Window(Feedeo.windows.help.about).show();
@@ -172,7 +171,7 @@ Feedeo.MainToolbar = Ext.extend(Ext.Toolbar, {
                 '->', //remplit l'espace restant
                 {
                     text:'Se déconnecter',
-                    icon : icons+'/door_out.png',
+                    icon : Feedeo.ICONS_URL+'/door_out.png',
                     cls:"x-btn-text-icon", //pour ne pas repeter le background
                     handler : testHandler
                 }

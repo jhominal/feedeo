@@ -1,3 +1,5 @@
+(function (){ //no footprint function
+
 var highlightPlugin =
 {
     name : 'highlightPlugin',
@@ -53,3 +55,4 @@ var highlightPlugin =
     }
 }
 Feedeo.plugins.register(highlightPlugin);
+})(); //eo no footprint function

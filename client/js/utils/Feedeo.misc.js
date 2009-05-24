@@ -19,7 +19,7 @@ Feedeo.request = function(options)
     }
     options.success = function(response)
     {
-        jsonResponse = Ext.util.JSON.decode(response.responseText);
+	var jsonResponse = Ext.util.JSON.decode(response.responseText);
         if(jsonResponse.success!= null && jsonResponse.success)
         {
             if(options.handlers.success != null)

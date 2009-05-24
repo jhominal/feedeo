@@ -1,4 +1,4 @@
-
+(function(){//no footprint function
 var pressReview =
 {
     name : 'Revue de Presse',
@@ -32,12 +32,12 @@ var pressReview =
                             '-',
                             {
                                 text: 'Revue de presse',
-                                icon: Ext.APPLICATION_URL+'/img/icons/newspaper.png',
+                                icon: Feedeo.ICONS_URL+'/newspaper.png',
                                 menu : {
                                      ignoreParentClicks : true,
                                     items : [
-                                            {text: 'Exporter la sélection en HTML', icon: icons+'/html.png'},
-                                            {text: 'Exporter la sélection en PDF', icon: icons+'/page_white_acrobat.png'}
+                                            {text: 'Exporter la sélection en HTML', icon: Feedeo.ICONS_URL+'/html.png'},
+                                            {text: 'Exporter la sélection en PDF', icon: Feedeo.ICONS_URL+'/page_white_acrobat.png'}
                                     ]
                                 }                            
                             }
@@ -48,3 +48,4 @@ var pressReview =
     }
 }
 Feedeo.plugins.register(pressReview);
+})();//eo no footprint function
