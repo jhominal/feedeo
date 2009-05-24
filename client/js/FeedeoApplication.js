@@ -368,12 +368,16 @@ Feedeo.init = function(options)
             {
                 region : 'west',
                 title : 'Vos dossiers',
-                xtype:'feedsandarchivespanel',
+		layout: 'fit',
+		items:{
+                	xtype:'feedsandarchivespanel',
+			border:false,	
+			autoScroll:true//? comment ca marche ?
+		},
                 width: 200,
                 split :true,
-                collapsible : true,
+                collapsible : true
                 //collapseMode : 'mini',
-                autoScroll:true//? comment ca marche ?
     
             },
             {
