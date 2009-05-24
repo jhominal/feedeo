@@ -7,15 +7,25 @@ Feedeo.ArticlePanel = Ext.extend(Ext.Panel, {
         // hard coded - cannot be changed from outside
     
         var config = {
+	    viewInSite:false,
             tbar:
             [{
                 text:'Ouvrir dans un onglet',
                 tooltip: 'Ouvre l\'article dans un onglet',
                 handler: this.openInTabClick,
                 scope:this //comme ça, le "this" dans le handler sera "articlePanel" au lieu de "button"
-            }],
+            },{
+		text:'Afficher le site original',
+		enableToggle:true,
+		tooltip:'Affiche l\'article dans son contexte original',
+		handler: function(){
+			this.viewInSite = !this.viewInSite;
+			this.refresh();
+		},
+		scope:this
+	    }],
             autoScroll:true,
-            bodyStyle:'padding:15px',
+            //bodyStyle:'padding:15px',
             html:'Ce flux ne dispose pas d\'informations'
         }; // eo config object
         
@@ -41,11 +51,21 @@ Feedeo.ArticlePanel = Ext.extend(Ext.Panel, {
     },
     refresh : function()
     {
-        Feedeo.plugins.actions('beforeArticleRefresh',this);
-        var articleContent = this.record !== null ? this.record.data.content : 'Pas d\'article sélectionné.';
-        articleContent = Feedeo.plugins.filters('articleContent',articleContent);
-        this.body.dom.innerHTML = articleContent;
-        Feedeo.plugins.actions('afterArticleRefresh',this);
+	if(this.record){
+	        Feedeo.plugins.actions('beforeArticleRefresh',this);
+	        if(this.viewInSite === true)
+		{
+			var url = this.record.data.url;
+			this.body.dom.innerHTML = '<object style="width:100%;height:100%;" data="'+url+'"></object>';
+		}
+		else
+		{
+			var articleContent = this.record !== null ? this.record.data.content : 'Pas d\'article sélectionné.';
+	        	articleContent = Feedeo.plugins.filters('articleContent',articleContent);
+	        	this.body.dom.innerHTML = articleContent;
+		}
+	        Feedeo.plugins.actions('afterArticleRefresh',this);
+	}
     }
 });
  
