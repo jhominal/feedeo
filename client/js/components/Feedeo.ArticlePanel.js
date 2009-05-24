@@ -5,7 +5,17 @@ Feedeo.ArticlePanel = Ext.extend(Ext.Panel, {
     record : null,
     initComponent:function() {
         // hard coded - cannot be changed from outside
-    
+   	var articleTemplate = new Ext.XTemplate(
+            '<div class="article">',
+	    '<div class="article-header">',
+            '<h3><a href="{url}">{title}</a></h3>',
+            '{author} - {categories} - {[fm.date(values.date,"d/m/Y")]} - {important}',
+	    '</div>',
+	    '{content}',
+	    '</div>'
+        );
+	articleTemplate.compile();
+ 
         var config = {
 	    viewInSite:false,
             tbar:
@@ -26,7 +36,8 @@ Feedeo.ArticlePanel = Ext.extend(Ext.Panel, {
 	    }],
             autoScroll:true,
             //bodyStyle:'padding:15px',
-            html:'Ce flux ne dispose pas d\'informations'
+            html:'Ce flux ne dispose pas d\'informations',
+	    tpl : articleTemplate
         }; // eo config object
         
     
@@ -60,9 +71,9 @@ Feedeo.ArticlePanel = Ext.extend(Ext.Panel, {
 		}
 		else
 		{
-			var articleContent = this.record !== null ? this.record.data.content : 'Pas d\'article sélectionné.';
-	        	articleContent = Feedeo.plugins.filters('articleContent',articleContent);
-	        	this.body.dom.innerHTML = articleContent;
+			var article = this.record !== null ? Feedeo.clone(this.record.data) : {content:'Pas d\'article sélectionné.'};
+	        	article.content = Feedeo.plugins.filters('articleContent',article.content);
+	        	this.tpl.overwrite(this.body,article);
 		}
 		this.body.scrollTo('top',0);
 		this.body.scrollTo('left',0);

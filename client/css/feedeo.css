@@ -22,3 +22,12 @@
     background-color:#DDD;
     border-color:#999;
 }
+.article
+{
+	padding:10px;
+}
+.article-header
+{
+	border-bottom:1px solid;
+	background-color:#ccc;
+}
