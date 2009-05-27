@@ -1,14 +1,13 @@
 package org.feedeo;
 
+import static org.feedeo.hibernate.InitSessionFactory.getSession;
+
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.feedeo.hibernate.HibernateObject;
-import org.feedeo.hibernate.ObjSession;
-import org.feedeo.hibernate.ObjSessionGetter;
-import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
 /**
@@ -17,7 +16,7 @@ import org.hibernate.criterion.Restrictions;
  * @author Feedeo Team
  * 
  */
-public class Feed extends HibernateObject implements ObjSession {
+public class Feed extends HibernateObject {
 	private String title;
 	private String url;
 	private String link;
@@ -195,30 +194,13 @@ public class Feed extends HibernateObject implements ObjSession {
 	public static Feed getFeedByUrl(String url) {
 		Feed refFeed = new Feed();
 		refFeed.setUrl(url);
-		Feed potentialFeed = (Feed) refFeed.getSession().createCriteria(
+		Feed potentialFeed = (Feed) getSession().createCriteria(
 				Feed.class).add(Restrictions.eq("url", url)).uniqueResult();
 		if (potentialFeed == null) {
-			refFeed.getSession().saveOrUpdate(refFeed);
+			getSession().saveOrUpdate(refFeed);
 			return refFeed;
 		} else {
 			return potentialFeed;
 		}
 	}
-
-	/* (non-Javadoc)
-	 * @see org.feedeo.hibernate.HibernateObject#getReference()
-	 */
-	@Override
-	protected ObjSession getReference() {
-		return this;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.feedeo.hibernate.ObjSession#getObjectSession()
-	 */
-	@Override
-	public Session getObjectSession() {
-		return ObjSessionGetter.get(this);
-	}
-
 }

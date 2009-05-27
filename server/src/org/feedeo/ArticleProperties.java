@@ -1,7 +1,6 @@
 package org.feedeo;
 
 import org.feedeo.hibernate.HibernateObject;
-import org.feedeo.hibernate.ObjSession;
 
 /**
  * Models data specific to a user and an article.
@@ -70,12 +69,5 @@ public class ArticleProperties extends HibernateObject {
 		this.owner = owner;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.feedeo.hibernate.HibernateObject#getReference()
-	 */
-	@Override
-	protected ObjSession getReference() {
-		return getOwner();
-	}
 
 }

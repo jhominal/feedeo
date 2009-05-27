@@ -10,21 +10,29 @@
   <property name="lib" location="${server}/lib"/>
   <property name="web" location="${server}/web"/>
 
+  <!-- First attempts to load properties from config/user.properties; then will load config/default.properties -->
+  <property file="config/user.properties"/>
+  <property file="config/default.properties"/>
+
+  <condition property="tomcat-libs" value="${tomcat-path}/lib">
+    <isset property="tomcat-path"/>
+  </condition>
+
+  <condition property="servlet-api-jar" value="${tomcat-libs}/servlet-api.jar">
+    <isset property="tomcat-libs"/>
+  </condition>
+
   <path id="feedeo.classpath">
     <pathelement path="${classpath}"/>
     <fileset dir="${lib}">
       <include name="**/*.jar"/>
     </fileset>
-    <pathelement path="${tomcat-path}/lib/servlet-api.jar"/>
+    <pathelement path="${servlet-api-jar}"/>
   </path>
 
 
   <property name="client-build" location="${dist}/client-build"/>
   <property name="web-app" location="${dist}/web-app"/>
-
-  <!-- First attempts to load properties from config/user.properties; then will load config/default.properties -->
-  <property file="config/user.properties"/>
-  <property file="config/default.properties"/>
 
   <!-- Should be replaced by the corresponding context value. -->
   <property name="context" value="feedeo"/>
@@ -48,8 +56,19 @@
   </target>
 
   <target name="build-server"> 
-    <!-- The tomcat path property should be changed to match your own tomcat installation path (or a symlink to it). -->
-    <fail message="tomcat-path ${nodef.message}" unless="tomcat-path"/>
+    <fail message="Required classes from servlet-api.jar are not available. Please look at the user.sample.properties as a model to create a user.properties file in the ant-script/config folder (default.properties should not be modified, it contains the settings for the feedeo server)">
+      <condition>
+        <not>
+          <and>
+            <available classname="javax.servlet.ServletException" classpathref="feedeo.classpath"/>
+            <available classname="javax.servlet.http.HttpServlet" classpathref="feedeo.classpath"/>
+            <available classname="javax.servlet.http.HttpServletRequest" classpathref="feedeo.classpath"/>
+            <available classname="javax.servlet.http.HttpServletResponse" classpathref="feedeo.classpath"/>
+            <available classname="javax.servlet.http.HttpSession" classpathref="feedeo.classpath"/>
+          </and>
+        </not>
+      </condition>
+    </fail>
     <!-- Compile the java code from ${src} into ${build} -->
     <javac srcdir="${src}" destdir="${build}" classpathref="feedeo.classpath"/>
     <!-- Copy non-java resources from ${src} into ${build} -->
@@ -74,7 +93,7 @@
     <copy todir="${web-app}/WEB-INF/classes">
       <fileset dir="${build}" includes="**/*"/>
     </copy>
-    <copy todir="${web-app}/WEB-INF">
+    <copy todir="${web-app}">
       <fileset dir="${client-build}" includes="**/*"/>
     </copy>
   </target>
@@ -85,7 +104,7 @@
     <war destfile="${dist}/Feedeo.war" webxml="${web}/WEB-INF/web.xml" manifest="${web}/META-INF/MANIFEST.MF">
       <lib dir="${lib}" includes="**/*.jar"/>
       <classes dir="${build}" includes="**/*"/>
-      <webinf dir="${client-build}" includes="**/*"/>
+      <fileset dir="${client-build}" includes="**/*"/>
     </war>
   </target>
 

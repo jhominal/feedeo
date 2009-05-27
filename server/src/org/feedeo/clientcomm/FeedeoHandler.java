@@ -1,5 +1,7 @@
 package org.feedeo.clientcomm;
 
+import static org.feedeo.hibernate.InitSessionFactory.getSession;
+
 import java.util.Map;
 
 import org.feedeo.Article;
@@ -9,7 +11,6 @@ import org.feedeo.Feed;
 import org.feedeo.User;
 import org.feedeo.syndication.FeedReader;
 import org.hibernate.HibernateException;
-import org.hibernate.Session;
 
 /**
  * This class handles the JSON requests built by the index.jsp page, and gives
@@ -32,10 +33,6 @@ public class FeedeoHandler {
 	 */
 	public FeedeoHandler(String login) {
 		user = User.getUserByLogin(login);
-	}
-
-	private Session getSession() {
-		return user.getSession();
 	}
 
 	/**
@@ -215,7 +212,9 @@ public class FeedeoHandler {
 			possibleUser.setFirstName((String) newAccountReq.get("name"));
 			possibleUser.setLastName((String) newAccountReq.get("lastname"));
 			possibleUser.setEmail((String) newAccountReq.get("mail"));
-			possibleUser.getSession().saveOrUpdate(possibleUser);
+			getSession().beginTransaction();
+			getSession().saveOrUpdate(possibleUser);
+			getSession().getTransaction().commit();
 			return login;
 		} else {
 			return null;

@@ -1,16 +1,16 @@
 package org.feedeo.syndication;
 
+import static org.feedeo.hibernate.InitSessionFactory.getSession;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
 
-import org.hibernate.Session;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 import org.feedeo.Feed;
-import org.feedeo.hibernate.ObjSession;
-import org.feedeo.hibernate.ObjSessionGetter;
 
 /**
  * Provides a class to schedule updates, with most interactions being a trace
@@ -23,13 +23,19 @@ import org.feedeo.hibernate.ObjSessionGetter;
  * @author Feedeo Team
  * 
  */
-public final class UpdateScheduler implements ObjSession {
+public enum UpdateScheduler {
 
-	private static UpdateScheduler instance;
-	
-	static {
-		getInstance();
-	}
+	/**
+	 * This is the UpdateScheduler instance.
+	 */
+	instance;
+
+	private int threadPoolSize = 1;
+	private ScheduledExecutorService scheduler = Executors
+			.newScheduledThreadPool(threadPoolSize);
+	private Map<Feed, UpdateTask> taskMap = Collections
+			.synchronizedMap(new HashMap<Feed, UpdateTask>());
+	private boolean initialized = false;
 
 	/**
 	 * Gets the active UpdateScheduler instance.
@@ -37,28 +43,18 @@ public final class UpdateScheduler implements ObjSession {
 	 * @return the UpdateScheduler instance in use.
 	 */
 	public static UpdateScheduler getInstance() {
-		if (instance == null) {
-			instance = new UpdateScheduler();
-		}
 		if (!instance.initialized) {
 			instance.init();
 		}
 		return instance;
 	}
 
-	private Timer timer;
-	private Map<Feed, UpdateTask> taskMap;
-	private boolean initialized;
-
 	private UpdateScheduler() {
-		timer = new Timer("Feedeod", true);
-		taskMap = Collections.synchronizedMap(new HashMap<Feed, UpdateTask>());
-		initialized = false;
 	}
 
-	@SuppressWarnings("unchecked")
 	void init() {
-		List<Feed> feeds = getObjectSession().createCriteria(Feed.class).list();
+		@SuppressWarnings("unchecked")
+		List<Feed> feeds = getSession().createCriteria(Feed.class).list();
 		for (Feed feed : feeds) {
 			add(feed);
 		}
@@ -84,13 +80,13 @@ public final class UpdateScheduler implements ObjSession {
 
 	/**
 	 * This functions stops the UpdateScheduler instance by: -cancelling all
-	 * remaining tasks (timer.cancel()) -clearing the underlying Map
+	 * remaining tasks (scheduler.shutdown()) -clearing the underlying Map
 	 * (map.clear()) -marking that an initialization is necessary the next time
 	 * that getInstance() will be called.
 	 */
 	public void stop() {
 		initialized = false;
-		timer.cancel();
+		scheduler.shutdown();
 		taskMap.clear();
 	}
 
@@ -158,7 +154,7 @@ public final class UpdateScheduler implements ObjSession {
 			this.remove(feed);
 		}
 		taskMap.put(feed, task);
-		timer.schedule(task, task.period, task.period);
+		scheduler.scheduleAtFixedRate(task, 0, task.period, task.unit);
 		return task;
 	}
 
@@ -184,14 +180,5 @@ public final class UpdateScheduler implements ObjSession {
 	 */
 	public int size() {
 		return taskMap.size();
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.feedeo.hibernate.ObjSession#getObjectSession()
-	 */
-	public Session getObjectSession() {
-		return ObjSessionGetter.get(this);
 	}
 }

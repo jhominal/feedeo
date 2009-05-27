@@ -1,7 +1,5 @@
 package org.feedeo.hibernate;
 
-import org.hibernate.Session;
-
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
 
@@ -38,24 +36,6 @@ public abstract class HibernateObject {
 	 */
 	protected Long getId() {
 		return id;
-	}
-
-	/**
-	 * @return an Object that will be the reference from which Hibernate
-	 *         Sessions concerning this object will be obtained.
-	 */
-	abstract protected ObjSession getReference();
-
-	/**
-	 * gets the session appropriate for the given object; it is the object
-	 * session of the "ObjSession" object returned by the "getReference"
-	 * function.
-	 * 
-	 * @return the session associated to the ObjSession reference (usually a
-	 *         Feed or a User).
-	 */
-	public Session getSession() {
-		return getReference().getObjectSession();
 	}
 
 }

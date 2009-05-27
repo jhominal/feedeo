@@ -1,13 +1,12 @@
 package org.feedeo;
 
+import static org.feedeo.hibernate.InitSessionFactory.getSession;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.feedeo.hibernate.HibernateObject;
-import org.feedeo.hibernate.ObjSession;
-import org.feedeo.hibernate.ObjSessionGetter;
-import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
 /**
@@ -17,7 +16,7 @@ import org.hibernate.criterion.Restrictions;
  * @author Feedeo Team
  * 
  */
-public class User extends HibernateObject implements ObjSession {
+public class User extends HibernateObject {
 
 	private String login;
 	private String password;
@@ -202,31 +201,14 @@ public class User extends HibernateObject implements ObjSession {
 	public static User getUserByLogin(String login) {
 		User refUser = new User();
 		refUser.setLogin(login);
-		refUser.getSession().beginTransaction();
-		User potentialUser = (User) refUser.getSession().createCriteria(
+		getSession().beginTransaction();
+		User potentialUser = (User) getSession().createCriteria(
 				User.class).add(Restrictions.eq("login", login)).uniqueResult();
-		refUser.getSession().getTransaction().commit();
+		getSession().getTransaction().commit();
 		if (potentialUser == null) {
 			return refUser;
 		} else {
 			return potentialUser;
 		}
 	}
-
-	/* (non-Javadoc)
-	 * @see org.feedeo.hibernate.HibernateObject#getReference()
-	 */
-	@Override
-	protected ObjSession getReference() {
-		return this;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.feedeo.hibernate.ObjSession#getObjectSession()
-	 */
-	@Override
-	public Session getObjectSession() {
-		return ObjSessionGetter.get(this);
-	}
-
 }

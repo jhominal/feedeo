@@ -1,5 +1,7 @@
 package org.feedeo.test;
 
+import static org.feedeo.hibernate.InitSessionFactory.getSession;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,7 +32,7 @@ public class TestMain {
 		
 		User u1 = User.getUserByLogin("toto");
 		
-		u1.getSession().beginTransaction();
+		getSession().beginTransaction();
 		
 		String pref1 = (String) u1.getPreferences().get("pref-string");
 		Boolean pref2 = (Boolean) u1.getPreferences().get("pref-bool");
@@ -43,7 +45,7 @@ public class TestMain {
 		System.out.println(pref4.get("1"));
 		System.out.println(pref4.get("2"));
 		
-		u1.getSession().getTransaction().commit();
+		getSession().getTransaction().commit();
 		
 	}
 	
@@ -52,6 +54,7 @@ public class TestMain {
 	 * are mapped to the database correctly.
 	 */
 	public static void testPersistence() {
+		getSession().beginTransaction();
 		User u1 = new User();
 		u1.setLogin("toto");
 		u1.setPassword("bidoule");
@@ -70,8 +73,8 @@ public class TestMain {
 		configObject.put("2", "val2");
 		u1.getPreferences().put("pref-map", configObject);
 		
-		u1.getSession().saveOrUpdate(u1);
-		
+		getSession().saveOrUpdate(u1);
+		getSession().getTransaction().commit();
 //		u1.getSession().beginTransaction();
 //		
 //		Feed f1 = Feed.getFeedByUrl("http://feedproxy.google.com/TechCrunch");
@@ -92,10 +95,10 @@ public class TestMain {
 	public static void testSyndication() {
 		// Flux RSS 0.92
 		Feed f1 = FeedReader.checkout("http://fcargoet.evolix.net/feed/atom/");
-		f1.getSession().saveOrUpdate(f1);
+		getSession().saveOrUpdate(f1);
 		// Flux RSS 2.0
 		Feed f2 = FeedReader.checkout("http://feedproxy.google.com/TechCrunch");
-		f2.getSession().saveOrUpdate(f2);
+		getSession().saveOrUpdate(f2);
 		// Flux Atom 1.0
 //		Feed f3 = FeedReader.checkout("http://www.joel.lopes-da-silva.com/index.php?format=feed&type=atom");
 //		f3.saveOrUpdate();

@@ -1,38 +1,72 @@
 package org.feedeo.hibernate;
 
+import java.io.IOException;
+import java.util.Properties;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 /**
- * @author hennebrueder This class garanties that only one single SessionFactory
- *         is instanciated and that the configuration is done thread safe as
+ * @author hennebrueder
+ * 
+ *         This class garanties that only one single SessionFactory is
+ *         instanciated and that the configuration is done thread safe as
  *         singleton. Actually it only wraps the Hibernate SessionFactory. You
  *         are free to use any kind of JTA or Thread transactionFactories.
+ * 
+ *         jhominal: This class has been refactored to use an enum rather than a
+ *         class with a static instance and a private constructor to enforce
+ *         singleton, as recommended in "Effective Java 2nd edition"
  */
-public class InitSessionFactory {
-	/** The single instance of hibernate SessionFactory */
-	private static org.hibernate.SessionFactory sessionFactory;
-
+public enum InitSessionFactory {
 	/**
-	 * disable contructor to guaranty a single instance
+	 * This object contains a sessionFactory to which the operations will be
+	 * forwarded.
 	 */
-	private InitSessionFactory() {
-	}
+	instance;
+
+	private org.hibernate.SessionFactory sessionFactory;
 
 	static {
 		// Annotation and XML
 		// sessionFactory = new
 		// AnnotationConfiguration().configure().buildSessionFactory();
 		// XML only
-		sessionFactory = (new Configuration()).configure().buildSessionFactory();
+		// sessionFactory = new
+		// Configuration().configure().buildSessionFactory();
+
+		Configuration config = new Configuration();
+		// ClassLoader loader = InitSessionFactory.class.getClassLoader();
+		// URL xmlConfFile = loader.getResource("hibernate.cfg.xml");
+		// URL propertiesFile = loader.getResource("hibernate.properties");
+		// config.configure(xmlConfFile);
+
+		config.configure("hibernate.cfg.xml");
+		Properties extraProperties = new Properties();
+		try {
+			extraProperties.load(InitSessionFactory.class.getClassLoader()
+					.getResourceAsStream("hibernate.properties"));
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("File 'hibernate.properties' not found at the "
+					+ "classpath root. If you haven't already, please "
+					+ "add such a file to the src folder, using "
+					+ "hibernate.properties.sample as an example.");
+			// Thread.currentThread().interrupt();
+		}
+		config.mergeProperties(extraProperties);
+
+		System.out.println(config.getProperties());
+
+		instance.sessionFactory = config.buildSessionFactory();
 	}
 
 	/**
 	 * @return the unique session instance
 	 */
 	public static SessionFactory getInstance() {
-		return sessionFactory;
+		return instance.sessionFactory;
 	}
 
 	/**
@@ -60,11 +94,20 @@ public class InitSessionFactory {
 	}
 
 	/**
+	 * Does the same as getCurrentSession(), only in a static method.
+	 * 
+	 * @return the session
+	 */
+	public static Session getSession() {
+		return instance.getCurrentSession();
+	}
+
+	/**
 	 * closes the session factory
 	 */
 	public static void close() {
-		if (sessionFactory != null)
-			sessionFactory.close();
-		sessionFactory = null;
+		if (instance.sessionFactory != null)
+			instance.sessionFactory.close();
+		instance.sessionFactory = null;
 	}
 }

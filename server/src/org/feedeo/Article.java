@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.feedeo.clientcomm.JsonObjectSerializable;
 import org.feedeo.hibernate.HibernateObject;
-import org.feedeo.hibernate.ObjSession;
 
 /**
  * This class models an article, such as found in an RSS/Atom syndication file.
@@ -257,14 +256,5 @@ public class Article extends HibernateObject implements JsonObjectSerializable {
 		return result;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.feedeo.hibernate.HibernateObject#getReference()
-	 */
-	@Override
-	protected ObjSession getReference() {
-		return sourceFeed;
-	}
 
 }

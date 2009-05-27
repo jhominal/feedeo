@@ -1,6 +1,7 @@
 package org.feedeo.syndication;
 
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import org.feedeo.Feed;
 
@@ -11,24 +12,28 @@ import org.feedeo.Feed;
  *
  */
 public final class UpdateTask extends TimerTask {
-	static long defaultPeriod = 3600L*1000L;
+	static long defaultPeriod = 1L;
+	static TimeUnit defaultUnit = TimeUnit.HOURS;
 	final Feed targetFeed;
 	long period;
+	TimeUnit unit;
 	
 	/**
 	 * @param targetFeed
 	 * @param period 
+	 * @param unit 
 	 */
-	public UpdateTask(Feed targetFeed, long period) {
+	public UpdateTask(Feed targetFeed, long period, TimeUnit unit) {
 		super();
 		this.targetFeed = targetFeed;
 		this.period = period;
+		this.unit = unit;
 	}
 	/**
 	 * @param targetFeed
 	 */
 	public UpdateTask(Feed targetFeed) {
-		this(targetFeed, defaultPeriod);
+		this(targetFeed, defaultPeriod, defaultUnit);
 	}
 	
 	/** 
