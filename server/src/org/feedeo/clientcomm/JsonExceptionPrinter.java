@@ -12,51 +12,53 @@ import java.util.Map;
  * @author Feedeo Team
  * 
  */
-final class JsonExceptionPrinter implements JsonObjectSerializable {
+final class JsonExceptionPrinter implements Mappable {
 
-	private Exception exception;
-	private String transactionRollback;
+  private Exception exception;
+  private String    transactionRollback;
 
-	/**
-	 * Builds a JsonExceptionPrinter object, given a JavaException.
-	 * @param e the referenced Java Exception
-	 */
-	JsonExceptionPrinter(Exception e) {
-		exception = e;
-	}
+  /**
+   * Builds a JsonExceptionPrinter object, given a JavaException.
+   * 
+   * @param e
+   *          the referenced Java Exception
+   */
+  JsonExceptionPrinter(Exception e) {
+    exception = e;
+  }
 
-	/**
-	 * sets a message, whose goal is to tell whether the
-	 * transaction's rollback was successful.
-	 * 
-	 * @param message
-	 */
-	void setTransactionRollback(String message) {
-		transactionRollback = message;
-	}
+  /**
+   * sets a message, whose goal is to tell whether the transaction's rollback
+   * was successful.
+   * 
+   * @param message
+   */
+  void setTransactionRollback(String message) {
+    transactionRollback = message;
+  }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.feedeo.clientcomm.JsonObjectSerializable#toMap(boolean)
-	 */
-	@Override
-	public Map<String, Object> toMap(boolean deep) {
-		Map<String, Object> result = new HashMap<String, Object>();
-		result.put("message", exception.getMessage());
-		result.put("class", exception.getClass().toString());
-		if (transactionRollback != null) {
-			result.put("rollback", transactionRollback);
-		}
-		if (deep) {
-			List<String> stackTraceList = new ArrayList<String>();
-			StackTraceElement[] stackTraceArray = exception.getStackTrace();
-			for (int i = 0; i < stackTraceArray.length; i++) {
-				stackTraceList.add(i+": "+stackTraceArray[i].toString());
-			}
-			result.put("stacktrace", stackTraceList);
-		}
-		return result;
-	}
+  /**
+   * {@inheritDoc}
+   * 
+   * @see org.feedeo.clientcomm.Mappable#toMap(boolean)
+   */
+  @Override
+  public Map<String, Object> toMap(boolean deep) {
+    Map<String, Object> result = new HashMap<String, Object>();
+    result.put("message", exception.getMessage());
+    result.put("class", exception.getClass().toString());
+    if (transactionRollback != null) {
+      result.put("rollback", transactionRollback);
+    }
+    if (deep) {
+      List<String> stackTraceList = new ArrayList<String>();
+      StackTraceElement[] stackTraceArray = exception.getStackTrace();
+      for (int i = 0; i < stackTraceArray.length; i++) {
+        stackTraceList.add(i + ": " + stackTraceArray[i].toString());
+      }
+      result.put("stacktrace", stackTraceList);
+    }
+    return result;
+  }
 
 }

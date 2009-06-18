@@ -2,183 +2,99 @@ package org.feedeo.syndication;
 
 import static org.feedeo.hibernate.InitSessionFactory.getSession;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
-import org.feedeo.Feed;
+import org.feedeo.model.feed.Feed;
 
 /**
- * Provides a class to schedule updates, with most interactions being a trace
- * over a number of the standard methods of the java.util.Map interface.
  * 
- * The implementation for this Scheduler combines: -A Map<Feed,UpdateTask> to
- * keep a reference to all currently run tasks -A Timer that effectively runs
- * the
  * 
  * @author Feedeo Team
  * 
  */
 public enum UpdateScheduler {
 
-	/**
-	 * This is the UpdateScheduler instance.
-	 */
-	instance;
+  /**
+   * This is the UpdateScheduler INSTANCE.
+   */
+  INSTANCE;
 
-	private int threadPoolSize = 1;
-	private ScheduledExecutorService scheduler = Executors
-			.newScheduledThreadPool(threadPoolSize);
-	private Map<Feed, UpdateTask> taskMap = Collections
-			.synchronizedMap(new HashMap<Feed, UpdateTask>());
-	private boolean initialized = false;
+  /**
+   * This utility class models an update task. If you need to change
+   * 
+   * @author Feedeo Team
+   * 
+   */
+  public static class UpdateTask implements Runnable {
+    static long        defaultPeriod = 1L;
+    static TimeUnit    defaultUnit   = TimeUnit.HOURS;
+    private final Feed targetFeed;
+    long               period;
+    TimeUnit           unit;
 
-	/**
-	 * Gets the active UpdateScheduler instance.
-	 * 
-	 * @return the UpdateScheduler instance in use.
-	 */
-	public static UpdateScheduler getInstance() {
-		if (!instance.initialized) {
-			instance.init();
-		}
-		return instance;
-	}
+    /**
+     * @param targetFeed
+     * @param period
+     * @param unit
+     */
+    public UpdateTask(Feed targetFeed, long period, TimeUnit unit) {
+      super();
+      this.targetFeed = targetFeed;
+      this.period = period;
+      this.unit = unit;
+    }
 
-	private UpdateScheduler() {
-	}
+    /**
+     * @param targetFeed
+     */
+    public UpdateTask(Feed targetFeed) {
+      this(targetFeed, defaultPeriod, defaultUnit);
+    }
 
-	void init() {
-		@SuppressWarnings("unchecked")
-		List<Feed> feeds = getSession().createCriteria(Feed.class).list();
-		for (Feed feed : feeds) {
-			add(feed);
-		}
-		initialized = true;
-	}
+    /**
+     * {@inheritDoc}
+     * 
+     * @see java.lang.Runnable#run()
+     */
+    @Override
+    public void run() {
+      FeedReader.update(targetFeed);
+    }
 
-	/**
-	 * This functions adds a Feed to the Scheduler. However, if the Feed is
-	 * already in the Scheduler, then it will not be replaced by a new generated
-	 * UpdateTask.
-	 * 
-	 * @param feed
-	 * @return true if the adding was successful, false otherwise
-	 */
-	public boolean add(Feed feed) {
-		if (!containsKey(feed)) {
-			UpdateTask task = new UpdateTask(feed);
-			this.put(feed, task);
-			return true;
-		}
-		return false;
-	}
+  }
 
-	/**
-	 * This functions stops the UpdateScheduler instance by: -cancelling all
-	 * remaining tasks (scheduler.shutdown()) -clearing the underlying Map
-	 * (map.clear()) -marking that an initialization is necessary the next time
-	 * that getInstance() will be called.
-	 */
-	public void stop() {
-		initialized = false;
-		scheduler.shutdown();
-		taskMap.clear();
-	}
+  private int                      threadPoolSize = 1;
+  private ScheduledExecutorService scheduler      = Executors
+                                                      .newScheduledThreadPool(threadPoolSize);
+  private boolean                  initialized    = false;
 
-	/**
-	 * @param feed
-	 * @return a boolean indicating whether the given Feed is in this Scheduler.
-	 */
-	public boolean contains(Feed feed) {
-		return containsKey(feed);
-	}
+  /**
+   * Gets the active UpdateScheduler INSTANCE.
+   * 
+   * @return the UpdateScheduler INSTANCE in use.
+   */
+  public static UpdateScheduler getInstance() {
+    if (!INSTANCE.initialized) {
+      INSTANCE.init();
+    }
+    return INSTANCE;
+  }
 
-	/**
-	 * @see java.util.Map#containsKey(Object)
-	 * 
-	 * @param key
-	 * @return true if key is present as a key in the underlying map
-	 */
-	public boolean containsKey(Object key) {
-		return taskMap.containsKey(key);
-	}
+  private UpdateScheduler() {
+    // Forbidding instantiation by hiding constructor
+  }
 
-	/**
-	 * @see java.util.Map#containsValue(Object)
-	 * 
-	 * @param value
-	 * @return true if the value is present as a value in the underlying map
-	 */
-	public boolean containsValue(Object value) {
-		return taskMap.containsValue(value);
-	}
+  void init() {
+    @SuppressWarnings("unchecked")
+    List<Feed> feeds = getSession().createCriteria(Feed.class).list();
+    for (Feed feed : feeds) {
+      UpdateTask task = new UpdateTask(feed);
+      scheduler.scheduleAtFixedRate(task, 0L, task.period, task.unit);
+    }
+    initialized = true;
+  }
 
-	/**
-	 * @see java.util.Map#get(Object)
-	 * 
-	 * @param key
-	 * @return the UpdateTask associated to this key
-	 */
-	public UpdateTask get(Object key) {
-		return taskMap.get(key);
-	}
-
-	/**
-	 * @return true if the Scheduler has been initialized
-	 */
-	public boolean isInitialized() {
-		return initialized;
-	}
-
-	/**
-	 * @return true if no task was scheduled
-	 */
-	public boolean isEmpty() {
-		return taskMap.isEmpty();
-	}
-
-	/**
-	 * @see java.util.Map#put(Object, Object)
-	 * 
-	 * @param feed
-	 * @param task
-	 * @return the UpdateTask that has just been added
-	 */
-	public UpdateTask put(Feed feed, UpdateTask task) {
-		if (this.containsKey(feed)) {
-			this.remove(feed);
-		}
-		taskMap.put(feed, task);
-		scheduler.scheduleAtFixedRate(task, 0, task.period, task.unit);
-		return task;
-	}
-
-	/**
-	 * @see java.util.Map#remove(Object)
-	 * 
-	 * @param key
-	 * @return the UpdateTask that has just been removed
-	 */
-	public UpdateTask remove(Object key) {
-		UpdateTask task = taskMap.remove(key);
-		if (task != null) {
-			task.cancel();
-		}
-		return task;
-	}
-
-	/**
-	 * @see java.util.Map#size()
-	 * 
-	 * @return the size of the underlying HashMap, which is also the number of
-	 *         scheduled feeds.
-	 */
-	public int size() {
-		return taskMap.size();
-	}
 }
