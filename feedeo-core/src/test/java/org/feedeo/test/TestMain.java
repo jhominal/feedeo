@@ -1,0 +1,104 @@
+package org.feedeo.test;
+
+import static org.feedeo.hibernate.InitSessionFactory.getSession;
+
+import java.util.HashMap;
+
+import org.feedeo.model.user.User;
+import org.feedeo.syndication.FeedFetcher;
+
+/**
+ * This class implements various tests, in order to check how the java
+ * application is functioning.
+ * 
+ * @author Feedeo Team
+ * 
+ */
+public class TestMain {
+
+  /**
+   * This main method runs the tests.
+   * 
+   * @param args
+   * @throws Exception 
+   */
+  //@SuppressWarnings("unchecked")
+  public static void main(String[] args) throws Exception {
+    testSyndication();
+//    testPersistence();
+//
+//    User u1 = User.getUserByLogin("toto");
+//
+//    getSession().beginTransaction();
+//
+//    String pref1 = (String) u1.getPreferences().get("pref-string");
+//    Boolean pref2 = (Boolean) u1.getPreferences().get("pref-bool");
+//    Long pref3 = (Long) u1.getPreferences().get("pref-int");
+//    HashMap<String, String> pref4 = (HashMap<String, String>) u1
+//        .getPreferences().get("pref-map");
+//
+//    System.out.println(pref1);
+//    System.out.println(pref2);
+//    System.out.println(pref3);
+//    System.out.println(pref4.get("1"));
+//    System.out.println(pref4.get("2"));
+//
+//    getSession().getTransaction().commit();
+
+  }
+
+  /**
+   * This method tests if the persistent objects are mapped to the database
+   * correctly.
+   */
+  public static void testPersistence() {
+    getSession().beginTransaction();
+    User u1 = new User();
+    u1.setLogin("toto");
+    u1.setPassword("bidoule");
+    u1.setEmail("toto@feedeo.org");
+
+    u1.setFirstName("toto");
+    u1.setLastName("lateteatoto");
+
+    u1.getPreferences().put("pref-string", "valString");
+    u1.getPreferences().put("pref-string-bool", "false");
+    u1.getPreferences().put("pref-bool", Boolean.FALSE);
+    u1.getPreferences().put("pref-string-int", "15");
+    u1.getPreferences().put("pref-int", Long.valueOf(15L));
+    HashMap<String, String> configObject = new HashMap<String, String>();
+    configObject.put("1", "val1");
+    configObject.put("2", "val2");
+    u1.getPreferences().put("pref-map", configObject);
+
+    getSession().saveOrUpdate(u1);
+    getSession().getTransaction().commit();
+    // u1.getSession().beginTransaction();
+    //		
+    // Feed f1 = Feed.getFeedByUrl("http://feedproxy.google.com/TechCrunch");
+    //		
+    // Folder d1 = new Folder();
+    // d1.setTitle("premier dossier");
+    //		
+    // u1.getRootDirectory().attachDirectory(d1);
+    // d1.subscribeFeed(f1);
+    // u1.getSession().getTransaction().commit();
+    //		
+    // u1.saveOrUpdate();
+  }
+
+  /**
+   * This method tests if feeds are imported correctly
+   * @throws Exception 
+   */
+  public static void testSyndication() throws Exception {
+    // Flux RSS 0.92
+    getSession().beginTransaction();
+    FeedFetcher.getFetcher("http://fcargoet.evolix.net/feed/atom/").update();
+    // Flux RSS 2.0
+    FeedFetcher.getFetcher("http://feedproxy.google.com/TechCrunch").update();
+    // Flux Atom 1.0
+    
+    getSession().getTransaction().commit();
+  }
+}
