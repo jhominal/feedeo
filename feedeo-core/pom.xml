@@ -6,7 +6,7 @@
   <packaging>jar</packaging>
   <version>0.1-SNAPSHOT</version>
   <name>feedeo-core</name>
-  <url>http://projet02.optionsi.net/trac</url>
+  <url>http://feedeo.optionsi.net/trac</url>
   <repositories>
     <repository>
       <releases>

@@ -6,5 +6,5 @@
   <packaging>jar</packaging>
   <version>0.1-SNAPSHOT</version>
   <name>feedeo-web-client</name>
-  <url>http://projet02.optionsi.net/trac</url>
+  <url>http://feedeo.optionsi.net/trac</url>
 </project>

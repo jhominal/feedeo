@@ -6,7 +6,7 @@
   <packaging>war</packaging>
   <version>0.1-SNAPSHOT</version>
   <name>feedeo-web-package</name>
-  <url>http://maven.apache.org</url>
+  <url>http://feedeo.optionsi.net/trac</url>
   <properties>
     <client.files>target/client</client.files>
   </properties>
