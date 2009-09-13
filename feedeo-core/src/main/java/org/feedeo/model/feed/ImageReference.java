@@ -42,7 +42,7 @@ public class ImageReference {
   /**
    * @return the image's title.
    */
-  @Column(name="image-title",length=255)
+  @Column(name="image_title",length=255)
   public String getTitle() {
     return title;
   }
@@ -53,7 +53,7 @@ public class ImageReference {
   /**
    * @return the url The image's url
    */
-  @Column(name="image-url",length=255)
+  @Column(name="image_url",length=255)
   public String getUrl() {
     return url;
   }
@@ -64,7 +64,7 @@ public class ImageReference {
   /**
    * @return the link
    */
-  @Column(name="image-link",length=255)
+  @Column(name="image_link",length=255)
   public String getLink() {
     return link;
   }
@@ -75,7 +75,7 @@ public class ImageReference {
   /**
    * @return the description
    */
-  @Column(name="image-description",length=255)
+  @Column(name="image_description",length=255)
   public String getDescription() {
     return description;
   }

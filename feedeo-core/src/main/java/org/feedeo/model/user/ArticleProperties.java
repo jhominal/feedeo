@@ -1,5 +1,7 @@
 package org.feedeo.model.user;
 
+import javax.persistence.Embeddable;
+
 /**
  * Models data specific to a user and an article.
  * 
@@ -8,14 +10,11 @@ package org.feedeo.model.user;
  * @author Feedeo Team
  * 
  */
+@Embeddable
 public class ArticleProperties {
-
-  private Long    id;
 
   private boolean alreadyRead;
   private boolean important;
-
-  private User    owner;
 
   /**
    * Default constructor.
@@ -24,22 +23,6 @@ public class ArticleProperties {
     super();
     alreadyRead = false;
     important = false;
-  }
-
-  /**
-   * @param id
-   *          the id to set
-   */
-  @SuppressWarnings("unused")
-  private void setId(Long id) {
-    this.id = id;
-  }
-
-  /**
-   * @return the id
-   */
-  public Long getId() {
-    return id;
   }
 
   /**
@@ -70,21 +53,6 @@ public class ArticleProperties {
    */
   public void setImportant(boolean important) {
     this.important = important;
-  }
-
-  /**
-   * @return the owner
-   */
-  public User getOwner() {
-    return owner;
-  }
-
-  /**
-   * @param owner
-   *          the owner to set
-   */
-  public void setOwner(User owner) {
-    this.owner = owner;
   }
 
 }

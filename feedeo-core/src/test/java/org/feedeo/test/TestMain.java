@@ -22,29 +22,31 @@ public class TestMain {
    * @param args
    * @throws Exception 
    */
-  //@SuppressWarnings("unchecked")
   public static void main(String[] args) throws Exception {
     getSession();
-//    testSyndication();
-//    testPersistence();
-//
-//    User u1 = User.getUserByLogin("toto");
-//
-//    getSession().beginTransaction();
-//
-//    String pref1 = (String) u1.getPreferences().get("pref-string");
-//    Boolean pref2 = (Boolean) u1.getPreferences().get("pref-bool");
-//    Long pref3 = (Long) u1.getPreferences().get("pref-int");
-//    HashMap<String, String> pref4 = (HashMap<String, String>) u1
-//        .getPreferences().get("pref-map");
-//
-//    System.out.println(pref1);
-//    System.out.println(pref2);
-//    System.out.println(pref3);
-//    System.out.println(pref4.get("1"));
-//    System.out.println(pref4.get("2"));
-//
-//    getSession().getTransaction().commit();
+    testSyndication();
+    testPersistence();
+
+    User u1 = User.getUserByLogin("toto");
+
+    getSession().beginTransaction();
+
+    getSession().saveOrUpdate(u1);
+    
+    String pref1 = (String) u1.getPreferences().get("pref-string");
+    Boolean pref2 = (Boolean) u1.getPreferences().get("pref-bool");
+    Long pref3 = (Long) u1.getPreferences().get("pref-int");
+    @SuppressWarnings("unchecked")
+    HashMap<String, String> pref4 = (HashMap<String, String>) u1
+        .getPreferences().get("pref-map");
+
+    System.out.println(pref1);
+    System.out.println(pref2);
+    System.out.println(pref3);
+    System.out.println(pref4.get("1"));
+    System.out.println(pref4.get("2"));
+
+    getSession().getTransaction().commit();
 
   }
 
@@ -74,18 +76,6 @@ public class TestMain {
 
     getSession().saveOrUpdate(u1);
     getSession().getTransaction().commit();
-    // u1.getSession().beginTransaction();
-    //		
-    // Feed f1 = Feed.getFeedByUrl("http://feedproxy.google.com/TechCrunch");
-    //		
-    // Folder d1 = new Folder();
-    // d1.setTitle("premier dossier");
-    //		
-    // u1.getRootDirectory().attachDirectory(d1);
-    // d1.subscribeFeed(f1);
-    // u1.getSession().getTransaction().commit();
-    //		
-    // u1.saveOrUpdate();
   }
 
   /**

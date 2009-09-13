@@ -2,9 +2,17 @@ package org.feedeo.model.user;
 
 import static org.feedeo.hibernate.InitSessionFactory.getSession;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.Serializable;
+import java.io.Writer;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.persistence.*;
 
 import org.hibernate.criterion.Restrictions;
 
@@ -17,12 +25,13 @@ import org.feedeo.model.feed.Article;
  * @author Feedeo Team
  * 
  */
+@Entity
 public class User {
 
   private Long                            id;
 
   private String                          login;
-  private String                          password;
+  private String                          pwdHash;
   private String                          email;
 
   private String                          firstName;
@@ -56,6 +65,8 @@ public class User {
   /**
    * @return the id
    */
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
   public Long getId() {
     return id;
   }
@@ -75,19 +86,68 @@ public class User {
     this.login = login;
   }
 
-  /**
-   * @return the password
-   */
-  public String getPassword() {
-    return password;
+  private void setPwdHash(String pwdHash) {
+    this.pwdHash = pwdHash;
+  }
+
+  private String getPwdHash() {
+    return pwdHash;
   }
 
   /**
-   * @param password
-   *          the password to set
+   * Utility method to compute a Hash String using Java built-in methods.
+   * @param stringToHash
+   * @return a hash of the string, using the SHA-256 algorithm.
+   */
+  private String computeHash(String stringToHash) {
+    ByteArrayOutputStream byteArrayOut = new ByteArrayOutputStream();
+    try {
+      Writer out = new OutputStreamWriter(byteArrayOut, "UTF8");
+      out.write(stringToHash);
+      out.close();
+    } catch (IOException ioException) {
+      throw new RuntimeException("Exception occurred while converting the string to a UTF-8 byte array", ioException);
+    }
+    byte[] source = byteArrayOut.toByteArray();
+
+    MessageDigest hashFunction;
+    try {
+      hashFunction = MessageDigest.getInstance("SHA-256");
+    } catch (NoSuchAlgorithmException e) {
+      throw new RuntimeException("Exception occurred while trying to initialize Digest Algorithm",e);
+    }
+    byte[] result = hashFunction.digest(source);
+    
+    StringBuilder stringResultBuilder = new StringBuilder(result.length * 2);
+    for (byte resultByte : result) {
+      String toAppend = Integer.toHexString(resultByte & 0xff);
+      if (toAppend.length() == 1) {
+        stringResultBuilder.append("0");
+      }
+      stringResultBuilder.append(toAppend);
+    }
+    return stringResultBuilder.toString();
+  }
+
+  /**
+   * @return whether the password is correct.
+   */
+  public boolean checkPassword(String givenPassword) {
+    String resultingHash = computeHash(givenPassword);
+    if (resultingHash == null) {
+      return false;
+    } else {
+      return (resultingHash.equals(getPwdHash()));
+    }
+  }
+
+  /**
+   * @param pwdHash
+   *          the pwdHash to set
    */
   public void setPassword(String password) {
-    this.password = password;
+    String pwdHash = computeHash(password);
+    setPwdHash(pwdHash);
   }
 
   /**
@@ -138,6 +198,8 @@ public class User {
   /**
    * @return the lastName
    */
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name="root_dir_fk")
   public Folder getRootDirectory() {
     return rootDirectory;
   }
@@ -153,6 +215,7 @@ public class User {
   /**
    * @return the preferences
    */
+  @org.hibernate.annotations.CollectionOfElements
   public Map<String, Serializable> getPreferences() {
     return preferences;
   }
@@ -168,6 +231,7 @@ public class User {
   /**
    * @return the articleProperties
    */
+  @org.hibernate.annotations.CollectionOfElements
   public Map<Article, ArticleProperties> getArticleProperties() {
     return articleProperties;
   }
@@ -189,6 +253,7 @@ public class User {
    *          the article in question
    * @return the corresponding ArticleProperties object
    */
+  @Transient
   public ArticleProperties getArticleProperties(Article article) {
     if (!articleProperties.containsKey(article)) {
       articleProperties.put(article, new ArticleProperties());

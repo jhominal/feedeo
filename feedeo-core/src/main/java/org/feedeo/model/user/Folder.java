@@ -12,6 +12,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.Transient;
+
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 
@@ -25,6 +35,7 @@ import org.feedeo.model.feed.Feed;
  * @author Feedeo Team
  * 
  */
+@Entity
 public class Folder implements Mappable {
   private Long         id;
 
@@ -53,6 +64,8 @@ public class Folder implements Mappable {
   /**
    * @return the id
    */
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
   public Long getId() {
     return id;
   }
@@ -85,6 +98,7 @@ public class Folder implements Mappable {
   /**
    * @return the lastUpdate
    */
+  @Temporal(TemporalType.TIMESTAMP)
   public Date getLastUpdate() {
     return lastUpdate;
   }
@@ -104,6 +118,7 @@ public class Folder implements Mappable {
    * 
    * @return the feeds
    */
+  @ManyToMany
   public Set<Feed> getFeeds() {
     return Collections.unmodifiableSet(feeds);
   }
@@ -119,6 +134,7 @@ public class Folder implements Mappable {
   /**
    * @return a unmodifiable view to the folder's articles
    */
+  @ManyToMany
   public Set<Article> getArticles() {
     return Collections.unmodifiableSet(articles);
   }
@@ -133,6 +149,7 @@ public class Folder implements Mappable {
   /**
    * @return the directory's subFolders.
    */
+  @ManyToMany
   public Set<Folder> getSubFolders() {
     return Collections.unmodifiableSet(subFolders);
   }
@@ -147,6 +164,7 @@ public class Folder implements Mappable {
   /**
    * @return the folder's owner
    */
+  @ManyToOne
   public User getOwner() {
     return owner;
   }
@@ -166,6 +184,15 @@ public class Folder implements Mappable {
   public void attachFolder(Folder folder) {
     subFolders.add(folder);
     folder.setOwner(getOwner());
+  }
+  
+  /**
+   * This method removes a specified folder.
+   * 
+   * @param folder
+   */
+  public boolean removeFolder(Folder folder) {
+    return subFolders.remove(folder);
   }
 
   /**
@@ -214,6 +241,7 @@ public class Folder implements Mappable {
   /**
    * @return The list of the children's maps.
    */
+  @Transient
   public List<Map<String, Object>> getChildrenMap() {
     List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
     for (Folder directory : subFolders) {

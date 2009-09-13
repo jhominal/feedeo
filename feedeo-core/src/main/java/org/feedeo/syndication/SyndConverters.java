@@ -35,35 +35,52 @@ class SyndConverters {
   }
   
   static Content convertContent(SyndContent syndContent) {
-    String type = syndContent.getType();
-    String mode = syndContent.getMode();
-    String value = syndContent.getValue();
-    return new Content(type, mode, value);
+    if (syndContent == null) {
+      return null;
+    } else {
+      String type = syndContent.getType();
+      String mode = syndContent.getMode();
+      String value = syndContent.getValue();
+      return new Content(type, mode, value);
+    }
+    
   }
 
   static Enclosure convertEnclosure(SyndEnclosure syndEnclosure) {
-    String url = syndEnclosure.getUrl();
-    long length = syndEnclosure.getLength();
-    String type = syndEnclosure.getType();
-    return new Enclosure(url, length, type);
+    if (syndEnclosure == null) {
+      return null;
+    } else {
+      String url = syndEnclosure.getUrl();
+      long length = syndEnclosure.getLength();
+      String type = syndEnclosure.getType();
+      return new Enclosure(url, length, type);
+    }
   }
 
   static ImageReference convertImage(SyndImage syndImage) {
-    String title = syndImage.getTitle();
-    String url = syndImage.getUrl();
-    String link = syndImage.getLink();
-    String description = syndImage.getDescription();
-    return new ImageReference(title, url, link, description);
+    if (syndImage == null) {
+      return null;
+    } else {
+      String title = syndImage.getTitle();
+      String url = syndImage.getUrl();
+      String link = syndImage.getLink();
+      String description = syndImage.getDescription();
+      return new ImageReference(title, url, link, description);
+    }
   }
 
   static Link convertLink(SyndLink syndLink) {
-    String rel = syndLink.getRel();
-    String href = syndLink.getHref();
-    String title = syndLink.getTitle();
-    String type = syndLink.getType();
-    String hreflang = syndLink.getHreflang();
-    long length = syndLink.getLength();
-    return new Link(rel, href, title, type, hreflang, length);
+    if (syndLink == null) {
+      return null;
+    } else {
+      String rel = syndLink.getRel();
+      String href = syndLink.getHref();
+      String title = syndLink.getTitle();
+      String type = syndLink.getType();
+      String hreflang = syndLink.getHreflang();
+      long length = syndLink.getLength();
+      return new Link(rel, href, title, type, hreflang, length);
+    }
   }
 
   @SuppressWarnings("unchecked")

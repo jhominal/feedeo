@@ -8,6 +8,9 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
 
 import org.feedeo.model.feed.*;
+import org.feedeo.model.user.ArticleProperties;
+import org.feedeo.model.user.Folder;
+import org.feedeo.model.user.User;
 
 /**
  * @author hennebrueder
@@ -52,6 +55,9 @@ public enum InitSessionFactory {
     config.addAnnotatedClass(Feed.class);
     config.addAnnotatedClass(Writer.class);
     
+    config.addAnnotatedClass(User.class);
+    config.addAnnotatedClass(Folder.class);
+    config.addAnnotatedClass(ArticleProperties.class);
     
     Properties extraProperties = new Properties();
     try {

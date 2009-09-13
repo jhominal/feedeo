@@ -135,8 +135,6 @@ public class FeedeoHandler {
                 if (read != null) {
                   properties.setAlreadyRead(read.booleanValue());
                 }
-                // "On devrait gerer l'echec de tous les changements d'etat"
-                // TODO: kezako ?
                 response.put("success", Boolean.TRUE);
               }
             }
@@ -191,7 +189,7 @@ public class FeedeoHandler {
     String login = (String) loginRequest.get("login");
     String password = (String) loginRequest.get("password");
     User possibleUser = User.getUserByLogin(login);
-    if (password != null && password.equals(possibleUser.getPassword())) {
+    if (possibleUser.checkPassword(password)) {
       return login;
     } else {
       return null;
@@ -202,13 +200,13 @@ public class FeedeoHandler {
    * Creates a new account, if not already in the database.
    * 
    * @param newAccountReq
-   *          a Map specifying "login", "password", "name", "lastName", "email"
+   *          a Map specifying "login", "password", "name", "lastName", "mail"
    * @return the created-user's login
    */
   public static String createAccount(Map<String, Object> newAccountReq) {
     String login = (String) newAccountReq.get("login");
     User possibleUser = User.getUserByLogin(login);
-    if (possibleUser.getPassword() == null) {
+    if (possibleUser.getId() == null) {
       possibleUser.setPassword((String) newAccountReq.get("password"));
       possibleUser.setFirstName((String) newAccountReq.get("name"));
       possibleUser.setLastName((String) newAccountReq.get("lastname"));
