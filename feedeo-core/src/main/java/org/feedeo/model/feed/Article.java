@@ -115,9 +115,9 @@ public class Article implements Mappable {
    */
   @Embedded
   @AttributeOverrides( {
-      @AttributeOverride(name = "type", column = @Column(name = "title-type", length = 255)),
-      @AttributeOverride(name = "mode", column = @Column(name = "title-mode", length = 16)),
-      @AttributeOverride(name = "value", column = @Column(name = "title-value")) })
+      @AttributeOverride(name = "type", column = @Column(name = "title_type", length = 255)),
+      @AttributeOverride(name = "mode", column = @Column(name = "title_mode", length = 16)),
+      @AttributeOverride(name = "value", column = @Column(name = "title_value")) })
   public Content getTitle() {
     return title;
   }
@@ -163,9 +163,9 @@ public class Article implements Mappable {
    */
   @Embedded
   @AttributeOverrides( {
-      @AttributeOverride(name = "type", column = @Column(name = "desc-type", length = 255)),
-      @AttributeOverride(name = "mode", column = @Column(name = "desc-mode", length = 16)),
-      @AttributeOverride(name = "value", column = @Column(name = "desc-value")) })
+      @AttributeOverride(name = "type", column = @Column(name = "desc_type", length = 255)),
+      @AttributeOverride(name = "mode", column = @Column(name = "desc_mode", length = 16)),
+      @AttributeOverride(name = "value", column = @Column(name = "desc_value")) })
   public Content getDescription() {
     return description;
   }

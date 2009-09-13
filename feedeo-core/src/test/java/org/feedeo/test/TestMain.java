@@ -24,7 +24,8 @@ public class TestMain {
    */
   //@SuppressWarnings("unchecked")
   public static void main(String[] args) throws Exception {
-    testSyndication();
+    getSession();
+//    testSyndication();
 //    testPersistence();
 //
 //    User u1 = User.getUserByLogin("toto");

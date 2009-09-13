@@ -129,9 +129,9 @@ public class Feed {
    */
   @Embedded
   @AttributeOverrides( {
-      @AttributeOverride(name = "type", column = @Column(name = "title-type")),
-      @AttributeOverride(name = "mode", column = @Column(name = "title-mode")),
-      @AttributeOverride(name = "value", column = @Column(name = "title-value")) })
+      @AttributeOverride(name = "type", column = @Column(name = "title_type")),
+      @AttributeOverride(name = "mode", column = @Column(name = "title_mode")),
+      @AttributeOverride(name = "value", column = @Column(name = "title_value")) })
   public Content getTitle() {
     return title;
   }
@@ -181,9 +181,9 @@ public class Feed {
    */
   @Embedded
   @AttributeOverrides( {
-      @AttributeOverride(name = "type", column = @Column(name = "desc-type")),
-      @AttributeOverride(name = "mode", column = @Column(name = "desc-mode")),
-      @AttributeOverride(name = "value", column = @Column(name = "desc-value")) })
+      @AttributeOverride(name = "type", column = @Column(name = "desc_type")),
+      @AttributeOverride(name = "mode", column = @Column(name = "desc_mode")),
+      @AttributeOverride(name = "value", column = @Column(name = "desc_value")) })
   public Content getDescription() {
     return description;
   }
