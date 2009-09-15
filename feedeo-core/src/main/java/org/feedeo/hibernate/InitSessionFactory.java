@@ -34,13 +34,11 @@ public enum InitSessionFactory {
   private org.hibernate.SessionFactory sessionFactory;
 
   static {
-    // Annotation and XML
-    // sessionFactory = new
-    // AnnotationConfiguration().configure().buildSessionFactory();
-    // XML only
-    // sessionFactory = new
-    // Configuration().configure().buildSessionFactory();
-
+    init();
+  }
+  
+  private static void init()
+  {
     AnnotationConfiguration config = new AnnotationConfiguration();
 
     config.configure("hibernate.cfg.xml");

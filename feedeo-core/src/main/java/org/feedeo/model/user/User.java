@@ -1,7 +1,5 @@
 package org.feedeo.model.user;
 
-import static org.feedeo.hibernate.InitSessionFactory.getSession;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -13,8 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.persistence.*;
-
-import org.hibernate.criterion.Restrictions;
 
 import org.feedeo.model.feed.Article;
 
@@ -74,6 +70,7 @@ public class User {
   /**
    * @return the login
    */
+  @Column(unique=true)
   public String getLogin() {
     return login;
   }
@@ -153,6 +150,7 @@ public class User {
   /**
    * @return the email
    */
+  @Column(unique=true)
   public String getEmail() {
     return email;
   }
@@ -274,23 +272,4 @@ public class User {
     return result;
   }
 
-  /**
-   * Gets a User by his login.
-   * 
-   * @param login
-   *          the user's login.
-   * @return a User with the corresponding login; if he did not exist in the
-   *         base, all fields except login will be empty.
-   */
-  public static User getUserByLogin(String login) {
-    getSession().beginTransaction();
-    User potentialUser = (User) getSession().createCriteria(User.class).add(
-        Restrictions.eq("login", login)).uniqueResult();
-    getSession().getTransaction().commit();
-    if (potentialUser == null) {
-      return new User();
-    } else {
-      return potentialUser;
-    }
-  }
 }

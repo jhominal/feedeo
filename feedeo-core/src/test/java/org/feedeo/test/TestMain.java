@@ -4,6 +4,7 @@ import static org.feedeo.hibernate.InitSessionFactory.getSession;
 
 import java.util.HashMap;
 
+import org.feedeo.hibernate.Queries;
 import org.feedeo.model.user.User;
 import org.feedeo.syndication.FeedFetcher;
 
@@ -27,12 +28,11 @@ public class TestMain {
     testSyndication();
     testPersistence();
 
-    User u1 = User.getUserByLogin("toto");
-
     getSession().beginTransaction();
-
-    getSession().saveOrUpdate(u1);
     
+    User u1 = Queries.getUserByLogin("toto");
+
+
     String pref1 = (String) u1.getPreferences().get("pref-string");
     Boolean pref2 = (Boolean) u1.getPreferences().get("pref-bool");
     Long pref3 = (Long) u1.getPreferences().get("pref-int");
@@ -83,8 +83,8 @@ public class TestMain {
    * @throws Exception 
    */
   public static void testSyndication() throws Exception {
-    // Flux RSS 0.92
     getSession().beginTransaction();
+    // Flux RSS 0.92
     FeedFetcher.getFetcher("http://fcargoet.evolix.net/feed/atom/").update();
     // Flux RSS 2.0
     FeedFetcher.getFetcher("http://feedproxy.google.com/TechCrunch").update();

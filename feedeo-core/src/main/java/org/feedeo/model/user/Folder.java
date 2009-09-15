@@ -1,16 +1,6 @@
 package org.feedeo.model.user;
 
-import static org.feedeo.hibernate.InitSessionFactory.getSession;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,9 +11,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
-
-import org.hibernate.Criteria;
-import org.hibernate.criterion.Restrictions;
 
 import org.feedeo.clientcomm.Mappable;
 import org.feedeo.model.feed.Article;
@@ -216,27 +203,12 @@ public class Folder implements Mappable {
   public void unsubscribeFeed(Feed feed) {
     feeds.remove(feed);
   }
-
-  /**
-   * This functions updates all of a folder's default feeds, and puts the
-   * articles published after the lastUpdate date into this folder.
-   */
-  public void updateArticles() {
-    Date attemptUpdate = Calendar.getInstance().getTime();
-
-    if (!feeds.isEmpty()) {
-      Criteria criteria = getSession().createCriteria(Article.class, "article");
-      criteria.add(Restrictions.between("downloadDate", getLastUpdate(),
-          attemptUpdate));
-      criteria.add(Restrictions.in("sourceFeed", feeds));
-      // Safe suppress warning: The criteria instance has been configured to
-      // only search for instances of the Article class.
-      @SuppressWarnings("unchecked")
-      List<Article> resultList = criteria.list();
-      articles.addAll(resultList);
-    }
-    setLastUpdate(attemptUpdate);
+  
+  public void addArticles(Collection<? extends Article> articlesToAdd)
+  {
+    articles.addAll(articlesToAdd);
   }
+
 
   /**
    * @return The list of the children's maps.

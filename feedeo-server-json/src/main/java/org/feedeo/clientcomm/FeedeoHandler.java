@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.hibernate.HibernateException;
 
+import org.feedeo.hibernate.Queries;
 import org.feedeo.model.feed.Article;
 import org.feedeo.model.user.ArticleProperties;
 import org.feedeo.model.user.Folder;
@@ -32,7 +33,9 @@ public class FeedeoHandler {
    * @param login
    */
   public FeedeoHandler(String login) {
-    user = User.getUserByLogin(login);
+    getSession().beginTransaction();
+    user = Queries.getUserByLogin(login);
+    getSession().getTransaction().commit();
   }
 
   /**
@@ -76,7 +79,7 @@ public class FeedeoHandler {
                   response.put("children", targetDirectory.getChildrenMap());
                   response.put("success", Boolean.TRUE);
                 } else if ("getArticles".equals(action)) {
-                  targetDirectory.updateArticles();
+                  Queries.updateArticles(targetDirectory);
                   response.put("articles", targetDirectory.getArticlesMap(targetDirectory.getArticles()));
                   response.put("success", Boolean.TRUE);
                 } else if ("addFeed".equals(action)) {
@@ -188,12 +191,16 @@ public class FeedeoHandler {
   public static String login(Map<String, Object> loginRequest) {
     String login = (String) loginRequest.get("login");
     String password = (String) loginRequest.get("password");
-    User possibleUser = User.getUserByLogin(login);
+    String result;
+    getSession().beginTransaction();
+    User possibleUser = Queries.getUserByLogin(login);
     if (possibleUser.checkPassword(password)) {
-      return login;
+      result = login;
     } else {
-      return null;
+      result = null;
     }
+    getSession().getTransaction().commit();
+    return result;
   }
 
   /**
@@ -205,18 +212,19 @@ public class FeedeoHandler {
    */
   public static String createAccount(Map<String, Object> newAccountReq) {
     String login = (String) newAccountReq.get("login");
-    User possibleUser = User.getUserByLogin(login);
+    String result;
+    getSession().beginTransaction();
+    User possibleUser = Queries.getUserByLogin(login);
     if (possibleUser.getId() == null) {
       possibleUser.setPassword((String) newAccountReq.get("password"));
       possibleUser.setFirstName((String) newAccountReq.get("name"));
       possibleUser.setLastName((String) newAccountReq.get("lastname"));
       possibleUser.setEmail((String) newAccountReq.get("mail"));
-      getSession().beginTransaction();
-      getSession().saveOrUpdate(possibleUser);
-      getSession().getTransaction().commit();
-      return login;
+      result = login;
     } else {
-      return null;
+      result = null;
     }
+    getSession().getTransaction().commit();
+    return result;
   }
 }

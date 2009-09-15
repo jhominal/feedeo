@@ -5,13 +5,20 @@ import static org.hibernate.criterion.Restrictions.eq;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
 
 import org.feedeo.model.feed.Article;
 import org.feedeo.model.feed.Category;
 import org.feedeo.model.feed.Content;
 import org.feedeo.model.feed.Feed;
 import org.feedeo.model.feed.Writer;
+import org.feedeo.model.user.Folder;
+import org.feedeo.model.user.User;
 
 /**
  * Regroups a number of queries required for the program to function.
@@ -103,4 +110,45 @@ public class Queries {
     }
     return result;
   }
+  
+  /**
+   * This functions updates all of a folder's default feeds, and puts the
+   * articles published after the lastUpdate date into this folder.
+   */
+  public static void updateArticles(Folder folder) {
+    Date attemptUpdate = Calendar.getInstance().getTime();
+
+    if (!folder.getFeeds().isEmpty()) {
+      Criteria criteria = getSession().createCriteria(Article.class, "article");
+      criteria.add(Restrictions.between("downloadDate", folder.getLastUpdate(),
+          attemptUpdate));
+      criteria.add(Restrictions.in("sourceFeed", folder.getFeeds()));
+      // Safe suppress warning: The criteria instance has been configured to
+      // only search for instances of the Article class.
+      @SuppressWarnings("unchecked")
+      List<Article> resultList = criteria.list();
+      folder.addArticles(resultList);
+    }
+    folder.setLastUpdate(attemptUpdate);
+  }
+  
+  /**
+   * Gets a User by his login.
+   * 
+   * @param login
+   *          the user's login.
+   * @return a User with the corresponding login; if he did not exist in the
+   *         base, all fields except login will be empty.
+   */
+  public static User getUserByLogin(String login) {
+    User potentialUser = (User) getSession().createCriteria(User.class).add(
+        Restrictions.eq("login", login)).uniqueResult();
+    if (potentialUser == null) {
+      return new User();
+    } else {
+      return potentialUser;
+    }
+  }
+
+
 }
