@@ -4,6 +4,8 @@ import static org.feedeo.hibernate.InitSessionFactory.getSession;
 
 import java.util.HashMap;
 
+import org.junit.Test;
+
 import org.feedeo.hibernate.Queries;
 import org.feedeo.model.user.User;
 import org.feedeo.syndication.FeedFetcher;
@@ -23,7 +25,8 @@ public class TestMain {
    * @param args
    * @throws Exception 
    */
-  public static void main(String[] args) throws Exception {
+  @Test
+  public void run() throws Exception {
     getSession();
     testSyndication();
     testPersistence();
@@ -84,10 +87,11 @@ public class TestMain {
    */
   public static void testSyndication() throws Exception {
     getSession().beginTransaction();
-    // Flux RSS 0.92
-    FeedFetcher.getFetcher("http://fcargoet.evolix.net/feed/atom/").update();
+    // Flux RSS 1.0
+    FeedFetcher.getFetcher("http://rss.slashdot.org/Slashdot/slashdot").update();
     // Flux RSS 2.0
-    FeedFetcher.getFetcher("http://feedproxy.google.com/TechCrunch").update();
+    FeedFetcher.getFetcher("http://feeds.arstechnica.com/arstechnica/everything").update();
+    
     // Flux Atom 1.0
     
     getSession().getTransaction().commit();

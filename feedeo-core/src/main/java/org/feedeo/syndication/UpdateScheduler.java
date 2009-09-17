@@ -3,6 +3,8 @@ package org.feedeo.syndication;
 import static org.feedeo.hibernate.InitSessionFactory.getSession;
 
 import java.net.MalformedURLException;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -22,6 +24,10 @@ public enum UpdateScheduler {
    * This is the UpdateScheduler INSTANCE.
    */
   INSTANCE;
+  
+  static {
+    INSTANCE.init();
+  }
 
   /**
    * This utility class models an update task. If you need to change
@@ -29,19 +35,19 @@ public enum UpdateScheduler {
    * @author Feedeo Team
    * 
    */
-  public static class UpdateTask implements Runnable {
-    static long        defaultPeriod = 1L;
-    static TimeUnit    defaultUnit   = TimeUnit.HOURS;
-    private final Feed targetFeed;
-    long               period;
-    TimeUnit           unit;
+  public static class Task implements Runnable {
+    private static long     defaultPeriod = 1L;
+    private static TimeUnit defaultUnit   = TimeUnit.HOURS;
+    private final Feed      targetFeed;
+    private long            period;
+    private TimeUnit        unit;
 
     /**
      * @param targetFeed
      * @param period
      * @param unit
      */
-    public UpdateTask(Feed targetFeed, long period, TimeUnit unit) {
+    public Task(Feed targetFeed, long period, TimeUnit unit) {
       super();
       this.targetFeed = targetFeed;
       this.period = period;
@@ -51,7 +57,7 @@ public enum UpdateScheduler {
     /**
      * @param targetFeed
      */
-    public UpdateTask(Feed targetFeed) {
+    public Task(Feed targetFeed) {
       this(targetFeed, defaultPeriod, defaultUnit);
     }
 
@@ -74,6 +80,8 @@ public enum UpdateScheduler {
     }
 
   }
+  
+  private Collection<Long> scheduledFeedsIds = new HashSet<Long>();
 
   private int                      threadPoolSize = 1;
   private ScheduledExecutorService scheduler      = Executors
@@ -96,14 +104,40 @@ public enum UpdateScheduler {
     // Forbidding instantiation by hiding constructor
   }
 
-  void init() {
+  public void init() {
+    
+    getSession().beginTransaction();
     @SuppressWarnings("unchecked")
     List<Feed> feeds = getSession().createCriteria(Feed.class).list();
     for (Feed feed : feeds) {
-      UpdateTask task = new UpdateTask(feed);
-      scheduler.scheduleAtFixedRate(task, 0L, task.period, task.unit);
+      INSTANCE.scheduleFeed(feed);
     }
+    getSession().getTransaction().commit();
+    
     initialized = true;
+    
   }
-
+  
+  public boolean isFeedScheduled(Feed feed)
+  {
+    if (feed.getId() == null) {
+      return false;
+    } else {
+      return scheduledFeedsIds.contains(feed.getId());
+    }
+  }
+  
+  public boolean scheduleFeed(Feed feed)
+  {
+    if (feed.getId() == null) {
+      return false;
+    } else if (scheduledFeedsIds.contains(feed.getId())) {
+      return true;
+    } else {
+      Task task = new Task(feed);
+      scheduler.scheduleAtFixedRate(task, 0L, task.period, task.unit);
+      scheduledFeedsIds.add(feed.getId());
+      return true;
+    }
+  }
 }

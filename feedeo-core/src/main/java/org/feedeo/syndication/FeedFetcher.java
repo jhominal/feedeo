@@ -65,7 +65,6 @@ public class FeedFetcher {
    * @throws FeedRetrievalException
    */
   public void update() throws FeedRetrievalException {
-    // TODO this function
     SyndFeed source = retrieve();
 
     updateFeedFields(source);

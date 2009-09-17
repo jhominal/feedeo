@@ -107,7 +107,7 @@ public class Folder implements Mappable {
    */
   @ManyToMany
   public Set<Feed> getFeeds() {
-    return Collections.unmodifiableSet(feeds);
+    return feeds;
   }
 
   /**
@@ -123,7 +123,7 @@ public class Folder implements Mappable {
    */
   @ManyToMany
   public Set<Article> getArticles() {
-    return Collections.unmodifiableSet(articles);
+    return articles;
   }
 
   /**
@@ -138,7 +138,7 @@ public class Folder implements Mappable {
    */
   @ManyToMany
   public Set<Folder> getSubFolders() {
-    return Collections.unmodifiableSet(subFolders);
+    return subFolders;
   }
 
   /**
