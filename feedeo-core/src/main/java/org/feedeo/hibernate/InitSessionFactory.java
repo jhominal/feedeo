@@ -25,56 +25,42 @@ import org.feedeo.model.user.User;
  *         singleton, as recommended in "Effective Java 2nd edition"
  */
 public enum InitSessionFactory {
-  /**
-   * This object contains a sessionFactory to which the operations will be
-   * forwarded.
-   */
+  
   INSTANCE;
-
+  
   private org.hibernate.SessionFactory sessionFactory;
+  private boolean initialized = false;
 
   static {
     init();
   }
   
-  private static void init()
+  public static void init()
   {
-    AnnotationConfiguration config = new AnnotationConfiguration();
+    if (!INSTANCE.initialized)
+    {
+      AnnotationConfiguration config = new AnnotationConfiguration();
 
-    config.configure("hibernate.cfg.xml");
-    
-    config.addAnnotatedClass(Content.class);
-    config.addAnnotatedClass(Enclosure.class);
-    config.addAnnotatedClass(ImageReference.class);
-    config.addAnnotatedClass(Link.class);
-    
-    config.addAnnotatedClass(Article.class);
-    config.addAnnotatedClass(Category.class);
-    config.addAnnotatedClass(Feed.class);
-    config.addAnnotatedClass(Writer.class);
-    
-    config.addAnnotatedClass(User.class);
-    config.addAnnotatedClass(Folder.class);
-    config.addAnnotatedClass(ArticleProperties.class);
-    
-    Properties extraProperties = new Properties();
-    try {
-      extraProperties.load(InitSessionFactory.class.getClassLoader()
-          .getResourceAsStream("hibernate.properties"));
-    } catch (IOException e) {
+      config.configure("hibernate.cfg.xml");
       
-      e.printStackTrace();
-      System.out.println("File 'hibernate.properties' not found at the "
-          + "classpath root. If you haven't already, please "
-          + "add such a file to the src folder, using "
-          + "hibernate.properties.sample as an example.");
-      // Thread.currentThread().interrupt();
+      config.addAnnotatedClass(Content.class);
+      config.addAnnotatedClass(Enclosure.class);
+      config.addAnnotatedClass(ImageReference.class);
+      config.addAnnotatedClass(Link.class);
+      
+      config.addAnnotatedClass(Article.class);
+      config.addAnnotatedClass(Category.class);
+      config.addAnnotatedClass(Feed.class);
+      config.addAnnotatedClass(Writer.class);
+      
+      config.addAnnotatedClass(User.class);
+      config.addAnnotatedClass(Folder.class);
+      config.addAnnotatedClass(ArticleProperties.class);
+      
+      INSTANCE.sessionFactory = config.buildSessionFactory();
+      INSTANCE.initialized = true;
     }
-    config.mergeProperties(extraProperties);
-
-    System.out.println(config.getProperties());
-
-    INSTANCE.sessionFactory = config.buildSessionFactory();
+    
   }
 
   /**
@@ -82,15 +68,6 @@ public enum InitSessionFactory {
    */
   public static SessionFactory getInstance() {
     return INSTANCE.sessionFactory;
-  }
-
-  /**
-   * Opens a session and will not bind it to a session context
-   * 
-   * @return the session
-   */
-  public Session openSession() {
-    return sessionFactory.openSession();
   }
 
   /**
@@ -104,17 +81,8 @@ public enum InitSessionFactory {
    * 
    * @return the session
    */
-  public Session getCurrentSession() {
-    return sessionFactory.getCurrentSession();
-  }
-
-  /**
-   * Does the same as getCurrentSession(), only in a static method.
-   * 
-   * @return the session
-   */
   public static Session getSession() {
-    return INSTANCE.getCurrentSession();
+    return INSTANCE.sessionFactory.getCurrentSession();
   }
 
   /**

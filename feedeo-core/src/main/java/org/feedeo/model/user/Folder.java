@@ -2,15 +2,7 @@ package org.feedeo.model.user;
 
 import java.util.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
 import org.feedeo.clientcomm.Mappable;
 import org.feedeo.model.feed.Article;
@@ -30,7 +22,7 @@ public class Folder implements Mappable {
 
   private Date         lastUpdate;
 
-  private Set<Folder>  subFolders;
+  private List<Folder>  subFolders;
 
   // Each folder lists the feeds to which it has subscribed. This information is
   // only important when updating articles.
@@ -63,7 +55,7 @@ public class Folder implements Mappable {
   public Folder() {
     super();
     lastUpdate = Calendar.getInstance().getTime();
-    subFolders = new HashSet<Folder>();
+    subFolders = new ArrayList<Folder>();
     feeds = new HashSet<Feed>();
     articles = new HashSet<Article>();
   }
@@ -106,6 +98,7 @@ public class Folder implements Mappable {
    * @return the feeds
    */
   @ManyToMany
+  @JoinTable(name = "Folder_Feeds")
   public Set<Feed> getFeeds() {
     return feeds;
   }
@@ -122,6 +115,8 @@ public class Folder implements Mappable {
    * @return a unmodifiable view to the folder's articles
    */
   @ManyToMany
+  @JoinTable(name = "Folder_Articles")
+  @OrderBy(value = "sortDate desc")
   public Set<Article> getArticles() {
     return articles;
   }
@@ -137,14 +132,16 @@ public class Folder implements Mappable {
    * @return the directory's subFolders.
    */
   @ManyToMany
-  public Set<Folder> getSubFolders() {
+  @JoinTable(name = "Folder_subFolders")
+  @org.hibernate.annotations.IndexColumn(name = "subFolderOrder")
+  public List<Folder> getSubFolders() {
     return subFolders;
   }
 
   /**
    * @param subFolders
    */
-  public void setSubFolders(Set<Folder> subFolders) {
+  public void setSubFolders(List<Folder> subFolders) {
     this.subFolders = subFolders;
   }
 

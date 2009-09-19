@@ -90,10 +90,10 @@ public class TestMain {
     // Flux RSS 1.0
     FeedFetcher.getFetcher("http://rss.slashdot.org/Slashdot/slashdot").update();
     // Flux RSS 2.0
-    FeedFetcher.getFetcher("http://feeds.arstechnica.com/arstechnica/everything").update();
-    
+    FeedFetcher.getFetcher("http://feeds.feedburner.com/ostatic").update();
     // Flux Atom 1.0
-    
+    FeedFetcher.getFetcher("http://www.atomenabled.org/atom.xml").update();
+     
     getSession().getTransaction().commit();
   }
 }

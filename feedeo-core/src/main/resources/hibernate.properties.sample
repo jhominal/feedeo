@@ -1,3 +1,0 @@
-hibernate.connection.url=jdbc:mysql://localhost/feedeo-db
-hibernate.connection.username=feedeo-user
-hibernate.connection.password=feedeo-pass
