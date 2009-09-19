@@ -10,24 +10,6 @@
   <packaging>jar</packaging>
   <name>Feedeo JSON servlet</name>
   <url>http://feedeo.optionsi.net/trac</url>
-  <repositories>
-    <repository>
-      <releases>
-        <enabled>true</enabled>
-        <updatePolicy>never</updatePolicy>
-        <checksumPolicy>ignore</checksumPolicy>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-        <updatePolicy>never</updatePolicy>
-        <checksumPolicy>fail</checksumPolicy>
-      </snapshots>
-      <id>stringtree</id>
-      <name>Stringtree releases</name>
-      <url>http://stringtree.org/repository/</url>
-      <layout>default</layout>
-    </repository>
-  </repositories>
   <dependencies>
     <dependency>
       <groupId>org.feedeo</groupId>
