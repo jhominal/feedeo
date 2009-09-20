@@ -1,4 +1,4 @@
-package org.feedeo.model.feed;
+package org.feedeo.core.model.feed;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

@@ -1,17 +1,17 @@
-package org.feedeo.clientcomm;
+package org.feedeo.jsonserver;
 
-import static org.feedeo.hibernate.InitSessionFactory.getSession;
+import static org.feedeo.core.hibernate.InitSessionFactory.getSession;
 
 import java.util.Map;
 
 import org.hibernate.HibernateException;
 
-import org.feedeo.hibernate.Queries;
-import org.feedeo.model.feed.Article;
-import org.feedeo.model.user.ArticleProperties;
-import org.feedeo.model.user.Folder;
-import org.feedeo.model.user.User;
-import org.feedeo.syndication.FeedFetcher;
+import org.feedeo.core.hibernate.Queries;
+import org.feedeo.core.model.feed.Article;
+import org.feedeo.core.model.user.ArticleProperties;
+import org.feedeo.core.model.user.Folder;
+import org.feedeo.core.model.user.User;
+import org.feedeo.core.syndication.FeedFetcher;
 
 /**
  * This class handles the JSON requests built by the index.jsp page, and gives
@@ -76,11 +76,11 @@ public class FeedeoHandler {
               }
               if (targetDirectory != null) {
                 if ("getChildren".equals(action)) {
-                  response.put("children", targetDirectory.getChildrenMap());
+                  response.put("children", JsonMaps.childrenOf(targetDirectory));
                   response.put("success", Boolean.TRUE);
                 } else if ("getArticles".equals(action)) {
                   Queries.updateArticles(targetDirectory);
-                  response.put("articles", targetDirectory.getArticlesMap(targetDirectory.getArticles()));
+                  response.put("articles", JsonMaps.articlesOf(targetDirectory));
                   response.put("success", Boolean.TRUE);
                 } else if ("addFeed".equals(action)) {
                   String feedUrl = (String) request.get("feedUrl");
@@ -109,7 +109,7 @@ public class FeedeoHandler {
                 if (parentDirectory != null) {
                   parentDirectory.attachFolder(newDirectory);
                   getSession().persist(newDirectory);
-                  response.put("folder", newDirectory.toMap(false));
+                  response.put("folder", JsonMaps.of(newDirectory, false));
                   response.put("success", Boolean.TRUE);
 
                 }
@@ -125,7 +125,7 @@ public class FeedeoHandler {
                   Long.valueOf(articleId));
               if ("update".equals(action)) {
                 ArticleProperties properties = user
-                    .getArticleProperties(targetArticle);
+                    .propertiesOf(targetArticle);
                 // Suppress warning because the Feedeo client/server (implicit) API specifies that.
                 @SuppressWarnings("unchecked")
                 Map<String, Object> changes = (Map<String, Object>) request

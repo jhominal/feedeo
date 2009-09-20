@@ -1,4 +1,4 @@
-package org.feedeo.hibernate;
+package org.feedeo.core.hibernate;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -7,10 +7,10 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
 
-import org.feedeo.model.feed.*;
-import org.feedeo.model.user.ArticleProperties;
-import org.feedeo.model.user.Folder;
-import org.feedeo.model.user.User;
+import org.feedeo.core.model.feed.*;
+import org.feedeo.core.model.user.ArticleProperties;
+import org.feedeo.core.model.user.Folder;
+import org.feedeo.core.model.user.User;
 
 /**
  * @author hennebrueder

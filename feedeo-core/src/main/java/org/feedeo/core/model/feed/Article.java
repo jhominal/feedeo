@@ -1,11 +1,9 @@
-package org.feedeo.model.feed;
+package org.feedeo.core.model.feed;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.AttributeOverride;
@@ -24,8 +22,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
-import org.feedeo.clientcomm.Mappable;
-
 /**
  * This class models an article, such as found in an RSS/Atom syndication file.
  * The model used for it follows quite closely the
@@ -33,7 +29,7 @@ import org.feedeo.clientcomm.Mappable;
  * @author Feedeo Team
  */
 @Entity
-public class Article implements Mappable {
+public class Article {
   // This uri may contain the link (RSS), a guid (RSS 0.92 and RSS 2.0), or
   // a unique ID (Atom). This should be null only if no entry link is provided.*
   // For more details, look at <a
@@ -397,71 +393,4 @@ public class Article implements Mappable {
       return new Date(lastChange.getTime());
     }
   }
-
-  /**
-   * Convenience method to get a short description for the entry.
-   * 
-   * @return short summary for the entry
-   */
-  @Transient
-  public String getSummary() {
-    // TODO: ill conceived, must eventually disappear
-    if (description != null) {
-      return description.getValue();
-    } else if (!this.contents.isEmpty()) {
-      return contents.get(0).getValue();
-    } else {
-      return null;
-    }
-  }
-
-  /**
-   * Convenience method to get a text content for the entry
-   * 
-   * @return entry's text content
-   */
-  @Transient
-  public String getContent() {
-    // TODO: ill conceived, too.
-    if (!this.contents.isEmpty()) {
-      return contents.get(0).getValue();
-    } else if (description != null) {
-      return description.getValue();
-    } else {
-      return null;
-    }
-  }
-
-  /**
-   * {@inheritDoc}
-   * 
-   * @see org.feedeo.clientcomm.Mappable#toMap(boolean)
-   */
-  @Override
-  public Map<String, Object> toMap(boolean deep) {
-    Map<String, Object> result = new HashMap<String, Object>();
-    if (getId() != null) {
-      result.put("id", getId().toString());
-    }
-    if (title != null && title.getValue() != null) {
-      result.put("title", title.getValue());
-    }
-    if (!authors.isEmpty()) {
-      result.put("author", authors.iterator().next().getName());
-    }
-    if (getSummary() != null) {
-      result.put("summary", getSummary());
-    }
-    if (getContent() != null) {
-      result.put("content", getContent());
-    }
-    if (getDisplayedPubDate() != null) {
-      result.put("date", Long.valueOf(getDisplayedPubDate().getTime() / 1000L));
-    }
-    if (link != null) {
-      result.put("url", link);
-    }
-    return result;
-  }
-
 }

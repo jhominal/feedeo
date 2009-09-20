@@ -1,14 +1,14 @@
 package org.feedeo.test;
 
-import static org.feedeo.hibernate.InitSessionFactory.getSession;
+import static org.feedeo.core.hibernate.InitSessionFactory.getSession;
 
 import java.util.HashMap;
 
 import org.junit.Test;
 
-import org.feedeo.hibernate.Queries;
-import org.feedeo.model.user.User;
-import org.feedeo.syndication.FeedFetcher;
+import org.feedeo.core.hibernate.Queries;
+import org.feedeo.core.model.user.User;
+import org.feedeo.core.syndication.FeedFetcher;
 
 /**
  * This class implements various tests, in order to check how the java

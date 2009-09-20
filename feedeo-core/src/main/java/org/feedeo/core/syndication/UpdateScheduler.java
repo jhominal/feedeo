@@ -1,6 +1,6 @@
-package org.feedeo.syndication;
+package org.feedeo.core.syndication;
 
-import static org.feedeo.hibernate.InitSessionFactory.getSession;
+import static org.feedeo.core.hibernate.InitSessionFactory.getSession;
 
 import java.net.MalformedURLException;
 import java.util.Collection;
@@ -10,7 +10,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import org.feedeo.model.feed.Feed;
+import org.feedeo.core.model.feed.Feed;
 
 /**
  * 

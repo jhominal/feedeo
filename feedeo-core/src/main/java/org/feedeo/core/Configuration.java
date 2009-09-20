@@ -1,4 +1,4 @@
-package org.feedeo;
+package org.feedeo.core;
 
 import java.util.EnumSet;
 import java.util.Locale;

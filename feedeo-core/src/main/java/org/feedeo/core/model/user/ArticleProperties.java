@@ -1,4 +1,4 @@
-package org.feedeo.model.user;
+package org.feedeo.core.model.user;
 
 import javax.persistence.Embeddable;
 

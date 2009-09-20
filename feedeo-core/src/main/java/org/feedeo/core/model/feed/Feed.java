@@ -1,4 +1,4 @@
-package org.feedeo.model.feed;
+package org.feedeo.core.model.feed;
 
 import java.util.ArrayList;
 import java.util.Date;

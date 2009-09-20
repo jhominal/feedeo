@@ -1,4 +1,4 @@
-package org.feedeo.clientcomm;
+package org.feedeo.jsonserver;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,7 +12,7 @@ import java.util.Map;
  * @author Feedeo Team
  * 
  */
-final class JsonExceptionPrinter implements Mappable {
+public final class JsonExceptionPrinter {
 
   private Exception exception;
   private String    transactionRollback;
@@ -23,7 +23,7 @@ final class JsonExceptionPrinter implements Mappable {
    * @param e
    *          the referenced Java Exception
    */
-  JsonExceptionPrinter(Exception e) {
+  public JsonExceptionPrinter(Exception e) {
     exception = e;
   }
 
@@ -33,16 +33,10 @@ final class JsonExceptionPrinter implements Mappable {
    * 
    * @param message
    */
-  void setTransactionRollback(String message) {
+  public void setTransactionRollback(String message) {
     transactionRollback = message;
   }
 
-  /**
-   * {@inheritDoc}
-   * 
-   * @see org.feedeo.clientcomm.Mappable#toMap(boolean)
-   */
-  @Override
   public Map<String, Object> toMap(boolean deep) {
     Map<String, Object> result = new HashMap<String, Object>();
     result.put("message", exception.getMessage());

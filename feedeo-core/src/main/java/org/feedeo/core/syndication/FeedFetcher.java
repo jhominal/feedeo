@@ -1,6 +1,6 @@
-package org.feedeo.syndication;
+package org.feedeo.core.syndication;
 
-import static org.feedeo.syndication.SyndConverters.*;
+import static org.feedeo.core.syndication.SyndConverters.*;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -12,12 +12,12 @@ import com.sun.syndication.feed.synd.SyndFeed;
 import com.sun.syndication.io.SyndFeedInput;
 import com.sun.syndication.io.XmlReader;
 
-import org.feedeo.hibernate.Queries;
-import org.feedeo.model.feed.Article;
-import org.feedeo.model.feed.Content;
-import org.feedeo.model.feed.Enclosure;
-import org.feedeo.model.feed.Feed;
-import org.feedeo.model.feed.Link;
+import org.feedeo.core.hibernate.Queries;
+import org.feedeo.core.model.feed.Article;
+import org.feedeo.core.model.feed.Content;
+import org.feedeo.core.model.feed.Enclosure;
+import org.feedeo.core.model.feed.Feed;
+import org.feedeo.core.model.feed.Link;
 
 /**
  * Type a description for FeedFetcher here.

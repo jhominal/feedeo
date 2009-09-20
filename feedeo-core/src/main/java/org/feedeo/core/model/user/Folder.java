@@ -1,12 +1,11 @@
-package org.feedeo.model.user;
+package org.feedeo.core.model.user;
 
 import java.util.*;
 
 import javax.persistence.*;
 
-import org.feedeo.clientcomm.Mappable;
-import org.feedeo.model.feed.Article;
-import org.feedeo.model.feed.Feed;
+import org.feedeo.core.model.feed.Article;
+import org.feedeo.core.model.feed.Feed;
 
 /**
  * Folder reprensents the "folders" in which feeds can be stored.
@@ -15,7 +14,7 @@ import org.feedeo.model.feed.Feed;
  * 
  */
 @Entity
-public class Folder implements Mappable {
+public class Folder {
   private Long         id;
 
   private String       title;
@@ -204,51 +203,5 @@ public class Folder implements Mappable {
   public void addArticles(Collection<? extends Article> articlesToAdd)
   {
     articles.addAll(articlesToAdd);
-  }
-
-
-  /**
-   * @return The list of the children's maps.
-   */
-  @Transient
-  public List<Map<String, Object>> getChildrenMap() {
-    List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
-    for (Folder directory : subFolders) {
-      result.add(directory.toMap(false));
-    }
-    return result;
-  }
-
-  /**
-   * @param articlesList
-   * @return a list of maps qualified with the owner's properties corresponding
-   *         to the articles referenced by the list.
-   */
-  public List<Map<String, Object>> getArticlesMap(Set<Article> articlesList) {
-    List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
-    for (Article article : articlesList) {
-      result.add(getOwner().articleMap(article));
-    }
-    return result;
-  }
-
-  /**
-   * {@inheritDoc}
-   * 
-   * @see org.feedeo.clientcomm.Mappable#toMap(boolean)
-   */
-  @Override
-  public Map<String, Object> toMap(boolean deep) {
-    Map<String, Object> result = new HashMap<String, Object>();
-    result.put("id", getId().toString());
-    result.put("text", getTitle());
-    result.put("leaf", Boolean.FALSE);
-    if (deep) {
-      result.put("children", getChildrenMap());
-    }
-    if (deep) {
-      result.put("articles", getArticlesMap(getArticles()));
-    }
-    return result;
   }
 }

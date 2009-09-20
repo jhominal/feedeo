@@ -1,4 +1,4 @@
-package org.feedeo.clientcomm;
+package org.feedeo.jsonserver;
 
 import java.io.IOException;
 import java.util.HashMap;

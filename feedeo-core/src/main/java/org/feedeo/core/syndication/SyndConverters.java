@@ -1,4 +1,4 @@
-package org.feedeo.syndication;
+package org.feedeo.core.syndication;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,13 +13,13 @@ import com.sun.syndication.feed.synd.SyndImage;
 import com.sun.syndication.feed.synd.SyndLink;
 import com.sun.syndication.feed.synd.SyndPerson;
 
-import org.feedeo.hibernate.Queries;
-import org.feedeo.model.feed.Category;
-import org.feedeo.model.feed.Content;
-import org.feedeo.model.feed.Enclosure;
-import org.feedeo.model.feed.ImageReference;
-import org.feedeo.model.feed.Link;
-import org.feedeo.model.feed.Writer;
+import org.feedeo.core.hibernate.Queries;
+import org.feedeo.core.model.feed.Category;
+import org.feedeo.core.model.feed.Content;
+import org.feedeo.core.model.feed.Enclosure;
+import org.feedeo.core.model.feed.ImageReference;
+import org.feedeo.core.model.feed.Link;
+import org.feedeo.core.model.feed.Writer;
 
 /**
  * This utility class hosts some functions that are useful while

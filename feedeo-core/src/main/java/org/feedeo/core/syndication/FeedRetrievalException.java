@@ -1,4 +1,4 @@
-package org.feedeo.syndication;
+package org.feedeo.core.syndication;
 
 /**
  * <p>

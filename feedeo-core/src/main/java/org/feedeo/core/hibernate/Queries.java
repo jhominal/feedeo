@@ -1,6 +1,6 @@
-package org.feedeo.hibernate;
+package org.feedeo.core.hibernate;
 
-import static org.feedeo.hibernate.InitSessionFactory.getSession;
+import static org.feedeo.core.hibernate.InitSessionFactory.getSession;
 import static org.hibernate.criterion.Restrictions.eq;
 
 import java.net.MalformedURLException;
@@ -12,13 +12,13 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 
-import org.feedeo.model.feed.Article;
-import org.feedeo.model.feed.Category;
-import org.feedeo.model.feed.Content;
-import org.feedeo.model.feed.Feed;
-import org.feedeo.model.feed.Writer;
-import org.feedeo.model.user.Folder;
-import org.feedeo.model.user.User;
+import org.feedeo.core.model.feed.Article;
+import org.feedeo.core.model.feed.Category;
+import org.feedeo.core.model.feed.Content;
+import org.feedeo.core.model.feed.Feed;
+import org.feedeo.core.model.feed.Writer;
+import org.feedeo.core.model.user.Folder;
+import org.feedeo.core.model.user.User;
 
 /**
  * Regroups a number of queries required for the program to function.

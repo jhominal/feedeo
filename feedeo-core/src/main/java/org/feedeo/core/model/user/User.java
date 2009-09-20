@@ -1,4 +1,4 @@
-package org.feedeo.model.user;
+package org.feedeo.core.model.user;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -12,7 +12,7 @@ import java.util.Map;
 
 import javax.persistence.*;
 
-import org.feedeo.model.feed.Article;
+import org.feedeo.core.model.feed.Article;
 
 /**
  * This class models the application's users (people who have subscribed to this
@@ -251,25 +251,10 @@ public class User {
    *          the article in question
    * @return the corresponding ArticleProperties object
    */
-  @Transient
-  public ArticleProperties getArticleProperties(Article article) {
+  public ArticleProperties propertiesOf(Article article) {
     if (!articleProperties.containsKey(article)) {
       articleProperties.put(article, new ArticleProperties());
     }
     return articleProperties.get(article);
   }
-
-  /**
-   * @param article
-   *          the article whose map is desired
-   * @return an article's map with its parameters.
-   */
-  public Map<String, Object> articleMap(Article article) {
-    Map<String, Object> result = article.toMap(true);
-    ArticleProperties currProperties = getArticleProperties(article);
-    result.put("read", Boolean.valueOf(currProperties.isAlreadyRead()));
-    result.put("important", Boolean.valueOf(currProperties.isImportant()));
-    return result;
-  }
-
 }
