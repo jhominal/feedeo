@@ -9,9 +9,9 @@
   <properties>
     <feedeo.version>${project.version}</feedeo.version>
     <junit.version>4.7</junit.version>
-    <derby.version>10.5.3.0</derby.version>
   </properties>
   <modules>
+    <module>feedeo-commons</module>
     <module>feedeo-core</module>
     <module>feedeo-server-json</module>
     <module>feedeo-web-client</module>

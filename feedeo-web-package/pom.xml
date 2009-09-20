@@ -52,7 +52,6 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
         <configuration>
-          <finalName>feedeo-test2</finalName>
           <webResources>
             <resource>
               <directory>${client.files}</directory>
@@ -62,4 +61,40 @@
       </plugin>
     </plugins>
   </build>
+  <profiles>
+    <profile>
+      <id>mysql</id>
+      <activation>
+        <property>
+          <name>feedeo.db.type</name>
+          <value>mysql</value>
+        </property>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>mysql</groupId>
+          <artifactId>mysql-connector-java</artifactId>
+          <version>5.1.6</version>
+          <scope>runtime</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+    <profile>
+      <id>hsqldb</id>
+      <activation>
+        <property>
+          <name>feedeo.db.type</name>
+          <value>hsqldb</value>
+        </property>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>hsqldb</groupId>
+          <artifactId>hsqldb</artifactId>
+          <version>1.8.0.7</version>
+          <scope>runtime</scope>
+        </dependency>
+      </dependencies>
+    </profile>
+  </profiles>
 </project>

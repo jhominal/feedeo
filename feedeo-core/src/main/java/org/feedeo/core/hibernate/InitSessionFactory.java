@@ -1,11 +1,14 @@
 package org.feedeo.core.hibernate;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.feedeo.core.model.feed.*;
 import org.feedeo.core.model.user.ArticleProperties;
@@ -28,7 +31,9 @@ public enum InitSessionFactory {
   
   INSTANCE;
   
-  private org.hibernate.SessionFactory sessionFactory;
+  private static Logger logger = LoggerFactory.getLogger(InitSessionFactory.class);
+  
+  private SessionFactory sessionFactory;
   private boolean initialized = false;
 
   static {
@@ -56,6 +61,21 @@ public enum InitSessionFactory {
       config.addAnnotatedClass(User.class);
       config.addAnnotatedClass(Folder.class);
       config.addAnnotatedClass(ArticleProperties.class);
+      
+      InputStream propertiesStream = InitSessionFactory.class.getClassLoader().getResourceAsStream("database.properties");
+      
+      if (propertiesStream != null) {
+        Properties extraProperties = new Properties();
+        try {
+          extraProperties.load(propertiesStream);
+          config.mergeProperties(extraProperties);
+          propertiesStream.close();
+        } catch (IOException e) {
+          logger.warn("IOException occurred while parsing 'database.properties', please check the file's validity.");
+        }
+      } else {
+        logger.info("No 'database.properties' file found, continuing...");
+      }
       
       INSTANCE.sessionFactory = config.buildSessionFactory();
       INSTANCE.initialized = true;
