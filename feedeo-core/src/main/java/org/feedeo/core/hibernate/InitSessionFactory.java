@@ -18,8 +18,8 @@ import org.feedeo.core.model.user.User;
 /**
  * @author hennebrueder
  * 
- *         This class garanties that only one single SessionFactory is
- *         instanciated and that the configuration is done thread safe as
+ *         This class guarantees that only one single SessionFactory is
+ *         instantiated and that the configuration is done thread safe as
  *         singleton. Actually it only wraps the Hibernate SessionFactory. You
  *         are free to use any kind of JTA or Thread transactionFactories.
  * 

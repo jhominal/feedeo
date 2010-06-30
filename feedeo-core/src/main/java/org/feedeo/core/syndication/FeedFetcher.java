@@ -66,6 +66,8 @@ public class FeedFetcher {
    */
   public void update() throws FeedRetrievalException {
     SyndFeed source = retrieve();
+    
+    
 
     updateFeedFields(source);
     updateFeedArticles(source.getEntries());
@@ -85,7 +87,9 @@ public class FeedFetcher {
     }
     SyndFeed result = null;
     try {
-      result = (new SyndFeedInput()).build(new XmlReader(feedURL));
+      SyndFeedInput feedInput = new SyndFeedInput();
+      feedInput.setPreserveWireFeed(true);
+      result = feedInput.build(new XmlReader(feedURL));
     } catch (Exception e) {
       throw new FeedRetrievalException("Feed cannot be retrieved by ROME.", e);
     }

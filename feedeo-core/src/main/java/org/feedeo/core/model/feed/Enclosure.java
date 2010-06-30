@@ -10,7 +10,6 @@ import javax.persistence.Embeddable;
  */
 @Embeddable
 public class Enclosure {
-  //TODO: Understand Enclosures.
   private String url;
   private long length;
   private String type;

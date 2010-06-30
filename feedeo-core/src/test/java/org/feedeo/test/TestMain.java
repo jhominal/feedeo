@@ -88,6 +88,7 @@ public class TestMain {
   public static void testSyndication() throws Exception {
     getSession().beginTransaction();
     // Flux RSS 1.0
+    FeedFetcher.getFetcher("http://www.scripting.com/rss.xml").update();
     FeedFetcher.getFetcher("http://rss.slashdot.org/Slashdot/slashdot").update();
     // Flux RSS 2.0
     FeedFetcher.getFetcher("http://feeds.feedburner.com/ostatic").update();
@@ -96,4 +97,5 @@ public class TestMain {
      
     getSession().getTransaction().commit();
   }
+  
 }
