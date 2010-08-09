@@ -1,5 +1,8 @@
 package org.feedeo.authentication
 
-trait AuthenticationService {
+import scala.collection.Map
+import org.feedeo.model.user.User
 
+trait AuthenticationService {
+	def login(params: Map[String, Any]): User
 }
