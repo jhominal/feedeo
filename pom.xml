@@ -16,6 +16,22 @@
     <module>feedeo-core</module>
   </modules>
   <repositories>
+    <repository>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>never</updatePolicy>
+        <checksumPolicy>warn</checksumPolicy>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+        <updatePolicy>never</updatePolicy>
+        <checksumPolicy>fail</checksumPolicy>
+      </snapshots>
+      <id>scala-tools</id>
+      <name>Scala Tools Maven Repository</name>
+      <url>http://www.scala-tools.org/repo-releases/</url>
+      <layout>default</layout>
+    </repository>
     <!--repository>
       <releases>
         <enabled>true</enabled>

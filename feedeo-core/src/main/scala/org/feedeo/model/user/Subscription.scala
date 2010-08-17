@@ -1,5 +1,7 @@
 package org.feedeo.model.user
 
-class Subscription {
+import org.feedeo.model.feed._
+
+class Subscription(feed: Feed) {
 
 }
