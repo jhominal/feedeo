@@ -1,16 +1,19 @@
 package org.feedeo.model
 
-
-trait Extendable {
-	var extensions : Map[ExtensionKey, Any]
-}
-
+/**
+ * This class represents Feedeo attributes namespaces.
+ * 
+ * The namespaces URIs should mostly coincide with the URIs used in the 
+ * XML feeds.
+ * 
+ * @author jean
+ *
+ */
 case class Namespace(uri: String) {
-	
+	def ##(key : String) = NamespacedKey(this, key)
 }
 
-case class ExtensionKey(namespace: Namespace, key: String) {
-	
+case class NamespacedKey(namespace: Namespace, key: String) {
 }
 
 object Namespaces {
@@ -19,5 +22,5 @@ object Namespaces {
 	val Rss1_Rdf = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
 	val Rss2 = Namespace("http://purl.org/rss/2.0/")
 	val Atom = Namespace("http://www.w3.org/2005/Atom")
-	val Html = Namespace(null)
+	val Html = Namespace("http://www.w3.org/1999/xhtml")
 }

@@ -1,5 +1,7 @@
 package org.feedeo.model.feed
 
-class Feed {
+import org.feedeo.model._
+
+class Feed extends AnyRef with DataEntity {
 
 }

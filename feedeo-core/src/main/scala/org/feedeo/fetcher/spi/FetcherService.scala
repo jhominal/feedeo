@@ -21,7 +21,7 @@ trait FetcherService {
      * Returns a reference to {@link BundleContext} appropriate for this Service.
      * @return The BundleContext associated to this service.
      */
-    protected def getContext(): BundleContext;
+    protected def getContext(): BundleContext
     
     /**
      * Posts an event signaling that a given feed (identified by its URL) should be parsed by the application - and 
@@ -36,16 +36,13 @@ trait FetcherService {
         if (eventAdminReference != null) {
             val eventAdmin = getContext().getService(eventAdminReference)
             eventAdmin match {
-
                 case eventAdmin: EventAdmin => 
                     import org.feedeo.util.ImplicitConverters.map2dico
                     eventAdmin.postEvent(new Event(FetcherService.feedReadyTopicName, Map("url" -> url, "source" -> source)))
                 case _ => 
             }
-            
         }
     }
-    
     
 }
 
