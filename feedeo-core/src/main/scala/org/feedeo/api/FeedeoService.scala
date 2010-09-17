@@ -5,5 +5,4 @@ package org.feedeo.api
  * @author Jean Hominal
  *
  */
-trait FeedeoService {
-}
+trait FeedeoService {}
